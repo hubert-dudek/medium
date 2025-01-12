@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "myrestdatasource"
+version = "0.1.0"
+description = "Spark Data Source for reading/writing from a REST API"
+authors = [{ name = "Hubert", email = "hub@company.com" }]
+dependencies = [
+  "requests>=2.0"
+]
