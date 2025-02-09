@@ -4,14 +4,26 @@ from myrest import MyRest
 # Register the custom data source with Spark
 spark.dataSource.register(MyRest)
 
-# Read from the data source
+default_parallelism = spark.sparkContext.defaultParallelism
+print(f"Default parallelism: {default_parallelism}")
+
 df = (
     spark.read
-         .format("myrest")
-         .load()
+    .format("myrest") 
+    .option("startId", "1")
+    .option("endId", "100")
+    .option("numPartitions", str(default_parallelism * 2))
+    .load()
 )
 
+num_partitions = df.rdd.getNumPartitions()
+print(f"Number of partitions: {num_partitions}")
+
 display(df)
+
+# COMMAND ----------
+
+
 
 # COMMAND ----------
 
