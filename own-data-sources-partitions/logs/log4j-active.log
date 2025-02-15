@@ -1,0 +1,103 @@
+25/02/09 18:02:27 INFO DatabricksEdgeConfigs: serverlessEnabled : false
+25/02/09 18:02:28 INFO DatabricksEdgeConfigs: perfPackEnabled : false
+25/02/09 18:02:28 INFO DatabricksEdgeConfigs: classicSqlEnabled : false
+25/02/09 18:02:29 INFO RawConfigSingleton$: Successfully loaded DB_CONF into RawConfigSingleton.
+25/02/09 18:02:29 INFO GlobalConf$$anon$1: 
+Location Old Values:
+  - shardAlias: None
+  - realShardName: null
+  - realShardNameOpt: None
+  - shardName: null
+  - shardNameOpt: None
+  - branch: development
+  - region: us-west-2
+  - runtime: default
+  - workerNamePrefix: null
+  - deploymentMode: development
+  - shardCloud: unknown
+
+Location New Values:
+  - location: 
+    
+25/02/09 18:02:30 INFO SecurityManager: Changing view acls to: root
+25/02/09 18:02:30 INFO SecurityManager: Changing modify acls to: root
+25/02/09 18:02:30 INFO SecurityManager: Changing view acls groups to: root
+25/02/09 18:02:30 INFO SecurityManager: Changing modify acls groups to: root
+25/02/09 18:02:30 INFO SecurityManager: SecurityManager: authentication is enabled: false; ui acls disabled; users with view permissions: root groups with view permissions: EMPTY; users with modify permissions: root; groups with modify permissions: EMPTY; RPC SSL enabled: false
+25/02/09 18:02:30 INFO SparkContext: Running Spark version 3.5.2
+25/02/09 18:02:30 INFO SparkContext: OS info Linux, 5.15.0-1075-azure, amd64
+25/02/09 18:02:30 INFO SparkContext: Java version 17.0.13
+25/02/09 18:02:30 INFO ResourceUtils: ==============================================================
+25/02/09 18:02:30 INFO ResourceUtils: No custom resources configured for spark.driver.
+25/02/09 18:02:30 INFO ResourceUtils: ==============================================================
+25/02/09 18:02:30 INFO SparkContext: Submitted application: pyspark-shell
+25/02/09 18:02:30 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(memory -> name: memory, amount: 1024, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+25/02/09 18:02:30 INFO ResourceProfile: Limiting resource is cpu
+25/02/09 18:02:30 INFO ResourceProfileManager: Added ResourceProfile id: 0
+25/02/09 18:02:30 INFO SecurityManager: Changing view acls to: root
+25/02/09 18:02:30 INFO SecurityManager: Changing modify acls to: root
+25/02/09 18:02:30 INFO SecurityManager: Changing view acls groups to: root
+25/02/09 18:02:30 INFO SecurityManager: Changing modify acls groups to: root
+25/02/09 18:02:30 INFO SecurityManager: SecurityManager: authentication is enabled: false; ui acls disabled; users with view permissions: root groups with view permissions: EMPTY; users with modify permissions: root; groups with modify permissions: EMPTY; RPC SSL enabled: false
+25/02/09 18:02:30 INFO JvmCrashLogger: Past JVM crashes: detected 0, logged 0, and skipped 0 already logged
+25/02/09 18:02:31 INFO Utils: Successfully started service 'sparkDriver' on port 34571.
+25/02/09 18:02:31 INFO SparkEnv: Registering MapOutputTracker
+25/02/09 18:02:31 INFO SparkEnv: Registering BlockManagerMaster
+25/02/09 18:02:31 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+25/02/09 18:02:31 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+25/02/09 18:02:31 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+25/02/09 18:02:31 INFO DiskBlockManager: Created local directory at /local_disk0/blockmgr-8c7a869b-243c-4d5c-9103-987595d1356e/blockmgr-bdd2014a-c59e-42a1-8c20-bac457c23673
+25/02/09 18:02:31 INFO SparkEnv: Registering OutputCommitCoordinator
+25/02/09 18:02:31 WARN MetricsSystem: Using default name SparkStatusTracker for source because neither spark.metrics.namespace nor spark.app.id is set.
+25/02/09 18:02:31 INFO log: Logging initialized @9324ms to org.eclipse.jetty.util.log.Slf4jLog
+25/02/09 18:02:31 INFO ErrorEventListener: Configured monitoring unexpected Java module errors with a throttling threshold of 5 unique events per 10 minutes
+25/02/09 18:02:31 INFO JfrStreamingManager: Started JFR stream JDK17 HMR
+25/02/09 18:02:32 INFO JettyUtils: Start Jetty 10.139.64.10:4040 for SparkUI
+25/02/09 18:02:32 INFO Server: jetty-9.4.52.v20230823; built: 2023-08-23T19:29:37.669Z; git: abdcda73818a1a2c705da276edb0bf6581e7997e; jvm 17.0.13+11-LTS
+25/02/09 18:02:32 INFO Server: Started @10367ms
+25/02/09 18:02:33 INFO AbstractConnector: Started ServerConnector@1aa483eb{HTTP/1.1, (http/1.1)}{10.139.64.10:4040}
+25/02/09 18:02:33 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+25/02/09 18:02:33 INFO ContextHandler: Started o.e.j.s.ServletContextHandler@6771043a{/,null,AVAILABLE,@Spark}
+25/02/09 18:02:33 INFO LibraryLoader: Loaded library lib-dbr.so from /tmp/load-from-jar8090537358701270567lib-dbr.so with glog sink /databricks/driver/logs
+25/02/09 18:02:34 ERROR SparkConnectService: Could not start Spark Connect GRPC service
+java.io.IOException: Failed to bind to address 0.0.0.0/0.0.0.0:15002
+	at grpc_shaded.io.grpc.netty.NettyServer.start(NettyServer.java:333)
+	at grpc_shaded.io.grpc.internal.ServerImpl.start(ServerImpl.java:185)
+	at grpc_shaded.io.grpc.internal.ServerImpl.start(ServerImpl.java:94)
+	at org.apache.spark.sql.connect.service.SparkConnectService$.startGRPCService(SparkConnectService.scala:445)
+	at org.apache.spark.sql.connect.service.SparkConnectService$.start(SparkConnectService.scala:454)
+	at org.apache.spark.sql.connect.SparkConnectPlugin$$anon$1.init(SparkConnectPlugin.scala:48)
+	at org.apache.spark.internal.plugin.DriverPluginContainer.$anonfun$driverPlugins$1(PluginContainer.scala:55)
+	at scala.collection.TraversableLike.$anonfun$flatMap$1(TraversableLike.scala:293)
+	at scala.collection.Iterator.foreach(Iterator.scala:943)
+	at scala.collection.Iterator.foreach$(Iterator.scala:943)
+	at scala.collection.AbstractIterator.foreach(Iterator.scala:1431)
+	at scala.collection.IterableLike.foreach(IterableLike.scala:74)
+	at scala.collection.IterableLike.foreach$(IterableLike.scala:73)
+	at scala.collection.AbstractIterable.foreach(Iterable.scala:56)
+	at scala.collection.TraversableLike.flatMap(TraversableLike.scala:293)
+	at scala.collection.TraversableLike.flatMap$(TraversableLike.scala:290)
+	at scala.collection.AbstractTraversable.flatMap(Traversable.scala:108)
+	at org.apache.spark.internal.plugin.DriverPluginContainer.<init>(PluginContainer.scala:48)
+	at org.apache.spark.internal.plugin.PluginContainer$.apply(PluginContainer.scala:227)
+	at org.apache.spark.internal.plugin.PluginContainer$.apply(PluginContainer.scala:198)
+	at org.apache.spark.SparkContext.<init>(SparkContext.scala:899)
+	at org.apache.spark.api.java.JavaSparkContext.<init>(JavaSparkContext.scala:61)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:247)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:397)
+	at py4j.Gateway.invoke(Gateway.java:257)
+	at py4j.commands.ConstructorCommand.invokeConstructor(ConstructorCommand.java:80)
+	at py4j.commands.ConstructorCommand.execute(ConstructorCommand.java:69)
+	at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:199)
+	at py4j.ClientServerConnection.run(ClientServerConnection.java:119)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: grpc_shaded.io.netty.channel.unix.Errors$NativeIoException: bind(..) failed: Address already in use
+25/02/09 18:02:34 INFO DriverPluginContainer: Initialized driver component for plugin org.apache.spark.sql.connect.SparkConnectPlugin.
+25/02/09 18:02:34 INFO DriverPluginContainer: Initialized driver component for plugin com.databricks.spark.connect.LocalSparkConnectPlugin.
+25/02/09 18:02:34 INFO DLTDebugger: Registered DLTDebuggerEndpoint at endpoint dlt-debugger
+25/02/09 18:02:34 INFO DriverPluginContainer: Initialized driver component for plugin org.apache.spark.debugger.DLTDebuggerSparkPlugin.
