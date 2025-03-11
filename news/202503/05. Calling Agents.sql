@@ -29,19 +29,18 @@ SELECT http_request(
 -- COMMAND ----------
 
 -- a function that will be used by the agent. COMMENT - metadata here is critical so it will understand how to use it
-CREATE OR REPLACE FUNCTION raise_alert(alert_text STRING COMMENT 'alert_text: The text message to be sent as an alert')
-RETURNS STRING
-LANGUAGE SQL
-COMMENT 'Function to send an alert to an external service'
-RETURN http_request(
+CREATE OR REPLACE FUNCTION raise_alert(
+    alert_text STRING COMMENT 'alert_text: The text message to be sent as an alert'
+  )
+  RETURNS STRING
+  LANGUAGE SQL
+  COMMENT 'Function to send an alert to an external service'
+  RETURN http_request(
     conn => 'alert',
     method => 'POST',
     path => '/',
-    json => to_json(named_struct(
-      'text', alert_text
-    ))
-  )
-;
+    json => to_json(named_struct('text', alert_text))
+  );
 
 -- COMMAND ----------
 
