@@ -62,15 +62,15 @@ WHERE
 
 -- COMMAND ----------
 
-CREATE OR REPLACE TABLE my_table_ci(name STRING COLLATE de_ci_ai); 
+CREATE OR REPLACE TABLE my_table_ci(name STRING COLLATE UNICODE_CI_AI); 
 INSERT INTO my_table_ci SELECT name FROM my_table;
 
 SELECT
-  name COLLATE de_ci_ai
+  name COLLATE UNICODE_CI_AI
 FROM
   my_table_ci
 ORDER BY
-  name COLLATE de_ci_ai;
+  name COLLATE UNICODE_CI_AI;
 
 -- COMMAND ----------
 
