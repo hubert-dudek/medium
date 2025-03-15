@@ -1,0 +1,5 @@
+-- Databricks notebook source
+-- MAGIC %md
+-- MAGIC Token report:
+-- MAGIC
+-- MAGIC ![token_report.png](./images/token_report.png "token_report.png")

@@ -1,0 +1,4 @@
+-- Databricks notebook source
+-- MAGIC %md
+-- MAGIC - you can upload file and "join" with your Genie conversation,
+-- MAGIC - in Volume you can preview files

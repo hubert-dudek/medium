@@ -1,12 +1,12 @@
 -- Databricks notebook source
-CREATE TABLE metadata_catalog (
+CREATE OR REPLACE TABLE metadata_catalog (
   t STRING,
   meta VARIANT
 );
 
 -- COMMAND ----------
 
-DESCRIBE EXTENDED my_table AS JSON;image.png
+DESCRIBE EXTENDED my_table AS JSON;
 
 -- COMMAND ----------
 

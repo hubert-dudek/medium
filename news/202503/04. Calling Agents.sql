@@ -29,7 +29,7 @@ SELECT http_request(
 -- COMMAND ----------
 
 -- a function that will be used by the agent. COMMENT - metadata here is critical so it will understand how to use it
-CREATE OR REPLACE FUNCTION raise_alert(
+CREATE OR REPLACE FUNCTION main.egg_shop.raise_alert(
     alert_text STRING COMMENT 'alert_text: The text message to be sent as an alert'
   )
   RETURNS STRING

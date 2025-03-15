@@ -10,7 +10,7 @@ import requests
 
 access_token = "faketoken"
 workspace_url = "https://fakeid.cloud.databricks.com//" 
-genie_room_id = "fakeroom"
+genie_room_id = "01f001bbf8bb106fb2e54ab399c1f36e?o=3323272837455455" # egg shop room id from the url
 
 # COMMAND ----------
 
