@@ -16,6 +16,10 @@
         }
       }
     } ]
+  }, {
+    "name" : "41c8c1b6",
+    "displayName" : "sales",
+    "query" : "SELECT * FROM main.samples.sales;"
   } ],
   "pages" : [ {
     "name" : "9fd751bf",
@@ -204,6 +208,53 @@
       },
       "position" : {
         "x" : 0,
+        "y" : 0,
+        "width" : 3,
+        "height" : 6
+      }
+    }, {
+      "widget" : {
+        "name" : "0ffc2e15",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "41c8c1b6",
+            "fields" : [ {
+              "name" : "transaction_date",
+              "expression" : "`transaction_date`"
+            }, {
+              "name" : "sum(amount)",
+              "expression" : "SUM(`amount`)"
+            } ],
+            "disaggregated" : false
+          }
+        } ],
+        "spec" : {
+          "version" : 3,
+          "widgetType" : "line",
+          "encodings" : {
+            "x" : {
+              "fieldName" : "transaction_date",
+              "scale" : {
+                "type" : "temporal"
+              },
+              "displayName" : "transaction_date"
+            },
+            "y" : {
+              "fieldName" : "sum(amount)",
+              "scale" : {
+                "type" : "quantitative"
+              },
+              "displayName" : "Sum of amount"
+            },
+            "label" : {
+              "show" : true
+            }
+          }
+        }
+      },
+      "position" : {
+        "x" : 3,
         "y" : 0,
         "width" : 3,
         "height" : 6

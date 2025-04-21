@@ -19,7 +19,7 @@ end_time = datetime.now() + timedelta(minutes=10)
 while datetime.now() < end_time:
     # Insert values using SQL
     spark.sql("""
-        INSERT INTO course.quality_test.transactions (transaction_time, amount) VALUES
+        INSERT INTO main.samples.transactions (transaction_time, amount) VALUES
         (CURRENT_TIMESTAMP(), 100.00),
         (CURRENT_TIMESTAMP(), 150.50),
         (CURRENT_TIMESTAMP(), 200.75)

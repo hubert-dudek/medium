@@ -3,6 +3,47 @@ CREATE SCHEMA main.samples;
 
 -- COMMAND ----------
 
+CREATE TABLE main.samples.sales (
+  transaction_id INT,
+  transaction_date DATE,
+  amount DECIMAL(10, 2),
+  description STRING
+);
+
+INSERT INTO main.samples.sales (transaction_id, transaction_date, amount, description) VALUES
+  (1, '2025-04-01', 100.00, 'Sample transaction 1'),
+  (2, '2025-04-01', 150.00, 'Sample transaction 2'),
+  (3, '2025-04-01', 200.00, 'Sample transaction 3'),
+  (4, '2025-04-02', 250.00, 'Sample transaction 4'),
+  (5, '2025-04-02', 300.00, 'Sample transaction 5'),
+  (6, '2025-04-02', 350.00, 'Sample transaction 6'),
+  (7, '2025-04-03', 400.00, 'Sample transaction 7'),
+  (8, '2025-04-03', 450.00, 'Sample transaction 8'),
+  (9, '2025-04-03', 500.00, 'Sample transaction 9'),
+  (10, '2025-04-04', 550.00, 'Sample transaction 10'),
+  (11, '2025-04-04', 600.00, 'Sample transaction 11'),
+  (12, '2025-04-04', 650.00, 'Sample transaction 12'),
+  (13, '2025-04-05', 700.00, 'Sample transaction 13'),
+  (14, '2025-04-05', 750.00, 'Sample transaction 14'),
+  (15, '2025-04-05', 800.00, 'Sample transaction 15'),
+  (16, '2025-04-06', 850.00, 'Sample transaction 16'),
+  (17, '2025-04-06', 900.00, 'Sample transaction 17'),
+  (18, '2025-04-06', 950.00, 'Sample transaction 18'),
+  (19, '2025-04-07', 1000.00, 'Sample transaction 19'),
+  (20, '2025-04-07', 1050.00, 'Sample transaction 20'),
+  (21, '2025-04-07', 1100.00, 'Sample transaction 21'),
+  (22, '2025-04-08', 1150.00, 'Sample transaction 22'),
+  (23, '2025-04-08', 1200.00, 'Sample transaction 23'),
+  (24, '2025-04-08', 1250.00, 'Sample transaction 24'),
+  (25, '2025-04-09', 1300.00, 'Sample transaction 25'),
+  (26, '2025-04-09', 1350.00, 'Sample transaction 26'),
+  (27, '2025-04-09', 1400.00, 'Sample transaction 27'),
+  (28, '2025-04-10', 1450.00, 'Sample transaction 28'),
+  (29, '2025-04-10', 1500.00, 'Sample transaction 29'),
+  (30, '2025-04-10', 1550.00, 'Sample transaction 30');
+
+-- COMMAND ----------
+
 CREATE VOLUME main.samples.invoices;
 
 -- COMMAND ----------

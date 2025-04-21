@@ -5,6 +5,11 @@
 -- COMMAND ----------
 
 -- MAGIC %md
+-- MAGIC ![01 powerbi task.png](./01 powerbi task.png "01 powerbi task.png")
+
+-- COMMAND ----------
+
+-- MAGIC %md
 -- MAGIC         - task_key: PowerBI_Refresh
 -- MAGIC           depends_on:
 -- MAGIC             - task_key: MV_Refresh

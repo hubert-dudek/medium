@@ -1,8 +1,4 @@
 -- Databricks notebook source
-
-
--- COMMAND ----------
-
 -- MAGIC %md
 -- MAGIC Edit multiple columns using ALTER TABLE: You can now alter multiple columns in a single ALTER TABLE statement. See ALTER TABLE … COLUMN clause.
 
