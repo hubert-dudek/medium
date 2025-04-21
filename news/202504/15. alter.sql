@@ -4,7 +4,7 @@
 
 -- COMMAND ----------
 
-CREATE OR REPLACE TABLE unstable_table (
+CREATE OR REPLACE TABLE main.samples.unstable_table (
     id INT,
     will_be_commented STRING,
     will_be_bool STRING,
@@ -16,7 +16,7 @@ TBLPROPERTIES('delta.feature.allowColumnDefaults' = 'supported');
 -- COMMAND ----------
 
 ALTER TABLE 
-   unstable_table 
+   main.samples.unstable_table 
 ALTER COLUMN
    will_be_commented COMMENT 'boolean column',
    will_be_bool AFTER id,
