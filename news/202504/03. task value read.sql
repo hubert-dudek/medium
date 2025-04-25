@@ -1,2 +1,2 @@
 -- Databricks notebook source
-SELECT :id
+SELECT :shop_id
