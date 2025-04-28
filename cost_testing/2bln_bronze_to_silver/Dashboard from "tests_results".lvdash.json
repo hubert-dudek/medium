@@ -1,8 +1,12 @@
 {
   "datasets" : [ {
     "name" : "4b269011",
-    "displayName" : "10_bln_bronze_to_silver",
-    "query" : "with CTE AS (\n  SELECT\n    u.custom_tags,\n    SUM(u.usage_quantity * p.pricing.default) AS total\n  FROM\n    system.billing.usage u\n      RIGHT JOIN system.billing.list_prices p\n        ON u.sku_name = p.sku_name\n        AND (\n          (u.usage_start_time BETWEEN p.price_start_time AND p.price_end_time)\n          OR (\n            (u.usage_start_time > p.price_start_time)\n            AND (p.price_end_time IS NULL)\n          )\n        )\n  WHERE\n    map_contains_key(u.custom_tags, 'tests') AND\n    date(u.usage_start_time) = date'2025-04-27' -- date of 10 bln test\n  GROUP BY\n    u.custom_tags\n  ORDER BY\n    total ASC\n)\nSELECT\n  concat_ws(': ', row_number() OVER (ORDER BY total ASC), custom_tags['tests']) as rank,\n  total\nFROM\n  CTE"
+    "displayName" : "2_bln_bronze_to_silver",
+    "query" : "with CTE AS (\n  SELECT\n    u.custom_tags,\n    SUM(u.usage_quantity * p.pricing.default) AS total\n  FROM\n    system.billing.usage u\n      RIGHT JOIN system.billing.list_prices p\n        ON u.sku_name = p.sku_name\n        AND (\n          (u.usage_start_time BETWEEN p.price_start_time AND p.price_end_time)\n          OR (\n            (u.usage_start_time > p.price_start_time)\n            AND (p.price_end_time IS NULL)\n          )\n        )\n  WHERE\n      (map_contains_key(u.custom_tags, 'tests') OR map_contains_key(u.custom_tags, 'test')) AND\n    (u.usage_start_time BETWEEN timestamp'2025-04-27T21:40:00' AND timestamp'2025-04-28T06:00:00') -- test period\n  GROUP BY\n    u.custom_tags\n  ORDER BY\n    total ASC\n)\nSELECT\n  concat_ws(': ', row_number() OVER (ORDER BY total ASC), coalesce(custom_tags['tests'], custom_tags['test'])) as rank,\n  total\nFROM\n  CTE"
+  }, {
+    "name" : "e70d417b",
+    "displayName" : "2_bln_time",
+    "query" : "WITH source AS (\r\n  SELECT *\r\n  FROM VALUES\r\n    ('SQL_XXS', '5m 53s'),\r\n    ('pyspark_standard', '10m 54s'),\r\n    ('SQL_XS', '5m 49s'),\r\n    ('dlt_standard', '14m 45s'),\r\n    ('SQL_S', '5m 36s'),\r\n    ('pyspark_performance', '4m 12s'),\r\n    ('dlt_performance', '5m 43s')\r\n  AS t (name, duration)\r\n)\r\n\r\nSELECT\r\n  name,\r\n  duration,\r\n  -- Convert to total seconds\r\n  CAST(regexp_extract(duration, '([0-9]+)m', 1) AS INT) * 60 +\r\n  CAST(regexp_extract(duration, '([0-9]+)s', 1) AS INT) AS duration_seconds\r\nFROM source;\r\n"
   } ],
   "pages" : [ {
     "name" : "826c1622",
@@ -62,7 +66,7 @@
             }
           },
           "frame" : {
-            "title" : "results 10 bln bronze to silver",
+            "title" : "results 2 bln bronze to silver",
             "showTitle" : true
           },
           "mark" : {
@@ -100,6 +104,102 @@
       },
       "position" : {
         "x" : 0,
+        "y" : 0,
+        "width" : 3,
+        "height" : 6
+      }
+    }, {
+      "widget" : {
+        "name" : "508f664c",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "e70d417b",
+            "fields" : [ {
+              "name" : "sum(duration_seconds)",
+              "expression" : "SUM(`duration_seconds`)"
+            }, {
+              "name" : "name",
+              "expression" : "`name`"
+            } ],
+            "disaggregated" : false
+          }
+        } ],
+        "spec" : {
+          "version" : 3,
+          "widgetType" : "bar",
+          "encodings" : {
+            "x" : {
+              "fieldName" : "sum(duration_seconds)",
+              "scale" : {
+                "type" : "quantitative"
+              },
+              "format" : {
+                "type" : "number-plain",
+                "abbreviation" : "compact",
+                "decimalPlaces" : {
+                  "type" : "max",
+                  "places" : 2
+                }
+              },
+              "displayName" : "total s"
+            },
+            "y" : {
+              "fieldName" : "name",
+              "axis" : {
+                "hideLabels" : false
+              },
+              "scale" : {
+                "type" : "categorical",
+                "sort" : {
+                  "by" : "x"
+                }
+              },
+              "displayName" : "rank"
+            },
+            "label" : {
+              "show" : true
+            }
+          },
+          "frame" : {
+            "title" : "results 2 bln bronze to silver",
+            "showTitle" : true
+          },
+          "mark" : {
+            "colors" : [ "#205b11", {
+              "themeColorType" : "visualizationColors",
+              "position" : 2
+            }, {
+              "themeColorType" : "visualizationColors",
+              "position" : 3
+            }, {
+              "themeColorType" : "visualizationColors",
+              "position" : 4
+            }, {
+              "themeColorType" : "visualizationColors",
+              "position" : 5
+            }, {
+              "themeColorType" : "visualizationColors",
+              "position" : 6
+            }, {
+              "themeColorType" : "visualizationColors",
+              "position" : 7
+            }, {
+              "themeColorType" : "visualizationColors",
+              "position" : 8
+            }, {
+              "themeColorType" : "visualizationColors",
+              "position" : 9
+            }, {
+              "themeColorType" : "visualizationColors",
+              "position" : 10
+            } ],
+            "layout" : "group"
+          }
+        }
+      },
+      "position" : {
+        "x" : 3,
         "y" : 0,
         "width" : 3,
         "height" : 6
