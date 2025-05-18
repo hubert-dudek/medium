@@ -1,0 +1,120 @@
+{
+  "datasets" : [ {
+    "name" : "5a30aae4",
+    "displayName" : "example_table",
+    "query" : "SELECT * FROM hub.default.example_table"
+  } ],
+  "pages" : [ {
+    "name" : "76c6c93d",
+    "displayName" : "new charts",
+    "layout" : [ {
+      "widget" : {
+        "name" : "b63c1c6c",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "5a30aae4",
+            "fields" : [ {
+              "name" : "sum(amount)",
+              "expression" : "SUM(`amount`)"
+            }, {
+              "name" : "country",
+              "expression" : "`country`"
+            } ],
+            "disaggregated" : false
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "choropleth-map",
+          "encodings" : {
+            "color" : {
+              "fieldName" : "sum(amount)",
+              "scale" : {
+                "type" : "quantitative"
+              },
+              "displayName" : "Sum of amount"
+            },
+            "region" : {
+              "regionType" : "mapbox-v4-admin",
+              "admin0" : {
+                "fieldName" : "country",
+                "type" : "field",
+                "geographicRole" : "admin0-name",
+                "displayName" : "country"
+              }
+            }
+          }
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 3,
+        "height" : 6
+      }
+    }, {
+      "widget" : {
+        "name" : "dd5fe804",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "5a30aae4",
+            "fields" : [ {
+              "name" : "country",
+              "expression" : "`country`"
+            }, {
+              "name" : "product",
+              "expression" : "`product`"
+            }, {
+              "name" : "sum(amount)",
+              "expression" : "SUM(`amount`)"
+            } ],
+            "disaggregated" : false
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "sankey",
+          "encodings" : {
+            "value" : {
+              "fieldName" : "sum(amount)",
+              "displayName" : "Sum of amount"
+            },
+            "stages" : [ {
+              "fieldName" : "country",
+              "displayName" : "country"
+            }, {
+              "fieldName" : "product",
+              "displayName" : "product"
+            } ]
+          }
+        }
+      },
+      "position" : {
+        "x" : 3,
+        "y" : 0,
+        "width" : 3,
+        "height" : 6
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_UNSPECIFIED"
+  } ],
+  "uiSettings" : {
+    "theme" : {
+      "canvasBackgroundColor" : {
+        "light" : "#F6F7F9",
+        "dark" : "#1F272D"
+      },
+      "widgetBackgroundColor" : {
+        "light" : "#FFFFFF",
+        "dark" : "#11171C"
+      },
+      "fontColor" : {
+        "light" : "#11171C",
+        "dark" : "#E8ECF0"
+      },
+      "visualizationColors" : [ "#077A9D", "#FFAB00", "#00A972", "#FF3621", "#8BCAE7", "#AB4057", "#99DDB4", "#FCA4A1", "#919191", "#BF7080", "#c3984b", "#ff00e2" ]
+    }
+  }
+}

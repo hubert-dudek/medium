@@ -1,0 +1,3 @@
+-- Databricks notebook source
+-- MAGIC %md
+-- MAGIC ![workflow_diffrent.png](./images/workflow_diffrent.png "workflow_diffrent.png")
