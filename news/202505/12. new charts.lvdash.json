@@ -99,22 +99,5 @@
       }
     } ],
     "pageType" : "PAGE_TYPE_UNSPECIFIED"
-  } ],
-  "uiSettings" : {
-    "theme" : {
-      "canvasBackgroundColor" : {
-        "light" : "#F6F7F9",
-        "dark" : "#1F272D"
-      },
-      "widgetBackgroundColor" : {
-        "light" : "#FFFFFF",
-        "dark" : "#11171C"
-      },
-      "fontColor" : {
-        "light" : "#11171C",
-        "dark" : "#E8ECF0"
-      },
-      "visualizationColors" : [ "#077A9D", "#FFAB00", "#00A972", "#FF3621", "#8BCAE7", "#AB4057", "#99DDB4", "#FCA4A1", "#919191", "#BF7080", "#c3984b", "#ff00e2" ]
-    }
-  }
+  } ]
 }

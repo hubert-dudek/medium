@@ -1,3 +1,3 @@
 -- Databricks notebook source
 -- MAGIC %md
--- MAGIC ![lakeflow_connect.png](./lakeflow_connect.png "lakeflow_connect.png")
+-- MAGIC ![lakeflow_connect.png](./images/lakeflow_connect.png "lakeflow_connect.png")
