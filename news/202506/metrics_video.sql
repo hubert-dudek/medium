@@ -287,7 +287,5 @@ SELECT
   MEASURE(refund_amount)
 FROM
   transaction_metrics
-WHERE
-  tx_type = 'Refund'
 GROUP BY
   tx_id
