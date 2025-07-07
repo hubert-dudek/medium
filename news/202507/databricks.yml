@@ -1,0 +1,13 @@
+bundle:
+  name: dabs_sample_bundle 
+
+include:
+  - 09_jobs/job.yml
+
+workspace:
+  host: https://adb-3471387803274560.0.azuredatabricks.net/
+
+targets:
+  dev:                            # you may add prod, qa, etc. later
+    default: true                 # makes “dev” the implicit target
+    mode: development             # keeps files in your user area

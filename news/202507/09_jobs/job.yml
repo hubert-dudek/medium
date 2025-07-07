@@ -1,0 +1,8 @@
+resources:
+  jobs:
+    run_dabs_sql_serverless:  
+      name: "Run 09 dabs.sql (serverless)"
+      tasks:
+        - task_key: dabs_sql_task
+          notebook_task:
+            notebook_path: ../09_dabs.sql 
