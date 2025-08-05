@@ -1,0 +1,26 @@
+{
+  "evaluation": {
+    "source": {
+      "name": "1",
+      "display": "1",
+      "aggregation": "AGGREGATION_UNSPECIFIED"
+    },
+    "comparison_operator": "EQUAL",
+    "threshold": {
+      "value": {
+        "double_value": 1.0
+      }
+    },
+    "notification": {
+      "retrigger_seconds": 0,
+      "notify_on_ok": false
+    }
+  },
+  "schedule": {
+    "quartz_cron_schedule": "48 6 0 6 * ?",
+    "timezone_id": "UTC"
+  },
+  "query_lines": [
+    "SELECT 1"
+  ]
+}
