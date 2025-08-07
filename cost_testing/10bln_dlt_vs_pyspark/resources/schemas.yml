@@ -1,0 +1,13 @@
+resources:
+  schemas:
+    schema_XXS:
+      name: SQL_XXS
+      catalog_name: tests
+
+    schema_XS:
+      name: SQL_XS
+      catalog_name: tests
+
+    schema_S:
+      name: SQL_S
+      catalog_name: tests
