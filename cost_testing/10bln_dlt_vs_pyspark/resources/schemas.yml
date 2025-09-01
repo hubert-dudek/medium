@@ -1,13 +1,9 @@
 resources:
   schemas:
-    schema_XXS:
-      name: SQL_XXS
+    schema_rw_dlt_tests:
+      name: rw_dlt_tests
       catalog_name: tests
 
-    schema_XS:
-      name: SQL_XS
-      catalog_name: tests
-
-    schema_S:
-      name: SQL_S
+    schema_rw_pyspark_tests:
+      name: rw_pyspark_tests
       catalog_name: tests

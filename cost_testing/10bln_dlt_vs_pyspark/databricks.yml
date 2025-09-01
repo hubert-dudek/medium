@@ -1,20 +1,11 @@
 bundle:
-  name: cost-testing-bundle
+  name: dlt-pyspark-bundle
 
 include:
   - resources/schemas.yml
   - resources/jobs.yml
 
 variables:
-  SQL_XXS:
-    lookup:
-      warehouse: 'SQL_XXS'
-  SQL_XS:
-    lookup:
-      warehouse: 'SQL_XS'
-  SQL_S:
-    lookup:
-      warehouse: 'SQL_S'
 
 workspace:
   root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}

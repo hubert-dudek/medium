@@ -1,0 +1,162 @@
+{
+  "datasets": [
+    {
+      "name": "fd2874a8",
+      "displayName": "orders",
+      "queryLines": [
+        "-- export to metric view\r\n",
+        "-- undo/redo\r\n",
+        "-- global filters\r\n",
+        "-- Genie relations\r\n",
+        "SELECT * FROM hub.default.orders"
+      ],
+      "columns": [
+        {
+          "displayName": "VIP clients",
+          "description": "",
+          "expression": "CASE\r\n   WHEN customer_id < 103 THEN 'VIP'\r\n   WHEN customer_id >= 103 THEN 'NON-VIP'\r\nEND"
+        }
+      ]
+    },
+    {
+      "name": "9c8608df",
+      "displayName": "customers",
+      "queryLines": [
+        "SELECT * FROM hub.default.customers"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "c26009f0",
+      "displayName": "page",
+      "layout": [
+        {
+          "widget": {
+            "name": "05364157",
+            "multilineTextboxSpec": {
+              "lines": [
+                "aaa"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "d8d68916",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "fd2874a8",
+                  "fields": [
+                    {
+                      "name": "monthly(order_date)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `order_date`)"
+                    },
+                    {
+                      "name": "sum(amount)",
+                      "expression": "SUM(`amount`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(order_date)",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "order_date"
+                },
+                "y": {
+                  "fieldName": "sum(amount)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sum of amount"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "015a911a",
+      "displayName": "Global Filters",
+      "layout": [
+        {
+          "widget": {
+            "name": "69f97abd",
+            "queries": [
+              {
+                "name": "dashboards/01f0866163a31d63b4a50f31cca7e64b/datasets/01f086617438172492f15a8c1a11bf61_VIP clients",
+                "query": {
+                  "datasetName": "fd2874a8",
+                  "fields": [
+                    {
+                      "name": "VIP clients",
+                      "expression": "`VIP clients`"
+                    },
+                    {
+                      "name": "VIP clients_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "VIP clients",
+                    "displayName": "VIP clients",
+                    "queryName": "dashboards/01f0866163a31d63b4a50f31cca7e64b/datasets/01f086617438172492f15a8c1a11bf61_VIP clients"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    }
+  }
+}

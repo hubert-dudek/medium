@@ -1,0 +1,3 @@
+-- Databricks notebook source
+-- MAGIC %md
+-- MAGIC ![pl-azure.png](./pl-azure.png "pl-azure.png")

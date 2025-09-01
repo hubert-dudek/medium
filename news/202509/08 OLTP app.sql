@@ -1,0 +1,3 @@
+-- Databricks notebook source
+-- MAGIC %md
+-- MAGIC OLTP app

@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %sql
-# MAGIC CREATE TABLE IF NOT EXISTS tests.bronze_source.transactions (
+# MAGIC CREATE TABLE IF NOT EXISTS tests_source.transactions10m (
 # MAGIC     transaction_id      BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
 # MAGIC     transaction_date    DATE GENERATED ALWAYS AS (CAST(DATE(transaction_time) AS DATE)) NOT NULL,
 # MAGIC     transaction_time    TIMESTAMP NOT NULL,
@@ -21,8 +21,8 @@ from pyspark.sql.functions import (
     col, rand, round, current_date, date_sub, expr, lit, md5, concat
 )
 
-# Number of records to generate - 2 bln
-num_records = 2e9
+# Number of records to generate - 10 bln
+num_records = 10e9
 
 # Generate a range dataframe [0..(num_records - 1)]
 df = spark.range(num_records)
@@ -49,6 +49,6 @@ df = (
       .drop("id", "random_num")
 )
 
-df.write.mode("append").saveAsTable("tests.bronze_source.transactions")
+df.write.mode("append").saveAsTable("tests_source.transactions10m")
 
-spark.sql("OPTIMIZE tests.bronze_source.transactions")
+spark.sql("OPTIMIZE tests_source.transactions10m")
