@@ -4,10 +4,26 @@ resources:
       name: SQL_XXS
       catalog_name: tests
 
-    schema_XS:
-      name: SQL_XS
+    # schema_XS:
+    #   name: SQL_XS
+    #   catalog_name: tests
+
+    # schema_S:
+    #   name: SQL_S
+    #   catalog_name: tests
+
+    schema_pyspark_standard:
+      name: pyspark_standard
       catalog_name: tests
 
-    schema_S:
-      name: SQL_S
+    schema_pyspark_performance:
+      name: pyspark_performance
+      catalog_name: tests
+
+    schema_pipeline_standard:
+      name: pipeline_standard
+      catalog_name: tests
+
+    schema_pipeline_performance:
+      name: pipeline_performance
       catalog_name: tests
