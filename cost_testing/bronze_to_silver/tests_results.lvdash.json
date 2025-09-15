@@ -36,7 +36,7 @@
     },
     {
       "name": "e70d417b",
-      "displayName": "2_bln_time",
+      "displayName": "2_bln_time_202504",
       "queryLines": [
         "WITH source AS (\r\n",
         "  SELECT *\r\n",
@@ -48,6 +48,30 @@
         "    ('SQL_S', '5m 36s'),\r\n",
         "    ('pyspark_performance', '4m 12s'),\r\n",
         "    ('dlt_performance', '5m 43s')\r\n",
+        "  AS t (name, old_duration)\r\n",
+        ")\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "  name,\r\n",
+        "  old_duration,\r\n",
+        "  -- Convert to total seconds\r\n",
+        "  CAST(regexp_extract(old_duration, '([0-9]+)m', 1) AS INT) * 60 +\r\n",
+        "  CAST(regexp_extract(old_duration, '([0-9]+)s', 1) AS INT) AS duration_seconds\r\n",
+        "FROM source;\r\n"
+      ]
+    },
+    {
+      "name": "277c3af9",
+      "displayName": "2_bln_time_free_202509",
+      "queryLines": [
+        "WITH source AS (\r\n",
+        "  SELECT *\r\n",
+        "  FROM VALUES\r\n",
+        "    ('SQL_XXS', '11m 58s'),\r\n",
+        "    ('pyspark_standard', '12m 53s'),\r\n",
+        "    ('pipeline_standard', '17m 54s'),\r\n",
+        "    ('pyspark_performance', '5m 56s'),\r\n",
+        "    ('pipeline_performance', '11m 24s')\r\n",
         "  AS t (name, old_duration)\r\n",
         ")\r\n",
         "\r\n",
@@ -224,7 +248,8 @@
                 "y": {
                   "fieldName": "name",
                   "axis": {
-                    "hideLabels": false
+                    "hideLabels": false,
+                    "hideTitle": true
                   },
                   "scale": {
                     "type": "categorical",
@@ -239,12 +264,12 @@
                 }
               },
               "frame": {
-                "title": "results 2 bln bronze to silver",
+                "title": "results 2 bln bronze to silver 20025 04",
                 "showTitle": true
               },
               "mark": {
                 "colors": [
-                  "#205b11",
+                  "#B43729",
                   {
                     "themeColorType": "visualizationColors",
                     "position": 2
@@ -289,6 +314,120 @@
           "position": {
             "x": 3,
             "y": 0,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "0f540510",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "277c3af9",
+                  "fields": [
+                    {
+                      "name": "sum(duration_seconds)",
+                      "expression": "SUM(`duration_seconds`)"
+                    },
+                    {
+                      "name": "name",
+                      "expression": "`name`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(duration_seconds)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  },
+                  "displayName": "total s"
+                },
+                "y": {
+                  "fieldName": "name",
+                  "axis": {
+                    "hideLabels": false,
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x"
+                    }
+                  },
+                  "displayName": "rank"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "results 2 bln bronze to silver free 2025 09",
+                "showTitle": true
+              },
+              "mark": {
+                "colors": [
+                  "#B43729",
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ],
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 6,
             "width": 3,
             "height": 6
           }
