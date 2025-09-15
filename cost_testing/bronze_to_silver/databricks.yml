@@ -2,8 +2,7 @@ bundle:
   name: cost-testing-bundle
 
 include:
-  - resources/schemas.yml
-  - resources/jobs.yml
+  - resources/*.yml
 
 variables:
   SQL_XXS:

@@ -5,7 +5,7 @@ resources:
       name: dlt
       libraries:
         - glob:
-            include: ../tests_pipeline/transformations/**
+            include: ${workspace.root_path}/files/tests_pipeline/transformations/**
       schema: pipeline_standard
       continuous: false
       development: false
@@ -13,13 +13,13 @@ resources:
       channel: CURRENT
       catalog: tests
       serverless: true
-      root_path: ../tests_pipeline
+      root_path: ${workspace.root_path}/files/tests_pipeline
     pipeline_performance:
       pipeline_type: WORKSPACE
       name: dlt
       libraries:
         - glob:
-            include: ../tests_pipeline/transformations/**
+            include: ${workspace.root_path}/files/tests_pipeline/transformations/**
       schema: pipeline_performance
       continuous: false
       development: false
@@ -27,4 +27,4 @@ resources:
       channel: CURRENT
       catalog: tests
       serverless: true
-      root_path: ../tests_pipeline
+      root_path: ${workspace.root_path}/files/tests_pipeline
