@@ -1,0 +1,30 @@
+resources:
+  pipelines:
+    pipeline_standard:
+      pipeline_type: WORKSPACE
+      name: dlt
+      libraries:
+        - glob:
+            include: ../tests_pipeline/transformations/**
+      schema: pipeline_standard
+      continuous: false
+      development: false
+      photon: true
+      channel: CURRENT
+      catalog: tests
+      serverless: true
+      root_path: ../tests_pipeline
+    pipeline_performance:
+      pipeline_type: WORKSPACE
+      name: dlt
+      libraries:
+        - glob:
+            include: ../tests_pipeline/transformations/**
+      schema: pipeline_performance
+      continuous: false
+      development: false
+      photon: true
+      channel: CURRENT
+      catalog: tests
+      serverless: true
+      root_path: ../tests_pipeline

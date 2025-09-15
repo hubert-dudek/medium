@@ -10,6 +10,7 @@ resources:
             warehouse_id: ${var.SQL_XXS}
             base_parameters:
               schema: SQL_XXS
+              sample_size: ${var.sample_size}
 
     # bronze_to_silver_xs:
     #   name: bronze_to_silver_SQL_XS

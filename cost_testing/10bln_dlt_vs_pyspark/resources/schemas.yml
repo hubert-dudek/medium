@@ -1,9 +1,0 @@
-resources:
-  schemas:
-    schema_rw_dlt_tests:
-      name: rw_dlt_tests
-      catalog_name: tests
-
-    schema_rw_pyspark_tests:
-      name: rw_pyspark_tests
-      catalog_name: tests
