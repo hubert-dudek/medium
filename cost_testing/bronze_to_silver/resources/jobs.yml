@@ -68,6 +68,6 @@ resources:
           notebook_task:
             notebook_path: ../tests_pyspark/bronze_to_silver.ipynb
             base_parameters:
-              schema: pyspark_performance
+              schema: pyspark_standard
               sample_size: ${var.sample_size}
       performance_target: STANDARD
