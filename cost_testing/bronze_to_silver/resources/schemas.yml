@@ -1,5 +1,10 @@
 resources:
   schemas:
+
+    bronze_source:
+      name: bronze_source
+      catalog_name: tests
+
     schema_XXS:
       name: SQL_XXS
       catalog_name: tests

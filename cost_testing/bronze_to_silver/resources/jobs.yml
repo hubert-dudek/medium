@@ -32,3 +32,42 @@ resources:
     #         warehouse_id: ${var.SQL_S}
     #         base_parameters:
     #           schema:  SQL_S
+
+
+    pipeline_performance_job:
+      name: pipeline_performance
+      tasks:
+        - task_key: pipeline-task
+          pipeline_task:
+            pipeline_id: ${var.pipeline_performance}
+      performance_target: PERFORMANCE_OPTIMIZED
+
+    pipeline_standard_job:
+      name: pipeline_standard
+      tasks:
+        - task_key: pipeline-task-c55ab738-4e8f-4f07-be72-a31666f0b64a
+          pipeline_task:
+            pipeline_id: ${var.pipeline_standard}
+      performance_target: STANDARD
+
+    pyspark_performance_job:
+      name: pyspark_performance
+      tasks:
+        - task_key: pipeline-task
+          notebook_task:
+            notebook_path: ../tests_pyspark/bronze_to_silver.ipynb
+            base_parameters:
+              schema: pyspark_performance
+              sample_size: ${var.sample_size}
+      performance_target: PERFORMANCE_OPTIMIZED
+
+    pyspark_standard_job:
+      name: pyspark_standard
+      tasks:
+        - task_key: pipeline-task
+          notebook_task:
+            notebook_path: ../tests_pyspark/bronze_to_silver.ipynb
+            base_parameters:
+              schema: pyspark_performance
+              sample_size: ${var.sample_size}
+      performance_target: STANDARD

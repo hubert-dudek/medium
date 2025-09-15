@@ -14,6 +14,12 @@ variables:
   # SQL_S:
   #   lookup:
   #     warehouse: 'SQL_S'
+  pipeline_standard:
+    lookup:
+      pipeline: 'pipeline_standard'
+  pipeline_performance:
+    lookup:
+      pipeline: 'pipeline_performance'
 
   sample_size: 
     default: "2e9"

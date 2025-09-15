@@ -21,4 +21,5 @@ SELECT
     amount,
     (amount + (amount * tax))::decimal(10,2) AS amount_with_tax,
     description
-FROM STREAM(tests.bronze_source.transactions_2e9);
+FROM 
+    STREAM(tests.bronze_source.transactions_2e9);

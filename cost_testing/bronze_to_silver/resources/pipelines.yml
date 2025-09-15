@@ -1,8 +1,7 @@
 resources:
   pipelines:
     pipeline_standard:
-      pipeline_type: WORKSPACE
-      name: dlt
+      name: pipeline_standard
       libraries:
         - glob:
             include: ${workspace.root_path}/files/tests_pipeline/transformations/**
@@ -15,8 +14,7 @@ resources:
       serverless: true
       root_path: ${workspace.root_path}/files/tests_pipeline
     pipeline_performance:
-      pipeline_type: WORKSPACE
-      name: dlt
+      name: pipeline_performance
       libraries:
         - glob:
             include: ${workspace.root_path}/files/tests_pipeline/transformations/**
