@@ -1,8 +1,483 @@
 {
+  "datasets": [
+    {
+      "name": "78b74cae",
+      "displayName": "space",
+      "queryLines": [
+        "SELECT name, old_duration::INT\r\n",
+        "  FROM VALUES\r\n",
+        "    ('STRING JSON', '655'),\r\n",
+        "    ('VARIANT JSON', '512')\r\n",
+        "  AS t (name, old_duration)\r\n",
+        "\r\n",
+        "  -- diff: \r\n",
+        "  --22%"
+      ]
+    },
+    {
+      "name": "8ad5eccf",
+      "displayName": "test 1",
+      "queryLines": [
+        "SELECT name, duration::DECIMAL(4,2)\r\n",
+        "  FROM VALUES\r\n",
+        "    ('VARIANT JSON', '1.10'),\r\n",
+        "    ('STRING JSON', '1.86')\r\n",
+        "  AS t (name, duration)\r\n",
+        "  -- 40%"
+      ]
+    },
+    {
+      "name": "614a162d",
+      "displayName": "test 2",
+      "queryLines": [
+        "SELECT name, duration::DECIMAL(4,2)\r\n",
+        "  FROM VALUES\r\n",
+        "    ('STRING JSON', '3.85'),\r\n",
+        "    ('VARIANT JSON', '1.89')\r\n",
+        "  AS t (name, duration)\r\n",
+        "  -- 50%"
+      ]
+    },
+    {
+      "name": "d7677feb",
+      "displayName": "test 3",
+      "queryLines": [
+        "SELECT name, duration::DECIMAL(4,2)\r\n",
+        "  FROM VALUES\r\n",
+        "    ('STRING JSON', '7.32'),\r\n",
+        "    ('VARIANT JSON', '3.79')\r\n",
+        "  AS t (name, duration)\r\n",
+        "  -- 48%"
+      ]
+    }
+  ],
   "pages": [
     {
       "name": "215aa4ff",
-      "displayName": "Untitled page",
+      "displayName": "results",
+      "layout": [
+        {
+          "widget": {
+            "name": "f38d5634",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "78b74cae",
+                  "fields": [
+                    {
+                      "name": "sum(old_duration)",
+                      "expression": "SUM(`old_duration`)"
+                    },
+                    {
+                      "name": "name",
+                      "expression": "`name`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(old_duration)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "MB"
+                  },
+                  "displayName": "MB"
+                },
+                "y": {
+                  "fieldName": "name",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "name"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#D13826",
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "cb228f7e",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ad5eccf",
+                  "fields": [
+                    {
+                      "name": "duration",
+                      "expression": "`duration`"
+                    },
+                    {
+                      "name": "name",
+                      "expression": "`name`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "duration",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "seconds"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "all"
+                    }
+                  },
+                  "displayName": "ss"
+                },
+                "y": {
+                  "fieldName": "name",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "name"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#D13826",
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "6de9e7b0",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "614a162d",
+                  "fields": [
+                    {
+                      "name": "duration",
+                      "expression": "`duration`"
+                    },
+                    {
+                      "name": "name",
+                      "expression": "`name`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "duration",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "seconds"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "all"
+                    }
+                  },
+                  "displayName": "ss"
+                },
+                "y": {
+                  "fieldName": "name",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "name"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#D13826",
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "d8f7f626",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d7677feb",
+                  "fields": [
+                    {
+                      "name": "duration",
+                      "expression": "`duration`"
+                    },
+                    {
+                      "name": "name",
+                      "expression": "`name`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "duration",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "seconds"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "all"
+                    }
+                  },
+                  "displayName": "ss"
+                },
+                "y": {
+                  "fieldName": "name",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "name"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#D13826",
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 5,
+            "width": 3,
+            "height": 5
+          }
+        }
+      ],
       "pageType": "PAGE_TYPE_CANVAS"
     }
   ],
