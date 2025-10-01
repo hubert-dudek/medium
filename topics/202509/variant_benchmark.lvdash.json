@@ -479,6 +479,59 @@
         }
       ],
       "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "e8acd94a",
+      "displayName": "Global Filters",
+      "layout": [
+        {
+          "widget": {
+            "name": "3d60d073",
+            "queries": [
+              {
+                "name": "dashboards/01f0933e77481fc1bdc03120296670da/datasets/01f093b77a2115518ecfa6f38da96cbb_name",
+                "query": {
+                  "datasetName": "78b74cae",
+                  "fields": [
+                    {
+                      "name": "name",
+                      "expression": "`name`"
+                    },
+                    {
+                      "name": "name_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "name",
+                    "displayName": "name",
+                    "queryName": "dashboards/01f0933e77481fc1bdc03120296670da/datasets/01f093b77a2115518ecfa6f38da96cbb_name"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS"
     }
   ],
   "uiSettings": {
