@@ -1,0 +1,27 @@
+# Databricks Asset Bundle configuration, more info here: https://docs.databricks.com/en/dev-tools/bundles/settings.html
+bundle:
+  name: "defaults"
+
+include:
+  - resources/*.yml
+
+variables:
+  policy-job-2w-lts:
+    lookup:
+      cluster_policy: job-2w-lts
+
+resources:
+  jobs:
+    job_with_defaults:
+      job_clusters:
+        - job_cluster_key: Job_cluster
+          new_cluster:
+            apply_policy_default_values: true
+            policy_id: ${var.policy-job-2w-lts}
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-1179923690951934.14.azuredatabricks.net

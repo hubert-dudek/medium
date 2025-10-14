@@ -1,0 +1,47 @@
+# Databricks Asset Bundle configuration, more info here: https://docs.databricks.com/en/dev-tools/bundles/settings.html
+bundle:
+  name: "defaults"
+
+include:
+  - resources/*.yml
+
+variables:
+  policy-job-2w-lts:
+    lookup:
+      cluster_policy: job-2w-lts
+
+resources:
+  jobs:
+    job_with_defaults:
+      tasks:
+        - task_key: run_notebook
+          description: "Simple example task"
+          notebook_task:
+            notebook_path: "04 bundles.ipynb"
+          job_cluster_key: Job_cluster
+      job_clusters:
+        - job_cluster_key: Job_cluster
+          new_cluster:
+            apply_policy_default_values: true
+            policy_id: ${var.policy-job-2w-lts}
+
+
+# run by:
+# databricks bundle run materialize_env --target YOUR_TARGET --profile YOUR_PROFILE
+# please change shell in Visual Studio Code to bash
+scripts:
+  env_copy:
+    content: |
+      TARGET=$(databricks bundle summary | grep "Target:" | awk '{print $2}')
+      PATHVAL=$(databricks bundle summary | grep "Path:" | awk '{print $2}')
+
+      echo "Target=$TARGET"
+      echo "Path=$PATHVAL"
+ 
+      databricks fs cp "$PATHVAL/files/.env_$TARGET.yml" "$PATHVAL/files/.env.yml" --overwrite
+
+targets:
+  dev:
+    default: true
+    workspace:
+      host: https://adb-1179923690951934.14.azuredatabricks.net
