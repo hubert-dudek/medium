@@ -5,22 +5,6 @@ include:
   - resources/*.yml
 
 variables:
-  SQL_XXS:
-    lookup:
-      warehouse: 'Serverless Starter Warehouse'
-  SQL_XS:
-    lookup:
-      warehouse: 'SQL_XS'
-  SQL_S:
-    lookup:
-      warehouse: 'SQL_S'
-  pipeline_standard:
-    lookup:
-      pipeline: 'pipeline_standard'
-  pipeline_performance:
-    lookup:
-      pipeline: 'pipeline_performance'
-
   sample_size: 
     default: "2e9"
 

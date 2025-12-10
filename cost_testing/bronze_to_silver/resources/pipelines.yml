@@ -13,6 +13,9 @@ resources:
       catalog: tests
       serverless: true
       root_path: ${workspace.root_path}/files/tests_pipeline
+      tags:
+        "tests": "pipeline_standard"
+
     pipeline_performance:
       name: pipeline_performance
       libraries:
@@ -26,3 +29,5 @@ resources:
       catalog: tests
       serverless: true
       root_path: ${workspace.root_path}/files/tests_pipeline
+      tags:
+        "tests": "pipeline_performance"

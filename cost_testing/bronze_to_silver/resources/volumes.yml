@@ -1,0 +1,15 @@
+resources:
+  volumes:
+    vol_checkpoint_standard:
+      name: vol_checkpoint_standard
+      catalog_name: ${resources.schemas.schema_pyspark_standard.catalog_name}
+      schema_name:  ${resources.schemas.schema_pyspark_standard.name}
+      volume_type: MANAGED
+      comment: "Checkpoint volume for standard PySpark pipelines"
+
+    vol_checkpoint_performance:
+      name: vol_checkpoint_performance
+      catalog_name: ${resources.schemas.schema_pyspark_performance.catalog_name}
+      schema_name:  ${resources.schemas.schema_pyspark_performance.name}
+      volume_type: MANAGED
+      comment: "Checkpoint volume for performance PySpark pipelines"

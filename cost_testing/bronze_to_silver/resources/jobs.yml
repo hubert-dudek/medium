@@ -7,31 +7,37 @@ resources:
           notebook_task:
             notebook_path: ../tests_sql/bronze_to_silver_sql.ipynb
             source: WORKSPACE
-            warehouse_id: ${var.SQL_XXS}
+            warehouse_id: ${resources.sql_warehouses.SQL_XXS.id}
             base_parameters:
               schema: SQL_XXS
+      tags:
+        "tests": "SQL_XXS"
 
     bronze_to_silver_xs:
       name: bronze_to_silver_SQL_XS
       tasks:
         - task_key: test_sql_xs
           notebook_task:
-            notebook_path: ../tests/bronze_to_silver_sql.ipynb
+            notebook_path: ../tests_sql/bronze_to_silver_sql.ipynb
             source: WORKSPACE
-            warehouse_id: ${var.SQL_XS}
+            warehouse_id: ${resources.sql_warehouses.SQL_XS.id}
             base_parameters:
               schema: SQL_XS
+      tags:
+        "tests": "SQL_XS"
 
     bronze_to_silver_s:
       name: bronze_to_silver_SQL_S
       tasks:
         - task_key: test_sql_s
           notebook_task:
-            notebook_path: ../tests/bronze_to_silver_sql.ipynb
+            notebook_path: ../tests_sql/bronze_to_silver_sql.ipynb
             source: WORKSPACE
-            warehouse_id: ${var.SQL_S}
+            warehouse_id: ${resources.sql_warehouses.SQL_S.id}
             base_parameters:
               schema:  SQL_S
+      tags:
+        "tests": "SQL_S"
 
 
     pipeline_performance_job:
@@ -39,16 +45,20 @@ resources:
       tasks:
         - task_key: pipeline-task
           pipeline_task:
-            pipeline_id: ${var.pipeline_performance}
+            pipeline_id: ${resources.pipelines.pipeline_performance.id}
       performance_target: PERFORMANCE_OPTIMIZED
+      tags:
+        "tests": "pipeline_performance"
 
     pipeline_standard_job:
       name: pipeline_standard
       tasks:
-        - task_key: pipeline-task-c55ab738-4e8f-4f07-be72-a31666f0b64a
+        - task_key: pipeline-task
           pipeline_task:
-            pipeline_id: ${var.pipeline_standard}
+            pipeline_id: ${resources.pipelines.pipeline_standard.id}
       performance_target: STANDARD
+      tags:
+        "tests": "pipeline_standard"
 
     pyspark_performance_job:
       name: pyspark_performance
@@ -60,6 +70,8 @@ resources:
               schema: pyspark_performance
               sample_size: ${var.sample_size}
       performance_target: PERFORMANCE_OPTIMIZED
+      tags:
+        "tests": "pyspark_performance"
 
     pyspark_standard_job:
       name: pyspark_standard
@@ -71,3 +83,5 @@ resources:
               schema: pyspark_standard
               sample_size: ${var.sample_size}
       performance_target: STANDARD
+      tags:
+        "tests": "pyspark_standard"
