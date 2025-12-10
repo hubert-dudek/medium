@@ -11,27 +11,27 @@ resources:
             base_parameters:
               schema: SQL_XXS
 
-    # bronze_to_silver_xs:
-    #   name: bronze_to_silver_SQL_XS
-    #   tasks:
-    #     - task_key: test_sql_xs
-    #       notebook_task:
-    #         notebook_path: ../tests/bronze_to_silver_sql.ipynb
-    #         source: WORKSPACE
-    #         warehouse_id: ${var.SQL_XS}
-    #         base_parameters:
-    #           schema: SQL_XS
+    bronze_to_silver_xs:
+      name: bronze_to_silver_SQL_XS
+      tasks:
+        - task_key: test_sql_xs
+          notebook_task:
+            notebook_path: ../tests/bronze_to_silver_sql.ipynb
+            source: WORKSPACE
+            warehouse_id: ${var.SQL_XS}
+            base_parameters:
+              schema: SQL_XS
 
-    # bronze_to_silver_s:
-    #   name: bronze_to_silver_SQL_S
-    #   tasks:
-    #     - task_key: test_sql_s
-    #       notebook_task:
-    #         notebook_path: ../tests/bronze_to_silver_sql.ipynb
-    #         source: WORKSPACE
-    #         warehouse_id: ${var.SQL_S}
-    #         base_parameters:
-    #           schema:  SQL_S
+    bronze_to_silver_s:
+      name: bronze_to_silver_SQL_S
+      tasks:
+        - task_key: test_sql_s
+          notebook_task:
+            notebook_path: ../tests/bronze_to_silver_sql.ipynb
+            source: WORKSPACE
+            warehouse_id: ${var.SQL_S}
+            base_parameters:
+              schema:  SQL_S
 
 
     pipeline_performance_job:

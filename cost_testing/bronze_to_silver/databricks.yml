@@ -8,12 +8,12 @@ variables:
   SQL_XXS:
     lookup:
       warehouse: 'Serverless Starter Warehouse'
-  # SQL_XS:
-  #   lookup:
-  #     warehouse: 'SQL_XS'
-  # SQL_S:
-  #   lookup:
-  #     warehouse: 'SQL_S'
+  SQL_XS:
+    lookup:
+      warehouse: 'SQL_XS'
+  SQL_S:
+    lookup:
+      warehouse: 'SQL_S'
   pipeline_standard:
     lookup:
       pipeline: 'pipeline_standard'

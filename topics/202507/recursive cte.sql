@@ -4,7 +4,7 @@
 
 -- COMMAND ----------
 
-WITH RECURSIVE recursive_cte(col) MAX RECURSION LEVEL 10 -- recursive limit, kind of timeout as if more than 10 it will fail (VIDEO show fail)
+WITH RECURSIVE recursive_cte(col) MAX RECURSION LEVEL 15 -- recursive limit, kind of timeout as if more than 10 it will fail (VIDEO show fail)
 AS (
   SELECT
     'a'
@@ -112,7 +112,7 @@ WITH RECURSIVE recursive_cte AS (
   FROM
     department_hierarchy d
     JOIN recursive_cte -- it is recursive cte not table, it is self-referencing
-      ON d.parent = sd.department
+      ON d.parent = recursive_cte.department
 )
 SELECT
   level,
