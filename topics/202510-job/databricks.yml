@@ -1,0 +1,25 @@
+bundle:
+  name: "clusters-job-policy"
+
+variables:
+  my-policy:
+    lookup:
+      cluster_policy: "Job Compute"
+
+resources:
+  clusters:
+    job-interactive-cluster-job-policy:
+      cluster_name: job-interactive-cluster-job-policy
+      apply_policy_default_values: true
+      spark_version: 17.3.x-scala2.13
+      policy_id: ${var.my-policy}
+      workload_type:
+        clients:
+          jobs: true
+          notebooks: false
+
+targets:
+  dev:
+    default: true
+    workspace:
+      host: https://adb-1179923690951934.14.azuredatabricks.net

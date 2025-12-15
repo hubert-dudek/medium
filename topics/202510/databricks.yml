@@ -1,0 +1,34 @@
+bundle:
+  name: "clusters"
+
+variables:
+  my-policy:
+    lookup:
+      cluster_policy: my-policy
+
+resources:
+  clusters:
+    job-interactive-cluster:
+      cluster_name: job-interactive-cluster
+      apply_policy_default_values: true
+      spark_version: 17.3.x-scala2.13
+      policy_id: ${var.my-policy}
+      workload_type:
+        clients:
+          jobs: true
+          notebooks: false
+    notebook-interactive-cluster:
+      cluster_name: notebook-interactive-cluster
+      apply_policy_default_values: true
+      spark_version: 17.3.x-scala2.13
+      policy_id: ${var.my-policy}
+      workload_type:
+        clients:
+          jobs: false
+          notebooks: true
+
+targets:
+  dev:
+    default: true
+    workspace:
+      host: https://adb-1179923690951934.14.azuredatabricks.net
