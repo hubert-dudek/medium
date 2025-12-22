@@ -1,0 +1,42 @@
+# This is a Databricks asset bundle definition for confluence.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: confluence
+  uuid: 87a3ebc1-9065-469e-8bbc-c2647e435e1b
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+# Variable declarations. These variables are assigned in the dev/prod targets below.
+variables:
+  dest_catalog:
+    default: hub
+  dest_schema:
+    default: default
+
+targets:
+  dev:
+    # The default target uses 'mode: development' to create a development copy.
+    # - Deployed resources get prefixed with '[dev my_user_name]'
+    # - Any job schedules and triggers are paused by default.
+    # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-4539755d-8d40.cloud.databricks.com
+    variables:
+      catalog: hub
+      schema: dev
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-4539755d-8d40.cloud.databricks.com
+      # We explicitly deploy to /Workspace/Users/hdude2020@gmail.com to make sure we only have a single copy.
+      root_path: /Workspace/Users/hdude2020@gmail.com/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      catalog: hub
+      schema: prod
+    permissions:
+      - user_name: hdude2020@gmail.com
+        level: CAN_MANAGE
