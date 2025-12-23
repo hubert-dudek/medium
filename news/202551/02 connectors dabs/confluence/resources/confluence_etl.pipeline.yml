@@ -5,11 +5,11 @@ resources:
       catalog: ${var.dest_catalog}
       target: ${var.dest_schema}
       ingestion_definition:
-        connection_name: confluence_connection
+        connection_name: my_confluence
         objects:
           - table:
               source_schema: default
               source_table: pages
               destination_catalog: ${var.dest_catalog}
               destination_schema: ${var.dest_schema}
-              destination_table: <table-name>
+              destination_table: pages

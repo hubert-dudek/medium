@@ -1,5 +1,8 @@
 from pyspark import pipelines as dp
 
+@dp.table(name="silver_events")
+def silver_events():
+    return spark.readStream.table("hub.default.bronze_events")
 
 @dp.foreach_batch_sink(name="audit_sink")
 def audit_sink(df, batch_id: int):
@@ -18,12 +21,10 @@ def audit_sink(df, batch_id: int):
     )
     return
 
-
-@dp.table(name="silver_events")
-def silver_events():
-    return spark.readStream.table("hub.default.bronze_events")
-
-
 @dp.append_flow(target="audit_sink", name="events_flow")
 def events_flow():
     return spark.readStream.table("silver_events")
+
+
+
+
