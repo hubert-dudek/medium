@@ -1,0 +1,11 @@
+bundle:
+  name: simplest_dab
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    default: true
+    workspace:
+      host: https://dbc-ca93cffe-fba0.cloud.databricks.com
