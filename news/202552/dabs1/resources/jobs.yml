@@ -7,4 +7,4 @@ resources:
           notebook_task:
             notebook_path: ../src/sql.dbquery.ipynb
             source: WORKSPACE
-            warehouse_id: ${simplest_dab.resources.sql_warehouses.my_sql.id}
+            warehouse_id: ${resources.sql_warehouses.my_sql.id}

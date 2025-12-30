@@ -3,7 +3,7 @@ resources:
     my_alert:
       display_name: my_alert
       query_text: select 2
-      warehouse_id: 799f096837fzzzz4
+      warehouse_id: ${resources.sql_warehouses.my_sql.id}
       schedule:
         quartz_cron_schedule: "44 19 */1 * * ?"
         timezone_id: Europe/Amsterdam
