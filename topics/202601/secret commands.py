@@ -40,14 +40,9 @@
 
 # COMMAND ----------
 
-# MAGIC %%timeit 20???
-# MAGIC df.selectExpr("id * 2").count()
-
-# COMMAND ----------
-
 # DBTITLE 1,suppress output and optionally pass to variable
 # MAGIC %%capture out
-# MAGIC df = spark.range(1_000_000)
+# MAGIC df = spark.createDataFrame([(1, 'a'), (2, 'b')], ['id', 'value'])
 # MAGIC df.show()
 
 # COMMAND ----------
@@ -128,11 +123,6 @@ print(files)
 
 # MAGIC %pinfo spark.range
 # MAGIC
-
-# COMMAND ----------
-
-df = spark.createDataFrame([(1, 'a'), (2, 'b')], ['id', 'value'])
-df.show()
 
 # COMMAND ----------
 
