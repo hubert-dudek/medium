@@ -40,14 +40,13 @@
 
 # COMMAND ----------
 
-# DBTITLE 1,suppress output and optionally pass to variable
 # MAGIC %%capture out
 # MAGIC df = spark.createDataFrame([(1, 'a'), (2, 'b')], ['id', 'value'])
 # MAGIC df.show()
 
 # COMMAND ----------
 
-out.stdout
+print(out.stdout)
 
 # COMMAND ----------
 

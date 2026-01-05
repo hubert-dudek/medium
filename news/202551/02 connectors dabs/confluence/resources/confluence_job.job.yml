@@ -2,6 +2,7 @@ resources:
   jobs:
     confluence_dab_job:
       name: confluence_dab_job
+      performance_target: STANDARD
 
       trigger:
         # Run this job every day, exactly one day from the last run
