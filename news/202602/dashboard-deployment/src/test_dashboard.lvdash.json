@@ -1,0 +1,29 @@
+{
+  "datasets": [
+    {
+      "name": "292f9846",
+      "displayName": "dataset1",
+      "queryLines": [
+        "SELECT *\r\n",
+        "FROM VALUES\r\n",
+        "  (1, 'Alice', 25),\r\n",
+        "  (2, 'Bob', 30),\r\n",
+        "  (3, 'Charlie', 28)\r\n",
+        "AS t(id, name, age);\r\n"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "1b9e2ff8",
+      "displayName": "Untitled page",
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}

@@ -1,0 +1,31 @@
+# Databricks Asset Bundle configuration, more info here: https://docs.databricks.com/en/dev-tools/bundles/settings.html
+bundle:
+  name: "dashboard-deployment"
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog_name:
+    default: workspace
+  schema_name:
+    default: default
+
+targets:
+  # The 'dev' target, for development purposes. This target is the default.
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-ca93cffe-fba0.cloud.databricks.com
+    variables:
+      catalog_name: main
+      schema_name: demo
+
+  # The 'prod' target, used for production deployment.
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-ca93cffe-fba0.cloud.databricks.com
+      root_path: /deployment/.bundle/dahsboard_test/
+    
