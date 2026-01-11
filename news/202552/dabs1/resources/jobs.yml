@@ -3,7 +3,7 @@ resources:
     sql_job:
       name: sql_test_job
       tasks:
-        - task_key: test_sql
+        - task_key: test_sql_2
           notebook_task:
             notebook_path: ../src/sql.dbquery.ipynb
             source: WORKSPACE

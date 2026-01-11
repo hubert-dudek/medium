@@ -1,0 +1,11 @@
+resources:
+  jobs:
+    sql_job:
+      name: sql_test_job
+      tasks:
+        - task_key: test_sql
+          description: my task
+          notebook_task:
+            notebook_path: ../src/sql.dbquery.ipynb
+            source: WORKSPACE
+            warehouse_id: ${resources.sql_warehouses.my_sql.id}

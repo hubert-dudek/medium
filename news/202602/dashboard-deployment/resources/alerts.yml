@@ -1,0 +1,16 @@
+resources:
+  alerts:
+    my_alert:
+      display_name: my_alert
+      query_text: select 1
+      warehouse_id: ${resources.sql_warehouses.my_sql.id}
+      schedule:
+        quartz_cron_schedule: "44 19 */1 * * ?"
+        timezone_id: Europe/Amsterdam
+      evaluation:
+        comparison_operator: EQUAL
+        source:
+          name: "1"
+        threshold:
+          value:
+            double_value: 2
