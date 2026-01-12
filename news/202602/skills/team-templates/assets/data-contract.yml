@@ -1,0 +1,65 @@
+# Data contract for {{dataset_name}}
+# Fill in the fields below. Keep this file in version control.
+
+dataset:
+  name: {{dataset_name}}
+  description: {{description}}
+  domain: {{domain}}
+  owner:
+    team: {{team}}
+    slack: {{slack_channel}}
+    email: {{owner_email}}
+
+delivery:
+  cadence: {{cadence}}           # e.g. hourly, daily, streaming
+  freshness_sla_minutes: {{freshness_sla_minutes}}
+  availability_sla_percent: {{availability_sla_percent}}
+
+storage:
+  platform: databricks
+  location: {{catalog}}.{{schema}}.{{table}}
+  format: delta
+  partition_columns: [{{partition_columns}}]
+
+governance:
+  data_classification: {{classification}}   # PII/PHI/PCI/None/Unknown
+  retention_days: {{retention_days}}
+  access:
+    readers: [{{reader_groups}}]
+    writers: [{{writer_groups}}]
+
+schema:
+  primary_key: [{{primary_key}}]
+  columns:
+    - name: {{col_1}}
+      type: {{type_1}}
+      nullable: {{nullable_1}}   # true/false
+      description: {{col_desc_1}}
+    - name: {{col_2}}
+      type: {{type_2}}
+      nullable: {{nullable_2}}
+      description: {{col_desc_2}}
+
+quality:
+  checks:
+    - name: no_nulls_in_primary_key
+      type: not_null
+      columns: [{{primary_key}}]
+      severity: error
+    - name: uniqueness_primary_key
+      type: unique
+      columns: [{{primary_key}}]
+      severity: error
+    - name: freshness_sla
+      type: freshness
+      column: {{event_time_column}}
+      max_delay_minutes: {{freshness_sla_minutes}}
+      severity: warn
+
+change_management:
+  breaking_change_policy: {{breaking_change_policy}}  # e.g. 2-week notice + version bump
+  contact_for_changes: {{owner_email}}
+
+consumers:
+  - name: {{consumer_1}}
+    use_case: {{use_case_1}}

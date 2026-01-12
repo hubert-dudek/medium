@@ -6,17 +6,105 @@
       "queryLines": [
         "SELECT *\r\n",
         "FROM VALUES\r\n",
-        "  (1, 'Alice', 25),\r\n",
-        "  (2, 'Bob', 30),\r\n",
-        "  (3, 'Charlie', 28)\r\n",
-        "AS t(id, name, age);\r\n"
+        "  ('Alice', 'Math', 85),\r\n",
+        "  ('Alice', 'English', 92),\r\n",
+        "  ('Bob', 'Math', 78),\r\n",
+        "  ('Bob', 'English', 88),\r\n",
+        "  ('Charlie', 'Math', 90),\r\n",
+        "  ('Charlie', 'English', 81)\r\n",
+        "AS t(name, subject, score);\r\n"
       ]
     }
   ],
   "pages": [
     {
       "name": "1b9e2ff8",
-      "displayName": "Untitled page",
+      "displayName": "pivot",
+      "layout": [
+        {
+          "widget": {
+            "name": "f21a2f15",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "292f9846",
+                  "fields": [
+                    {
+                      "name": "name",
+                      "expression": "`name`"
+                    },
+                    {
+                      "name": "subject",
+                      "expression": "`subject`"
+                    },
+                    {
+                      "name": "sum(score)",
+                      "expression": "SUM(`score`)"
+                    }
+                  ],
+                  "cubeGroupingSets": {
+                    "sets": [
+                      {
+                        "fieldNames": [
+                          "name"
+                        ]
+                      },
+                      {
+                        "fieldNames": [
+                          "subject"
+                        ]
+                      }
+                    ]
+                  },
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "ASC",
+                      "expression": "`name`"
+                    },
+                    {
+                      "direction": "ASC",
+                      "expression": "`subject`"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pivot",
+              "encodings": {
+                "rows": [
+                  {
+                    "fieldName": "name"
+                  }
+                ],
+                "columns": [
+                  {
+                    "fieldName": "subject"
+                  }
+                ],
+                "cell": {
+                  "type": "multi-cell",
+                  "fields": [
+                    {
+                      "fieldName": "sum(score)",
+                      "cellType": "text"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 2,
+            "height": 6
+          }
+        }
+      ],
       "pageType": "PAGE_TYPE_CANVAS"
     }
   ],
