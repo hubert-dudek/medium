@@ -1,9 +1,8 @@
 resources: 
   dashboards:
     sales_overview:
-      display_name: "Dashbard Catalog and Schema changes"
+      display_name: "Dynamic Catalog and Schema"
       file_path: ./../src/test_dashboard.lvdash.json
       warehouse_id: ${resources.sql_warehouses.my_sql.id}
       dataset_catalog: ${var.catalog_name}
       dataset_schema: ${var.schema_name}
-      embed_credentials: true
