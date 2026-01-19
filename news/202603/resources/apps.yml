@@ -1,0 +1,19 @@
+resources:
+  apps:
+    catalog_env_app:
+      name: catalog-env-app-${bundle.target}
+      description: Simple Streamlit app that prints the CATALOG env var (configured via bundle config).
+      source_code_path: ./app
+      compute_size: SMALL
+
+      # This replaces the need for app/app.yaml.
+      config:
+        command:
+          - streamlit
+          - run
+          - app.py
+        env:
+          - name: CATALOG
+            value: ${var.catalog}
+          - name: STREAMLIT_GATHER_USAGE_STATS
+            value: "false"
