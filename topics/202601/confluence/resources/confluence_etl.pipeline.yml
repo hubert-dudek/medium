@@ -1,0 +1,21 @@
+resources:
+  pipelines:
+    pipeline_confluence:
+      name: confluence_test_pipeline
+      catalog: ${var.dest_catalog}
+      target: ${var.dest_schema}
+      ingestion_definition:
+        connection_name: my_confluence
+        objects:
+          - table:
+              source_schema: default
+              source_table: pages
+              destination_catalog: ${var.dest_catalog}
+              destination_schema: ${var.dest_schema}
+              destination_table: pages
+          - table:
+              source_schema: default
+              source_table: attachments
+              destination_catalog: ${var.dest_catalog}
+              destination_schema: ${var.dest_schema}
+              destination_table: attachments

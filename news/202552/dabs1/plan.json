@@ -1,0 +1,15 @@
+{
+  "plan_version": 1,
+  "cli_version": "0.281.0",
+  "plan": {
+    "resources.alerts.my_alert": {
+      "action": "create"
+    },
+    "resources.jobs.sql_job": {
+      "action": "create"
+    },
+    "resources.sql_warehouses.my_sql": {
+      "action": "create"
+    }
+  }
+}

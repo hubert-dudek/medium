@@ -1,14 +1,15 @@
 bundle:
-  name: news-202603
+  name: confluence
+  uuid: 87a3ebc1-9065-469e-8bbc-c2647e435e5b
 
 include:
   - resources/*.yml
 
 variables:
-  catalog:
-    default: main
-  schema:
-    default: default
+  dest_catalog:
+    default: hub
+  dest_schema:
+    default: ingestion
 
 targets:
   prod:

@@ -1,0 +1,17 @@
+resources:
+  jobs:
+    confluence_dab_job:
+      name: confluence_job_test
+      performance_target: STANDARD
+
+      trigger:
+        # Run this job every day, exactly one day from the last run
+        # See https://docs.databricks.com/api/workspace/jobs/create#trigger
+        periodic:
+          interval: 1
+          unit: DAYS
+
+      tasks:
+        - task_key: refresh_pipeline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.pipeline_confluence.id}

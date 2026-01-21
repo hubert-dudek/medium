@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D2LT9V0WVM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-D2LT9V0WVM');
+</script>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A clean HTML page template." />
+    <title>Page Template</title>
+
+    <!-- Basic SEO / Social -->
+    <meta property="og:title" content="Page Template" />
+    <meta property="og:description" content="A clean HTML page template." />
+    <meta property="og:type" content="website" />
+
+    <style>
+      :root {
+        --bg: #0b0f1a;
+        --card: rgba(255,255,255,.06);
+        --card-border: rgba(255,255,255,.14);
+        --text: rgba(255,255,255,.9);
+        --muted: rgba(255,255,255,.65);
+        --brand: #7c5cff;
+        --brand2: #22d3ee;
+        --shadow: 0 16px 40px rgba(0,0,0,.35);
+        --radius: 18px;
+        --maxw: 1120px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+        background: radial-gradient(1200px 600px at 20% -10%, rgba(124,92,255,.35), transparent 60%),
+                    radial-gradient(900px 500px at 90% 10%, rgba(34,211,238,.25), transparent 60%),
+                    var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+      }
+
+      a { color: inherit; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+
+      .container {
+        width: min(var(--maxw), calc(100% - 48px));
+        margin: 0 auto;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+        background: rgba(11,15,26,.6);
+        border-bottom: 1px solid rgba(255,255,255,.08);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0;
+        gap: 16px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        letter-spacing: .2px;
+      }
+
+      .logo {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--brand), var(--brand2));
+        box-shadow: 0 10px 25px rgba(124,92,255,.25);
+      }
+
+      .navlinks {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border: 1px solid rgba(255,255,255,.14);
+        background: rgba(255,255,255,.06);
+        color: var(--text);
+        padding: 10px 14px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,.18);
+        cursor: pointer;
+      }
+      .btn:hover { background: rgba(255,255,255,.09); text-decoration: none; }
+      .btn.primary {
+        border-color: rgba(124,92,255,.55);
+        background: linear-gradient(135deg, rgba(124,92,255,.95), rgba(34,211,238,.75));
+        color: #06101a;
+        font-weight: 700;
+      }
+      .btn.primary:hover { filter: brightness(1.05); }
+
+      main { padding: 54px 0 70px; }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.2fr .8fr;
+        gap: 28px;
+        align-items: center;
+        padding: 26px 0 18px;
+      }
+
+      .kicker {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 6px 10px;
+        border: 1px solid rgba(255,255,255,.14);
+        background: rgba(255,255,255,.06);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      h1 {
+        margin: 14px 0 10px;
+        font-size: clamp(30px, 4vw, 52px);
+        line-height: 1.06;
+        letter-spacing: -0.6px;
+      }
+
+      .lead {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 16px;
+        max-width: 58ch;
+      }
+
+      .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+
+      .hero-card {
+        background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 18px;
+      }
+
+      .statgrid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .stat {
+        padding: 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,.12);
+        background: rgba(255,255,255,.05);
+      }
+      .stat b { display: block; font-size: 18px; }
+      .stat span { color: var(--muted); font-size: 13px; }
+
+      section { margin-top: 42px; }
+      .section-title {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 14px;
+      }
+      .section-title h2 {
+        margin: 0;
+        font-size: 20px;
+        letter-spacing: -0.2px;
+      }
+      .section-title p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .card {
+        border-radius: var(--radius);
+        background: rgba(255,255,255,.05);
+        border: 1px solid rgba(255,255,255,.12);
+        padding: 16px;
+        box-shadow: 0 10px 25px rgba(0,0,0,.22);
+        min-height: 120px;
+      }
+
+      .card h3 { margin: 0 0 6px; font-size: 16px; }
+      .card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      form {
+        display: grid;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      label { font-size: 13px; color: var(--muted); }
+      input, textarea {
+        width: 100%;
+        padding: 12px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,.14);
+        background: rgba(255,255,255,.05);
+        color: var(--text);
+        outline: none;
+      }
+      input:focus, textarea:focus { border-color: rgba(34,211,238,.55); }
+      textarea { min-height: 110px; resize: vertical; }
+
+      footer {
+        border-top: 1px solid rgba(255,255,255,.08);
+        padding: 24px 0 34px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .footer-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      /* Responsive */
+      @media (max-width: 920px) {
+        .hero { grid-template-columns: 1fr; }
+        .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .split { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 560px) {
+        .grid { grid-template-columns: 1fr; }
+        .navlinks { gap: 12px; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="container">
+        <div class="nav">
+          <a class="brand" href="#top" aria-label="Home">
+            <span class="logo" aria-hidden="true"></span>
+            <span>MySite</span>
+          </a>
+
+          <nav class="navlinks" aria-label="Primary">
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+            <a class="btn" href="#contact">Talk to us</a>
+            <a class="btn primary" href="#get-started">Get started</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <div class="container">
+        <!-- HERO -->
+        <div class="hero">
+          <div>
+            <span class="kicker">✨ Template • Responsive • Single file</span>
+            <h1>Build a clean landing page in minutes.</h1>
+            <p class="lead">
+              Use this starter to ship fast: sticky header, hero section, feature cards,
+              and a contact form. Swap text, colors, and sections as needed.
+            </p>
+            <div class="hero-actions" id="get-started">
+              <a class="btn primary" href="#features">See features</a>
+              <a class="btn" href="#contact">Contact</a>
+            </div>
+          </div>
+
+          <aside class="hero-card" aria-label="Quick stats">
+            <h3 style="margin:0 0 6px;">Quick snapshot</h3>
+            <p style="margin:0;color:var(--muted);font-size:14px;">
+              Replace this panel with your product image, testimonial, or pricing.
+            </p>
+            <div class="statgrid">
+              <div class="stat"><b>1 file</b><span>No build tools</span></div>
+              <div class="stat"><b>Mobile</b><span>Responsive layout</span></div>
+              <div class="stat"><b>Clean</b><span>Modern UI</span></div>
+              <div class="stat"><b>Fast</b><span>Easy edits</span></div>
+            </div>
+          </aside>
+        </div>
+
+        <!-- FEATURES -->
+        <section id="features">
+          <div class="section-title">
+            <div>
+              <h2>Features</h2>
+              <p>Three simple cards—duplicate as needed.</p>
+            </div>
+          </div>
+
+          <div class="grid">
+            <article class="card">
+              <h3>Structure</h3>
+              <p>Header, hero, sections, and footer—ready to customize.</p>
+            </article>
+            <article class="card">
+              <h3>Responsive</h3>
+              <p>Works on mobile and desktop with clean breakpoints.</p>
+            </article>
+            <article class="card">
+              <h3>Accessible</h3>
+              <p>Semantic HTML and sensible aria labels.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- ABOUT / CONTENT -->
+        <section id="about">
+          <div class="section-title">
+            <div>
+              <h2>About</h2>
+              <p>Add your story, screenshots, or FAQ here.</p>
+            </div>
+          </div>
+
+          <div class="split">
+            <div class="card">
+              <h3>What this is</h3>
+              <p>
+                A minimal landing page layout you can drop into any project.
+                Extend it with pricing, testimonials, a blog list, or a product gallery.
+              </p>
+            </div>
+            <div class="card">
+              <h3>How to customize</h3>
+              <p>
+                Edit the text, change the CSS variables in <code>:root</code>,
+                and add/remove sections. Keep it as a single file or split it later.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact">
+          <div class="section-title">
+            <div>
+              <h2>Contact</h2>
+              <p>This form is front-end only—hook it to your backend/email service.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <form onsubmit="return handleSubmit(event)">
+              <div>
+                <label for="name">Name</label>
+                <input id="name" name="name" autocomplete="name" placeholder="Jane Doe" required />
+              </div>
+
+              <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="jane@example.com" required />
+              </div>
+
+              <div>
+                <label for="message">Message</label>
+                <textarea id="message" name="message" placeholder="How can we help?" required></textarea>
+              </div>
+
+              <button class="btn primary" type="submit">Send message</button>
+              <p id="formStatus" style="margin:0;color:var(--muted);font-size:13px;"></p>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-row">
+          <div>© <span id="year"></span> MySite. All rights reserved.</div>
+          <div style="display:flex; gap:14px; flex-wrap:wrap;">
+            <a href="#top">Back to top</a>
+            <a href="#features">Features</a>
+            <a href="#contact">Contact</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Set current year
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Front-end only form handler (demo)
+      function handleSubmit(event) {
+        event.preventDefault();
+        const status = document.getElementById("formStatus");
+        status.textContent = "Thanks! (Demo) Your message wasn't sent—connect this form to a backend.";
+        event.target.reset();
+        return false;
+      }
+    </script>
+  </body>
+</html>

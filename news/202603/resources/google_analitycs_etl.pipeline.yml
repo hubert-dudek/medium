@@ -1,0 +1,18 @@
+resources:
+  pipelines:
+    pipeline_google_analytics_pipeline:
+      name: google_analytics_pipeline
+      ingestion_definition:
+        connection_name: my_analityc
+        objects:
+          - table:
+              source_catalog: analityc-484919
+              source_schema: analytics_520647590
+              source_table: events
+              destination_catalog: ${var.catalog}
+              destination_schema: ${var.schema}
+              table_configuration:
+                row_filter: "event_timestamp > 1768867200000000"
+        source_type: GA4_RAW_DATA
+      schema: ingestion
+      catalog: hub
