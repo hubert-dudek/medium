@@ -1,3 +1,7 @@
 https://docs.databricks.com/aws/en/sql/language-manual/sql-ref-syntax-qry-explain-materialized-view
 
 environments
+
+☀️ Databricks SQL now supports Temporary Tables. Temp Tables are session-scoped, so you can build and test SQL logic without creating permanent tables. Automatic cleanup at the end of each session keeps your Unity Catalog clean and tidy. It's a beautiful day.
+
+Do you build SQL-based ETL pipelines? Learn more about how easy it is to get started with Temp Tables in the blog: https://lnkd.in/g2XB4Tng

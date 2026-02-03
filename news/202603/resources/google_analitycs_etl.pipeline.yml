@@ -4,6 +4,7 @@ resources:
       name: google_analytics_pipeline
       ingestion_definition:
         connection_name: my_analityc
+        source_type: GA4_RAW_DATA
         objects:
           - table:
               source_catalog: analityc-484919
@@ -11,8 +12,16 @@ resources:
               source_table: events
               destination_catalog: ${var.catalog}
               destination_schema: ${var.schema}
+              destination_table: events
               table_configuration:
-                row_filter: "event_timestamp > 1768867200000000"
-        source_type: GA4_RAW_DATA
-      schema: ingestion
-      catalog: hub
+                row_filter: "event_timestamp > '1768867200000000'"
+          - table:
+              source_catalog: analityc-484919
+              source_schema: analytics_520647590
+              source_table: events
+              destination_catalog: ${var.catalog}
+              destination_schema: ${var.schema}
+              destination_table: events_historic
+              table_configuration:
+                row_filter: "event_timestamp =< '1768867200000000'"
+                
