@@ -1,0 +1,4 @@
+resources:
+  catalogs:
+    test_catalog:
+      name: "test_catalog"
