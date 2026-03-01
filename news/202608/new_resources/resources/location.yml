@@ -1,0 +1,15 @@
+resources:
+  external_locations:
+    test_location:
+      name: test_ext_location_${bundle.target}
+      url: abfss://test@westus2uc.dfs.core.windows.net/
+      credential_name: westus2uc_ac
+      comment: "Analytics external location created via DABs"
+      skip_validation: false
+      read_only: false
+
+      grants:
+        - principal: hubert.dudek@brickschool.io
+          privileges:
+            - READ_FILES
+            - WRITE_FILES

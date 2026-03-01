@@ -12,16 +12,10 @@ targets:
     mode: development
     default: true
     workspace:
-      host: https://dbc-ca93cffe-fba0.cloud.databricks.com
+      host: https://adb-1179923690951934.14.azuredatabricks.net/
 
   # The 'prod' target, used for production deployment.
   prod:
     mode: production
     workspace:
-      host: https://dbc-ca93cffe-fba0.cloud.databricks.com
-      # We always use /Users/hdude2020@gmail.com for all resources to make sure we only have a single copy.
-      root_path: /Users/hdude2020@gmail.com/.bundle/${bundle.name}/${bundle.target}
-    run_as:
-      # This runs as hdude2020@gmail.com in production. We could also use a service principal here,
-      # see https://docs.databricks.com/dev-tools/bundles/permissions.html.
-      user_name: hdude2020@gmail.com
+      host: https://adb-1179923690951934.14.azuredatabricks.net/

@@ -2,3 +2,15 @@ resources:
   catalogs:
     test_catalog:
       name: "test_catalog"
+      comment: 'Catalog created by Databricks Asset Bundles'
+      properties:
+        purpose: 'Testing'
+      grants:
+        - principal: hubert.dudek@brickschool.io
+          privileges:
+            - USE_CATALOG
+            - CREATE_SCHEMA
+        - principal: dudek@brickschool.io
+          privileges:
+            - USE_CATALOG
+            - CREATE_SCHEMA
