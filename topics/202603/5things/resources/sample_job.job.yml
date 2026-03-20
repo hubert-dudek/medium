@@ -1,0 +1,19 @@
+# A sample job for metadata.
+
+resources:
+  jobs:
+    sample_job:
+      name: sample_job
+
+      parameters:
+        - name: git_branch
+          default: ${bundle.git.branch}
+        - name: git_origin
+          default: ${bundle.git.origin_url}
+
+      tasks:
+        - task_key: metadata
+          notebook_task:
+            notebook_path: ../src/sample_notebook.ipynb
+            base_parameters:
+              workspace_id: "{{workspace.id}}"
