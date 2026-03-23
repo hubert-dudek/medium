@@ -1,0 +1,47 @@
+# This is a Databricks asset bundle definition for test.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: test
+  uuid: 6809939c-bd4e-4e65-83df-6fef3a4e215b
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+# Variable declarations. These variables are assigned in the dev/prod targets below.
+variables:
+  warehouse_id:
+    description: The warehouse to use
+  catalog:
+    description: The catalog to use
+  schema:
+    description: The schema to use
+
+targets:
+  dev:
+    # The default target uses 'mode: development' to create a development copy.
+    # - Deployed resources get prefixed with '[dev my_user_name]'
+    # - Any job schedules and triggers are paused by default.
+    # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-1179923690951934.14.azuredatabricks.net
+    variables:
+      warehouse_id: sql
+      catalog: hub
+      schema: ${workspace.current_user.short_name}
+
+  prod:
+    mode: production
+    workspace:
+      host: https://adb-1179923690951934.14.azuredatabricks.net
+      # We explicitly deploy to /Workspace/Users/hubert.dudek@brickschool.io to make sure we only have a single copy.
+      root_path: /Workspace/Users/hubert.dudek@brickschool.io/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      warehouse_id: sql
+      catalog: hub
+      schema: default
+    permissions:
+      - user_name: hubert.dudek@brickschool.io
+        level: CAN_MANAGE
