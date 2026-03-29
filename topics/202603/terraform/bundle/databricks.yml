@@ -1,0 +1,27 @@
+bundle:
+  name: azure-keyvault-secret-scope-bundle
+  databricks_cli_version: ">= 0.279.0"
+
+# Optional: global variables (recommended for reuse across envs)
+variables:
+  key_vault_dns_name:
+    description: Azure Key Vault DNS name (e.g. https://my-kv.vault.azure.net/)
+  key_vault_resource_id:
+    description: Azure Key Vault resource ID
+
+resources:
+  secret_scopes:
+    secret_scope_azure:
+      name: test-secrets-azure-backend
+      backend_type: AZURE_KEYVAULT
+      keyvault_metadata:
+        resource_id: ${var.key_vault_resource_id}
+        dns_name: ${var.key_vault_dns_name}
+
+targets:
+  prod:
+    mode: production
+    default: true
+    workspace:
+      host: https://adb-1179923690951934.14.azuredatabricks.net
+
