@@ -1,0 +1,15 @@
+resources:
+  volumes:
+    structured_streaming_standard_checkpoints:
+      catalog_name: ${var.catalog}
+      schema_name: ${resources.schemas.structured_streaming_standard_schema.name}
+      name: checkpoints
+      volume_type: MANAGED
+      comment: Checkpoints volume for structured streaming standard benchmark
+
+    structured_streaming_performance_checkpoints:
+      catalog_name: ${var.catalog}
+      schema_name: ${resources.schemas.structured_streaming_performance_schema.name}
+      name: checkpoints
+      volume_type: MANAGED
+      comment: Checkpoints volume for structured streaming performance benchmark

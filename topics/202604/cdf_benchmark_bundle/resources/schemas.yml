@@ -1,0 +1,31 @@
+resources:
+  schemas:
+    source_schema:
+      name: cdf_benchmark_source
+      catalog_name: ${var.catalog}
+      comment: CDF benchmark source schema
+
+    auto_cdc_standard_schema:
+      name: cdf_benchmark_auto_cdc_standard
+      catalog_name: ${var.catalog}
+      comment: AUTO CDC standard benchmark schema
+
+    auto_cdc_performance_schema:
+      name: cdf_benchmark_auto_cdc_performance
+      catalog_name: ${var.catalog}
+      comment: AUTO CDC performance benchmark schema
+
+    structured_streaming_standard_schema:
+      name: cdf_benchmark_structured_streaming_standard
+      catalog_name: ${var.catalog}
+      comment: Structured Streaming standard benchmark schema
+
+    structured_streaming_performance_schema:
+      name: cdf_benchmark_structured_streaming_performance
+      catalog_name: ${var.catalog}
+      comment: Structured Streaming performance benchmark schema
+
+    table_changes_schema:
+      name: cdf_benchmark_table_changes
+      catalog_name: ${var.catalog}
+      comment: table_changes benchmark schema

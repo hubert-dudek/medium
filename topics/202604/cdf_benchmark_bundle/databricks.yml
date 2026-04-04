@@ -1,0 +1,22 @@
+bundle:
+  name: cdf_benchmark_bundle
+  databricks_cli_version: ">= 0.283.0"
+
+include:
+  - resources/*.yml
+
+sync:
+  include:
+    - notebooks/*.ipynb
+    - resources/*.yml
+
+variables:
+  catalog:
+    default: workspace
+  sql_warehouse_id:
+    lookup:
+      warehouse: sql_warehouse
+
+targets:
+  dev:
+    default: true
