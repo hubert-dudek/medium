@@ -1,4 +1,4 @@
-SET QUERY_TAGS['benchmark_test'] = 'table_changes_get_versions';
+SET QUERY_TAGS['benchmark_test'] = 'table_changes_sql';
 
 CREATE TABLE IF NOT EXISTS IDENTIFIER(:target_table) (
   booking_id BIGINT,
@@ -11,7 +11,6 @@ CREATE TABLE IF NOT EXISTS IDENTIFIER(:target_table) (
   status STRING,
   updated_at TIMESTAMP
 ) 
-USING DELTA
 CLUSTER BY (booking_date);
 
 CREATE TABLE IF NOT EXISTS IDENTIFIER(:state_table) (

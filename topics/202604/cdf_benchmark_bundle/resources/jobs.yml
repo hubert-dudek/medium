@@ -2,6 +2,7 @@ resources:
   jobs:
     generate_source_data_job:
       name: cdf-benchmark-generate-source-data
+      usage_policy_id: 05938aea-8364-4391-96e1-5cc5732fcfaf
       tags:
         benchmark_test: generate_source_data
       environments:
@@ -12,7 +13,7 @@ resources:
         - name: source_table
           default: ${var.catalog}.${resources.schemas.source_schema.name}.bookings
         - name: row_count
-          default: "10000000"
+          default: "20000000"
       tasks:
         - task_key: generate_source_data
           notebook_task:
@@ -20,6 +21,7 @@ resources:
 
     auto_cdc_standard_job:
       name: cdf-benchmark-auto-cdc-standard
+      usage_policy_id: 443f7bde-595e-4691-b5d8-ae2dc70264aa
       performance_target: STANDARD
       tags:
         benchmark_test: auto_cdc_standard
@@ -30,6 +32,7 @@ resources:
 
     auto_cdc_performance_job:
       name: cdf-benchmark-auto-cdc-performance
+      usage_policy_id: f87fc6e2-bee5-4525-915a-9f96a70b09e9
       performance_target: PERFORMANCE_OPTIMIZED
       tags:
         benchmark_test: auto_cdc_performance
@@ -100,7 +103,7 @@ resources:
       tasks:
         - task_key: get_versions
           sql_task:
-            warehouse_id: ${var.sql_warehouse_id}
+            warehouse_id: ${resources.sql_warehouses.test_warehouse.id}
             file:
               path: ${workspace.file_path}/sql/06_table_changes_get_versions.sql
               source: WORKSPACE
@@ -114,7 +117,7 @@ resources:
           depends_on:
             - task_key: get_versions
           sql_task:
-            warehouse_id: ${var.sql_warehouse_id}
+            warehouse_id: ${resources.sql_warehouses.test_warehouse.id}
             file:
               path: ${workspace.file_path}/sql/07_table_changes_merge.sql
               source: WORKSPACE
@@ -128,7 +131,7 @@ resources:
           depends_on:
             - task_key: merge_changes
           sql_task:
-            warehouse_id: ${var.sql_warehouse_id}
+            warehouse_id: ${resources.sql_warehouses.test_warehouse.id}
             file:
               path: ${workspace.file_path}/sql/08_table_changes_update_state.sql
               source: WORKSPACE
@@ -164,7 +167,7 @@ resources:
         benchmark_test: benchmark_main
       parameters:
         - name: row_count
-          default: "10000000"
+          default: "20000000"
         - name: table_changes_starting_version
           default: "0"
       tasks:

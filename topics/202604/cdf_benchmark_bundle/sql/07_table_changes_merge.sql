@@ -1,4 +1,4 @@
-SET QUERY_TAGS['benchmark_test'] = 'table_changes_merge';
+SET QUERY_TAGS['benchmark_test'] = 'table_changes_sql';
 
 DECLARE OR REPLACE VARIABLE latest_per_key_sql STRING;
 

@@ -1,4 +1,4 @@
-SET QUERY_TAGS['benchmark_test'] = 'table_changes_update_state';
+SET QUERY_TAGS['benchmark_test'] = 'table_changes_sql';
 
 INSERT INTO IDENTIFIER(:state_table)
 SELECT
