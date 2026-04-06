@@ -25,7 +25,7 @@ DECLARE OR REPLACE VARIABLE start_v BIGINT DEFAULT 0;
 SET VAR start_v = (
   SELECT COALESCE(
     (
-      SELECT last_commit_version
+      SELECT last_commit_version + 1
       FROM IDENTIFIER(:state_table)
       WHERE pipeline_name = :pipeline_name
       ORDER BY updated_at DESC
@@ -37,7 +37,10 @@ SET VAR start_v = (
 
 SELECT
   start_v AS start_version,
-  version AS end_version
+  CASE
+    WHEN version < start_v THEN start_v
+    ELSE version
+  END AS end_version
 FROM (
   DESCRIBE HISTORY IDENTIFIER('workspace.cdf_benchmark_source.bookings') LIMIT 1
 );
