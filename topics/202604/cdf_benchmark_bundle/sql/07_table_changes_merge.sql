@@ -22,8 +22,6 @@ FROM (
 WHERE rn = 1;
 ";
 
-SELECT latest_per_key_sql;
-
 EXECUTE IMMEDIATE latest_per_key_sql;
 
 MERGE INTO IDENTIFIER(:target_table) AS t
