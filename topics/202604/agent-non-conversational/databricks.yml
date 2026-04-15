@@ -1,0 +1,70 @@
+bundle:
+  name: agent-naming-convention
+
+variables:
+  app_name:
+    default: agent-naming-convention
+  experiment_id:
+    default: 2387617370421073
+  scan_warehouse_id:
+    default: bc33594c176fa899
+  report_volume_full_name:
+    default: workspace.default.tmp
+  agent_model:
+    default: databricks-gpt-5-2
+  target_catalogs:
+    default: workspace
+  scan_report_dir:
+    default: naming_convention
+
+resources:
+  apps:
+    agent-naming-convention:
+      name: ${var.app_name}
+      description: "agent application to scan UC for naming convention"
+      source_code_path: .
+      config:
+        command: ["uv", "run", "start-server"]
+        env:
+          - name: MLFLOW_TRACKING_URI
+            value: "databricks"
+          - name: MLFLOW_REGISTRY_URI
+            value: "databricks-uc"
+          - name: MLFLOW_EXPERIMENT_ID
+            value: ${var.experiment_id}
+          - name: AGENT_MODEL
+            value: ${var.agent_model}
+          - name: SCAN_WAREHOUSE_ID
+            value: ${var.scan_warehouse_id}
+          - name: REPORT_VOLUME_PATH
+            value: ${var.report_volume_full_name}
+          - name: TARGET_CATALOGS
+            value: ${var.target_catalogs}
+          - name: SCAN_REPORT_DIR
+            value: ${var.scan_report_dir}
+
+      # Resources which this app has access to
+      resources:
+        - name: "experiment"
+          experiment:
+            experiment_id: ${var.experiment_id}
+            permission: "CAN_MANAGE"
+
+        - name: "scan_warehouse"
+          sql_warehouse:
+            id: ${var.scan_warehouse_id}
+            permission: "CAN_USE"
+
+        - name: "report_volume"
+          uc_securable:
+            securable_full_name: ${var.report_volume_full_name}
+            securable_type: "VOLUME"
+            permission: "WRITE_VOLUME"
+
+targets:
+  dev:
+    mode: production
+    default: true
+    workspace:
+       host: https://dbc-ca93cffe-fba0.cloud.databricks.com/
+       root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
