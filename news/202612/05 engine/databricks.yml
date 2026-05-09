@@ -1,0 +1,13 @@
+bundle:
+  name: my-bundle
+  databricks_cli_version: ">= 0.295.0"
+  engine: direct
+
+include:
+  - resources/*.yml
+
+targets:
+  prod:
+    mode: production
+    bundle:
+      engine: terraform

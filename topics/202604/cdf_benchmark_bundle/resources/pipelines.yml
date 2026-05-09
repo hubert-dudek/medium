@@ -1,0 +1,31 @@
+resources:
+  pipelines:
+    auto_cdc_standard_pipeline:
+      name: cdf-benchmark-auto-cdc-standard
+      serverless: true
+      continuous: false
+      channel: CURRENT
+      catalog: ${resources.schemas.auto_cdc_standard_schema.catalog_name}
+      schema: ${resources.schemas.auto_cdc_standard_schema.name}
+      usage_policy_id: 443f7bde-595e-4691-b5d8-ae2dc70264aa
+      tags:
+        benchmark_test: auto_cdc_standard
+      root_path:  ../
+      libraries:
+        - glob:
+            include: ../pipeline/**
+
+    auto_cdc_performance_pipeline:
+      name: cdf-benchmark-auto-cdc-performance
+      serverless: true
+      continuous: false
+      channel: CURRENT
+      catalog: ${resources.schemas.auto_cdc_performance_schema.catalog_name}
+      schema: ${resources.schemas.auto_cdc_performance_schema.name}
+      usage_policy_id: f87fc6e2-bee5-4525-915a-9f96a70b09e9
+      tags:
+        benchmark_test: auto_cdc_performance
+      root_path:  ../
+      libraries:
+        - glob:
+            include: ../pipeline/**

@@ -1,0 +1,344 @@
+{
+  "datasets": [
+    {
+      "name": "1342ffdf",
+      "displayName": "Cloud Usage Patterns During Benchmark Test Intervals",
+      "queryLines": [
+        "USE CATALOG `workspace`;\n",
+        "USE SCHEMA `cdf_benchmark_auto_cdc_performance`;\n",
+        "\n",
+        "WITH test_windows AS (\n",
+        "  SELECT *\n",
+        "  FROM VALUES\n",
+        "    ('25 mln > 0 mln', TIMESTAMP '2026-04-05 22:00:00', TIMESTAMP '2026-04-06 00:00:00'),\n",
+        "    ('25 mln > 18 mln', TIMESTAMP '2026-04-06 08:00:00', TIMESTAMP '2026-04-06 10:00:00'),\n",
+        "    ('25 mln > 36 mln', TIMESTAMP '2026-04-06 10:00:00', TIMESTAMP '2026-04-06 12:00:00'),\n",
+        "    ('25 mln > 54 mln', TIMESTAMP '2026-04-06 12:00:00', TIMESTAMP '2026-04-06 14:00:00'),\n",
+        "    ('25 mln > 72 mln', TIMESTAMP '2026-04-06 14:00:00', TIMESTAMP '2026-04-06 16:00:00')\n",
+        "  AS test_windows(test_id, test_start, test_end)\n",
+        "),\n",
+        "usage_with_test AS (\n",
+        "  SELECT\n",
+        "    t.test_id,\n",
+        "    t.test_start,\n",
+        "    t.test_end,\n",
+        "    u.custom_tags,\n",
+        "    u.sku_name,\n",
+        "    u.cloud,\n",
+        "    u.usage_quantity,\n",
+        "    u.usage_start_time,\n",
+        "    u.usage_end_time,\n",
+        "    u.billing_origin_product,\n",
+        "    u.usage_metadata\n",
+        "  FROM system.billing.usage u\n",
+        "  JOIN test_windows t\n",
+        "    ON u.usage_start_time >= t.test_start\n",
+        "   AND u.usage_end_time   <= t.test_end\n",
+        "  WHERE\n",
+        "    map_contains_key(u.custom_tags, 'benchmark_test')\n",
+        "    OR map_contains_key(u.custom_tags, 'benchmark_policy')\n",
+        ")\n",
+        "SELECT\n",
+        "  u.test_id,\n",
+        "  CASE\n",
+        "    WHEN custom_tags['benchmark_test'] IS NOT NULL THEN custom_tags['benchmark_test']\n",
+        "    WHEN custom_tags['benchmark_policy'] IS NOT NULL THEN custom_tags['benchmark_policy']\n",
+        "  END AS benchmark_name,\n",
+        "  SUM(u.usage_quantity * lp.pricing.effective_list.default) AS price_usd\n",
+        "FROM usage_with_test u\n",
+        "LEFT JOIN system.billing.list_prices lp\n",
+        "  ON u.sku_name = lp.sku_name\n",
+        " AND u.cloud = lp.cloud\n",
+        " AND u.usage_start_time >= lp.price_start_time\n",
+        " AND (u.usage_start_time < lp.price_end_time OR lp.price_end_time IS NULL)\n",
+        "GROUP BY\n",
+        "  u.test_id,\n",
+        "  benchmark_name\n",
+        "HAVING benchmark_name <> 'generate_source_data' AND benchmark_name <> 'cdf-benchmark-generate-source-data'\n",
+        "ORDER BY u.test_id, price_usd DESC\n",
+        ";\n",
+        "-- validate add original product JOB/PIPELINE and charge reson/type"
+      ],
+      "columns": [
+        {
+          "displayName": "name",
+          "description": "",
+          "expression": "CASE\r\n   WHEN \r\n   benchmark_name = \"structured_streaming_performance\" \r\n   THEN\r\n   \"structured streaming performance\"\r\n   WHEN \r\n   benchmark_name = \"structured_streaming_standard\" \r\n   THEN\r\n   \"structured streaming standard\"\r\n   WHEN \r\n   benchmark_name = \"cdf-bench-auto-cdc-standard\" \r\n   THEN\r\n   \"AUTO CDC standard\"\r\n   WHEN \r\n   benchmark_name = \"cdf-bench-auto-cdc-performance\" \r\n   THEN\r\n   \"AUTO CDC perfromance\"\r\n   WHEN \r\n   benchmark_name = \"table_changes_sql\" \r\n   THEN\r\n   \"table_changes()\"\r\nEND"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "4cdba9d1",
+      "displayName": "results",
+      "layout": [
+        {
+          "widget": {
+            "name": "d97adc17",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1342ffdf",
+                  "fields": [
+                    {
+                      "name": "name",
+                      "expression": "`name`"
+                    },
+                    {
+                      "name": "test_id",
+                      "expression": "`test_id`"
+                    },
+                    {
+                      "name": "sum(price_usd)",
+                      "expression": "SUM(`price_usd`)"
+                    }
+                  ],
+                  "cubeGroupingSets": {
+                    "sets": [
+                      {
+                        "fieldNames": [
+                          "name"
+                        ]
+                      },
+                      {
+                        "fieldNames": [
+                          "test_id"
+                        ]
+                      }
+                    ]
+                  },
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "SUM(`price_usd`)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Visualization 1",
+                "showTitle": false
+              },
+              "mark": {
+                "marker": {
+                  "shape": "circle"
+                },
+                "layout": "layer",
+                "size": 0.8
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "test_id",
+                  "axis": {
+                    "labelAngle": 0,
+                    "title": "test"
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(price_usd)",
+                  "axis": {
+                    "title": "price usd"
+                  },
+                  "displayName": "price_usd",
+                  "scale": {
+                    "type": "quantitative",
+                    "domain": {
+                      "max": 0.3,
+                      "min": 0.05
+                    }
+                  }
+                },
+                "color": {
+                  "fieldName": "name",
+                  "legend": {
+                    "hide": false,
+                    "position": "right"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "measure-reversed",
+                      "measure": {
+                        "fieldName": "sum(price_usd)"
+                      }
+                    },
+                    "mappings": [
+                      {
+                        "value": "AUTO CDC perfromance",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 3
+                        }
+                      },
+                      {
+                        "value": "AUTO CDC standard",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 4
+                        }
+                      },
+                      {
+                        "value": "table_changes()",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 5
+                        }
+                      },
+                      {
+                        "value": "structured streaming standard",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 6
+                        }
+                      }
+                    ]
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 11,
+            "height": 10
+          }
+        },
+        {
+          "widget": {
+            "name": "e37ae9cc",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1342ffdf",
+                  "fields": [
+                    {
+                      "name": "sum(price_usd)",
+                      "expression": "SUM(`price_usd`)"
+                    },
+                    {
+                      "name": "name",
+                      "expression": "`name`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Visualization 1",
+                "showTitle": false
+              },
+              "mark": {
+                "marker": {
+                  "shape": "circle"
+                },
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(price_usd)",
+                  "axis": {
+                    "title": "price usd"
+                  },
+                  "displayName": "price_usd",
+                  "scale": {
+                    "type": "quantitative",
+                    "reverse": false
+                  }
+                },
+                "y": {
+                  "fieldName": "name",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x"
+                    }
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 9,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}

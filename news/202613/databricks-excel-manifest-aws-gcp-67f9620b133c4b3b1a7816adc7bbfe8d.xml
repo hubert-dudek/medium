@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
+  <Id>305c35cc-5f58-46b6-8701-d611c3379a86</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Databricks</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Databricks Excel Add-in"/>
+  <Description DefaultValue="Connect to Databricks."/>
+  <IconUrl DefaultValue="https://www.databricks.com/en-website-assets/favicon-32x32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://login.databricks.com/static/sql/images/favicon-64x64.png"/>
+  <SupportUrl DefaultValue="https://www.databricks.com/company/contact"/>
+  <AppDomains>
+    <!-- DO NOT CHANGE -->
+    <AppDomain>https://www.databricks.com</AppDomain>
+    <AppDomain>https://login.databricks.com</AppDomain>
+
+    <!-- ADD WORKSPACE URLS AS SHOWN BELOW; PUT EACH WORKSPACE URL IN ITS OWN <AppDomain> TAG  -->
+    <!-- EXAMPLE: <AppDomain>https://workspaceURL</AppDomain> -->
+    <AppDomain>https://dbc-ca93cffe-fba0.cloud.databricks.com/</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Workbook"/>
+  </Hosts>
+  <Requirements>
+    <Sets DefaultMinVersion="1.1">
+      <Set Name="SharedRuntime" MinVersion="1.1"/>
+    </Sets>
+  </Requirements>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://login.databricks.com/spreadsheet-connector-signin/excel"/>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Workbook">
+        <Runtimes>
+          <Runtime resid="Taskpane.Url" lifetime="long"/>
+        </Runtimes>
+        <AllFormFactors>
+          <ExtensionPoint xsi:type="CustomFunctions">
+            <Script>
+              <SourceLocation resid="Functions.Script.Url"/>
+            </Script>
+            <Page>
+              <SourceLocation resid="Taskpane.Url"/>
+            </Page>
+            <Metadata>
+              <SourceLocation resid="Functions.Metadata.Url"/>
+            </Metadata>
+            <Namespace resid="Functions.Namespace"/>
+          </ExtensionPoint>
+        </AllFormFactors>
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title"/>
+            <Description resid="GetStarted.Description"/>
+            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
+          </GetStarted>
+          <FunctionFile resid="Taskpane.Url"/>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="CommandsGroup">
+                <Label resid="CommandsGroup.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16x16"/>
+                  <bt:Image size="32" resid="Icon.32x32"/>
+                  <bt:Image size="80" resid="Icon.80x80"/>
+                </Icon>
+                <Control xsi:type="Button" id="TaskpaneButton">
+                  <Label resid="TaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.Label"/>
+                    <Description resid="TaskpaneButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>ButtonId1</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16x16" DefaultValue="https://login.databricks.com/static/sql/images/favicon-16x16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://login.databricks.com/static/sql/images/favicon-32x32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://www.databricks.com/en-website-assets/icons/icon-72x72.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Functions.Script.Url" DefaultValue="https://login.databricks.com/js/functions.js"/>
+        <bt:Url id="Functions.Metadata.Url" DefaultValue="https://login.databricks.com/js/excel-functions.json"/>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://www.databricks.com/product/databricks-sql"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://login.databricks.com/spreadsheet-connector-signin/excel"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="Functions.Namespace" DefaultValue="DATABRICKS"/>
+        <bt:String id="GetStarted.Title" DefaultValue="Get started with Databricks Excel Add-in!"/>
+        <bt:String id="CommandsGroup.Label" DefaultValue="Databricks"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Databricks"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GetStarted.Description" DefaultValue="Your Databricks Excel Add-in loaded successfully. Go to the HOME tab and click the 'Databricks' button to get started."/>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Click to open Databricks Excel Add-in"/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>

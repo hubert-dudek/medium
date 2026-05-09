@@ -1,0 +1,214 @@
+resources:
+  jobs:
+    generate_source_data_job:
+      name: cdf-benchmark-generate-source-data
+      usage_policy_id: 05938aea-8364-4391-96e1-5cc5732fcfaf
+      tags:
+        benchmark_test: generate_source_data
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+      parameters:
+        - name: source_table
+          default: ${var.catalog}.${resources.schemas.source_schema.name}.bookings
+        - name: row_count
+          default: "20000000"
+      tasks:
+        - task_key: generate_source_data
+          notebook_task:
+            notebook_path: ../notebooks/generate_source_data.ipynb
+
+    auto_cdc_standard_job:
+      name: cdf-benchmark-auto-cdc-standard
+      usage_policy_id: 443f7bde-595e-4691-b5d8-ae2dc70264aa
+      performance_target: STANDARD
+      tags:
+        benchmark_test: auto_cdc_standard
+      tasks:
+        - task_key: auto_cdc_standard
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.auto_cdc_standard_pipeline.id}
+
+    auto_cdc_performance_job:
+      name: cdf-benchmark-auto-cdc-performance
+      usage_policy_id: f87fc6e2-bee5-4525-915a-9f96a70b09e9
+      performance_target: PERFORMANCE_OPTIMIZED
+      tags:
+        benchmark_test: auto_cdc_performance
+      tasks:
+        - task_key: auto_cdc_performance
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.auto_cdc_performance_pipeline.id}
+
+    structured_streaming_standard_job:
+      name: cdf-benchmark-structured-streaming-standard
+      usage_policy_id: e3f10784-0590-4d7d-8e10-de47a15bcc03
+      performance_target: STANDARD
+      tags:
+        benchmark_test: structured_streaming_standard
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+      parameters:
+        - name: source_table
+          default: ${var.catalog}.${resources.schemas.source_schema.name}.bookings
+        - name: target_table
+          default: ${var.catalog}.${resources.schemas.structured_streaming_standard_schema.name}.bookings_current
+        - name: checkpoint_path
+          default: /Volumes/${var.catalog}/${resources.schemas.structured_streaming_standard_schema.name}/${resources.volumes.structured_streaming_standard_checkpoints.name}/{{job.run_id}}
+        - name: starting_version
+          default: "0"
+      tasks:
+        - task_key: structured_streaming_standard
+          notebook_task:
+            notebook_path: ../notebooks/structured_streaming.ipynb
+
+    structured_streaming_performance_job:
+      name: cdf-benchmark-structured-streaming-performance
+      usage_policy_id: c5f9f6be-6c7f-413e-8ea4-e6a1bf2087e7
+      performance_target: PERFORMANCE_OPTIMIZED
+      tags:
+        benchmark_test: structured_streaming_performance
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+      parameters:
+        - name: source_table
+          default: ${var.catalog}.${resources.schemas.source_schema.name}.bookings
+        - name: target_table
+          default: ${var.catalog}.${resources.schemas.structured_streaming_performance_schema.name}.bookings_current
+        - name: checkpoint_path
+          default: /Volumes/${var.catalog}/${resources.schemas.structured_streaming_performance_schema.name}/${resources.volumes.structured_streaming_performance_checkpoints.name}/{{job.run_id}}
+      tasks:
+        - task_key: structured_streaming_performance
+          notebook_task:
+            notebook_path: ../notebooks/structured_streaming.ipynb
+
+    table_changes_sql_job:
+      name: cdf-benchmark-table-changes-sql
+      tags:
+        benchmark_test: table_changes_sql
+      parameters:
+        - name: source_table
+          default: ${var.catalog}.${resources.schemas.source_schema.name}.bookings
+        - name: target_table
+          default: ${var.catalog}.${resources.schemas.table_changes_schema.name}.bookings_current
+        - name: state_table
+          default: ${var.catalog}.${resources.schemas.table_changes_schema.name}.bookings_state
+        - name: pipeline_name
+          default: bookings_current_sql
+      tasks:
+        - task_key: get_versions
+          sql_task:
+            warehouse_id: ${resources.sql_warehouses.test_warehouse.id}
+            file:
+              path: ${workspace.file_path}/sql/06_table_changes_get_versions.sql
+              source: WORKSPACE
+            parameters:
+              source_table: "{{job.parameters.source_table}}"
+              target_table: "{{job.parameters.target_table}}"
+              state_table: "{{job.parameters.state_table}}"
+              pipeline_name: "{{job.parameters.pipeline_name}}"
+
+        - task_key: merge_changes
+          depends_on:
+            - task_key: get_versions
+          sql_task:
+            warehouse_id: ${resources.sql_warehouses.test_warehouse.id}
+            file:
+              path: ${workspace.file_path}/sql/07_table_changes_merge.sql
+              source: WORKSPACE
+            parameters:
+              source_table: "{{job.parameters.source_table}}"
+              target_table: "{{job.parameters.target_table}}"
+              start_version: "{{tasks.get_versions.output.first_row.start_version}}"
+              end_version: "{{tasks.get_versions.output.first_row.end_version}}"
+
+        - task_key: update_state
+          depends_on:
+            - task_key: merge_changes
+          sql_task:
+            warehouse_id: ${resources.sql_warehouses.test_warehouse.id}
+            file:
+              path: ${workspace.file_path}/sql/08_table_changes_update_state.sql
+              source: WORKSPACE
+            parameters:
+              state_table: "{{job.parameters.state_table}}"
+              pipeline_name: "{{job.parameters.pipeline_name}}"
+              last_commit_version: "{{tasks.get_versions.output.first_row.end_version}}"
+
+    optimize_all_tables_job:
+      name: cdf-benchmark-optimize-all-tables
+      tags:
+        benchmark_test: optimize_all_tables
+      parameters:
+        - name: auto_cdc_standard_table
+          default: ${var.catalog}.${resources.schemas.auto_cdc_standard_schema.name}.bookings_current
+        - name: auto_cdc_performance_table
+          default: ${var.catalog}.${resources.schemas.auto_cdc_performance_schema.name}.bookings_current
+        - name: structured_streaming_standard_table
+          default: ${var.catalog}.${resources.schemas.structured_streaming_standard_schema.name}.bookings_current
+        - name: structured_streaming_performance_table
+          default: ${var.catalog}.${resources.schemas.structured_streaming_performance_schema.name}.bookings_current
+        - name: table_changes_table
+          default: ${var.catalog}.${resources.schemas.table_changes_schema.name}.bookings_current
+      tasks:
+        - task_key: optimize_all_tables
+          notebook_task:
+            notebook_path: ../notebooks/optimize_all_tables.ipynb
+            warehouse_id: ${var.sql_warehouse_id}
+
+    benchmark_main_job:
+      name: cdf-benchmark-main
+      tags:
+        benchmark_test: benchmark_main
+      parameters:
+        - name: row_count
+          default: "20000000"
+        - name: table_changes_starting_version
+          default: "0"
+      tasks:
+        - task_key: generate_source_data
+          run_job_task:
+            job_id: ${resources.jobs.generate_source_data_job.id}
+            job_parameters:
+              row_count: "{{job.parameters.row_count}}"
+
+        - task_key: auto_cdc_standard
+          depends_on:
+            - task_key: generate_source_data
+          run_job_task:
+            job_id: ${resources.jobs.auto_cdc_standard_job.id}
+
+        - task_key: auto_cdc_performance
+          depends_on:
+            - task_key: auto_cdc_standard
+          run_job_task:
+            job_id: ${resources.jobs.auto_cdc_performance_job.id}
+
+        - task_key: structured_streaming_standard
+          depends_on:
+            - task_key: auto_cdc_performance
+          run_job_task:
+            job_id: ${resources.jobs.structured_streaming_standard_job.id}
+
+        - task_key: structured_streaming_performance
+          depends_on:
+            - task_key: structured_streaming_standard
+          run_job_task:
+            job_id: ${resources.jobs.structured_streaming_performance_job.id}
+
+        - task_key: table_changes_sql
+          depends_on:
+            - task_key: structured_streaming_performance
+          run_job_task:
+            job_id: ${resources.jobs.table_changes_sql_job.id}
+
+        - task_key: optimize_all_tables
+          depends_on:
+            - task_key: table_changes_sql
+          run_job_task:
+            job_id: ${resources.jobs.optimize_all_tables_job.id}

@@ -1,0 +1,65 @@
+bundle:
+  name: watermark_based_ingestion
+
+targets:
+  production:
+    mode: production
+    default: true
+    workspace:
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+
+resources:
+
+  schemas:
+    watermark_schema:
+      catalog_name: main
+      name: watermark_schema
+      comment: "Schema for watermark-based ingestion pipeline"
+
+  pipelines:
+    pipeline_watermark_pipeline:
+      name: watermark_pipeline
+      catalog: main
+      schema: ${resources.schemas.watermark_schema.name}
+      channel: PREVIEW
+      ingestion_definition:
+        connection_name: mylakebase
+        source_type: POSTGRESQL
+        objects:
+          # SCD Type 1 — overwrites with latest version
+          - table:
+              source_catalog: mytables
+              source_schema: public
+              source_table: customer_source
+              destination_catalog: main
+              destination_schema: ${resources.schemas.watermark_schema.name}
+              destination_table: customer_source
+              table_configuration:
+                primary_keys:
+                  - customer_id
+                scd_type: SCD_TYPE_1
+                sequence_by:
+                  - last_modified_ts
+                query_based_connector_config:
+                  cursor_columns:
+                    - last_modified_ts
+                  deletion_condition: "is_deleted = TRUE"
+                  hard_deletion_sync_min_interval_in_seconds: 86400
+          # SCD Type 2 — keeps full history with versioning
+          - table:
+              source_catalog: mytables
+              source_schema: public
+              source_table: customer_source
+              destination_catalog: main
+              destination_schema: ${resources.schemas.watermark_schema.name}
+              destination_table: customer_source_history
+              table_configuration:
+                primary_keys:
+                  - customer_id
+                scd_type: SCD_TYPE_2
+                sequence_by:
+                  - last_modified_ts
+                query_based_connector_config:
+                  cursor_columns:
+                    - last_modified_ts
+                  deletion_condition: "is_deleted = TRUE"
