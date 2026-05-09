@@ -1,6 +1,5 @@
 bundle:
   name: azure-keyvault-secret-scope-bundle
-  databricks_cli_version: ">= 0.279.0"
 
 # Optional: global variables (recommended for reuse across envs)
 variables:
@@ -12,7 +11,7 @@ variables:
 resources:
   secret_scopes:
     secret_scope_azure:
-      name: test-secrets-azure-backend
+      name: test-secrets-azure-backend-2
       backend_type: AZURE_KEYVAULT
       keyvault_metadata:
         resource_id: ${var.key_vault_resource_id}
@@ -24,4 +23,5 @@ targets:
     default: true
     workspace:
       host: https://adb-1179923690951934.14.azuredatabricks.net
+      root_path: /Workspace/Users/hubert.dudek@brickschool.io/.bundle/${bundle.name}/${bundle.target}
 

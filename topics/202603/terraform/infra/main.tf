@@ -43,6 +43,8 @@ resource "azurerm_key_vault" "kv" {
   sku_name                   = "standard"
   soft_delete_retention_days = 7
 
+  
+
   # Keep access-policy mode for Databricks secret scope integration
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
@@ -54,6 +56,12 @@ resource "azurerm_key_vault" "kv" {
       "Set"
     ]
   }
+}
+
+resource "azurerm_role_assignment" "kv_contributor_for_creator" {
+  scope                = azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Administrator"
+  principal_id         = data.azurerm_client_config.current.object_id
 }
 
 locals {
