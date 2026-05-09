@@ -1,7 +1,7 @@
 resources: 
   dashboards:
-    sales_overview:
-      display_name: "Dynamic Catalog and Schema"
+    test_dashboard:
+      display_name: "test_dashboard"
       file_path: ./../src/test_dashboard.lvdash.json
       warehouse_id: ${resources.sql_warehouses.my_sql.id}
       dataset_catalog: ${var.catalog_name}

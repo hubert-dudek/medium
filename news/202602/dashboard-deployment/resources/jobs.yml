@@ -1,7 +1,7 @@
 resources:
   jobs:
     sql_job:
-      name: sql_test_job
+      name: sql_test_job_2
       tasks:
         - task_key: test_sql
           description: my task

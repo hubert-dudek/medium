@@ -1,48 +1,40 @@
 {
   "datasets": [
     {
-      "name": "292f9846",
+      "catalog": "main",
       "displayName": "dataset1",
+      "name": "292f9846",
       "queryLines": [
         "SELECT *\r\n",
         "FROM VALUES\r\n",
-        "  ('Alice', 'Math', 85),\r\n",
+        "  ('HUBERT', 'Math', 85),\r\n",
         "  ('Alice', 'English', 92),\r\n",
         "  ('Bob', 'Math', 78),\r\n",
         "  ('Bob', 'English', 88),\r\n",
         "  ('Charlie', 'Math', 90),\r\n",
         "  ('Charlie', 'English', 81)\r\n",
         "AS t(name, subject, score);\r\n"
-      ]
+      ],
+      "schema": "demo"
     }
   ],
   "pages": [
     {
-      "name": "1b9e2ff8",
       "displayName": "pivot",
       "layout": [
         {
+          "position": {
+            "height": 6,
+            "width": 3,
+            "x": 0,
+            "y": 0
+          },
           "widget": {
             "name": "f21a2f15",
             "queries": [
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "292f9846",
-                  "fields": [
-                    {
-                      "name": "name",
-                      "expression": "`name`"
-                    },
-                    {
-                      "name": "subject",
-                      "expression": "`subject`"
-                    },
-                    {
-                      "name": "sum(score)",
-                      "expression": "SUM(`score`)"
-                    }
-                  ],
                   "cubeGroupingSets": {
                     "sets": [
                       {
@@ -57,7 +49,22 @@
                       }
                     ]
                   },
+                  "datasetName": "292f9846",
                   "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`name`",
+                      "name": "name"
+                    },
+                    {
+                      "expression": "`subject`",
+                      "name": "subject"
+                    },
+                    {
+                      "expression": "SUM(`score`)",
+                      "name": "sum(score)"
+                    }
+                  ],
                   "orders": [
                     {
                       "direction": "ASC",
@@ -72,46 +79,45 @@
               }
             ],
             "spec": {
-              "version": 3,
-              "widgetType": "pivot",
               "encodings": {
-                "rows": [
-                  {
-                    "fieldName": "name"
-                  }
-                ],
+                "cell": {
+                  "fields": [
+                    {
+                      "cellType": "text",
+                      "fieldName": "sum(score)"
+                    }
+                  ],
+                  "type": "multi-cell"
+                },
                 "columns": [
                   {
                     "fieldName": "subject"
                   }
                 ],
-                "cell": {
-                  "type": "multi-cell",
-                  "fields": [
-                    {
-                      "fieldName": "sum(score)",
-                      "cellType": "text"
-                    }
-                  ]
-                }
-              }
+                "rows": [
+                  {
+                    "fieldName": "name"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "exam test"
+              },
+              "version": 3,
+              "widgetType": "pivot"
             }
-          },
-          "position": {
-            "x": 0,
-            "y": 0,
-            "width": 3,
-            "height": 6
           }
         }
       ],
+      "name": "1b9e2ff8",
       "pageType": "PAGE_TYPE_CANVAS"
     }
   ],
   "uiSettings": {
+    "applyModeEnabled": false,
     "theme": {
       "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
-    },
-    "applyModeEnabled": false
+    }
   }
 }

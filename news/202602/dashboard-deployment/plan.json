@@ -1,0 +1,304 @@
+{
+  "plan_version": 2,
+  "cli_version": "0.299.1",
+  "lineage": "0fa9b9d1-14fe-4bc3-a6ee-dcb223665efa",
+  "serial": 9,
+  "plan": {
+    "resources.alerts.my_alert": {
+      "depends_on": [
+        {
+          "node": "resources.sql_warehouses.my_sql",
+          "label": "${resources.sql_warehouses.my_sql.id}"
+        }
+      ],
+      "action": "skip",
+      "remote_state": {
+        "create_time": "2026-05-09T21:06:44Z",
+        "display_name": "my_alert",
+        "effective_run_as": {
+          "user_name": "hubert.dudek@brickschool.io"
+        },
+        "evaluation": {
+          "comparison_operator": "EQUAL",
+          "last_evaluated_at": "2026-05-09T21:20:13Z",
+          "source": {
+            "name": "1"
+          },
+          "state": "OK",
+          "threshold": {
+            "value": {
+              "double_value": 2
+            }
+          }
+        },
+        "id": "866916489683766",
+        "lifecycle_state": "ACTIVE",
+        "owner_user_name": "hubert.dudek@brickschool.io",
+        "parent_path": "/Workspace/deployment/.bundle/dahsboard_test/resources",
+        "query_text": "select 1",
+        "schedule": {
+          "quartz_cron_schedule": "44 19 */1 * * ?",
+          "timezone_id": "Europe/Amsterdam"
+        },
+        "update_time": "2026-05-09T21:06:44Z",
+        "warehouse_id": "1c0d997c009ac0e9"
+      },
+      "changes": {
+        "create_time": {
+          "action": "skip",
+          "reason": "spec:output_only",
+          "remote": "2026-05-09T21:06:44Z"
+        },
+        "effective_run_as": {
+          "action": "skip",
+          "reason": "spec:output_only",
+          "remote": {
+            "user_name": "hubert.dudek@brickschool.io"
+          }
+        },
+        "evaluation.last_evaluated_at": {
+          "action": "skip",
+          "reason": "spec:output_only",
+          "remote": "2026-05-09T21:20:13Z"
+        },
+        "evaluation.state": {
+          "action": "skip",
+          "reason": "spec:output_only",
+          "remote": "OK"
+        },
+        "id": {
+          "action": "skip",
+          "reason": "spec:output_only",
+          "remote": "866916489683766"
+        },
+        "lifecycle_state": {
+          "action": "skip",
+          "reason": "spec:output_only",
+          "remote": "ACTIVE"
+        },
+        "owner_user_name": {
+          "action": "skip",
+          "reason": "spec:output_only",
+          "remote": "hubert.dudek@brickschool.io"
+        },
+        "update_time": {
+          "action": "skip",
+          "reason": "spec:output_only",
+          "remote": "2026-05-09T21:06:44Z"
+        }
+      }
+    },
+    "resources.dashboards.test_dashboard": {
+      "depends_on": [
+        {
+          "node": "resources.sql_warehouses.my_sql",
+          "label": "${resources.sql_warehouses.my_sql.id}"
+        }
+      ],
+      "action": "skip",
+      "remote_state": {
+        "create_time": "2026-05-09T21:08:36.087Z",
+        "dashboard_id": "01f14beb3e5a1c23b647a6c48244fda3",
+        "display_name": "test_dashboard",
+        "embed_credentials": false,
+        "etag": "3073866624",
+        "lifecycle_state": "ACTIVE",
+        "parent_path": "/Workspace/deployment/.bundle/dahsboard_test/resources",
+        "path": "/deployment/.bundle/dahsboard_test/resources/test_dashboard.lvdash.json",
+        "published": true,
+        "serialized_dashboard": "{\n  \"datasets\": [\n    {\n      \"name\": \"292f9846\",\n      \"displayName\": \"dataset1\",\n      \"queryLines\": [\n        \"SELECT *\\r\\n\",\n        \"FROM VALUES\\r\\n\",\n        \"  ('HUBERT', 'Math', 85),\\r\\n\",\n        \"  ('Alice', 'English', 92),\\r\\n\",\n        \"  ('Bob', 'Math', 78),\\r\\n\",\n        \"  ('Bob', 'English', 88),\\r\\n\",\n        \"  ('Charlie', 'Math', 90),\\r\\n\",\n        \"  ('Charlie', 'English', 81)\\r\\n\",\n        \"AS t(name, subject, score);\\r\\n\"\n      ],\n      \"catalog\": \"main\",\n      \"schema\": \"demo\"\n    }\n  ],\n  \"pages\": [\n    {\n      \"name\": \"1b9e2ff8\",\n      \"displayName\": \"pivot\",\n      \"layout\": [\n        {\n          \"widget\": {\n            \"name\": \"f21a2f15\",\n            \"queries\": [\n              {\n                \"name\": \"main_query\",\n                \"query\": {\n                  \"datasetName\": \"292f9846\",\n                  \"fields\": [\n                    {\n                      \"name\": \"name\",\n                      \"expression\": \"`name`\"\n                    },\n                    {\n                      \"name\": \"subject\",\n                      \"expression\": \"`subject`\"\n                    },\n                    {\n                      \"name\": \"sum(score)\",\n                      \"expression\": \"SUM(`score`)\"\n                    }\n                  ],\n                  \"cubeGroupingSets\": {\n                    \"sets\": [\n                      {\n                        \"fieldNames\": [\n                          \"name\"\n                        ]\n                      },\n                      {\n                        \"fieldNames\": [\n                          \"subject\"\n                        ]\n                      }\n                    ]\n                  },\n                  \"disaggregated\": false,\n                  \"orders\": [\n                    {\n                      \"direction\": \"ASC\",\n                      \"expression\": \"`name`\"\n                    },\n                    {\n                      \"direction\": \"ASC\",\n                      \"expression\": \"`subject`\"\n                    }\n                  ]\n                }\n              }\n            ],\n            \"spec\": {\n              \"encodings\": {\n                \"cell\": {\n                  \"fields\": [\n                    {\n                      \"cellType\": \"text\",\n                      \"fieldName\": \"sum(score)\"\n                    }\n                  ],\n                  \"type\": \"multi-cell\"\n                },\n                \"columns\": [\n                  {\n                    \"fieldName\": \"subject\"\n                  }\n                ],\n                \"rows\": [\n                  {\n                    \"fieldName\": \"name\"\n                  }\n                ]\n              },\n              \"frame\": {\n                \"showTitle\": true,\n                \"title\": \"exam test\"\n              },\n              \"version\": 3,\n              \"widgetType\": \"pivot\"\n            }\n          },\n          \"position\": {\n            \"x\": 0,\n            \"y\": 0,\n            \"width\": 3,\n            \"height\": 6\n          }\n        }\n      ],\n      \"pageType\": \"PAGE_TYPE_CANVAS\"\n    }\n  ],\n  \"uiSettings\": {\n    \"theme\": {\n      \"widgetHeaderAlignment\": \"ALIGNMENT_UNSPECIFIED\"\n    },\n    \"applyModeEnabled\": false\n  }\n}\n",
+        "update_time": "2026-05-09T21:18:02.590Z",
+        "warehouse_id": "1c0d997c009ac0e9"
+      },
+      "changes": {
+        "dataset_catalog": {
+          "action": "skip",
+          "reason": "input_only",
+          "old": "main",
+          "new": "main"
+        },
+        "dataset_schema": {
+          "action": "skip",
+          "reason": "input_only",
+          "old": "demo",
+          "new": "demo"
+        },
+        "etag": {
+          "action": "skip",
+          "reason": "custom",
+          "old": "3073866624",
+          "remote": "3073866624"
+        },
+        "serialized_dashboard": {
+          "action": "skip",
+          "reason": "etag_based",
+          "old": "{\n  \"datasets\": [\n    {\n      \"catalog\": \"main\",\n      \"displayName\": \"dataset1\",\n      \"name\": \"292f9846\",\n      \"queryLines\": [\n        \"SELECT *\\r\\n\",\n        \"FROM VALUES\\r\\n\",\n        \"  ('HUBERT', 'Math', 85),\\r\\n\",\n        \"  ('Alice', 'English', 92),\\r\\n\",\n        \"  ('Bob', 'Math', 78),\\r\\n\",\n        \"  ('Bob', 'English', 88),\\r\\n\",\n        \"  ('Charlie', 'Math', 90),\\r\\n\",\n        \"  ('Charlie', 'English', 81)\\r\\n\",\n        \"AS t(name, subject, score);\\r\\n\"\n      ],\n      \"schema\": \"demo\"\n    }\n  ],\n  \"pages\": [\n    {\n      \"displayName\": \"pivot\",\n      \"layout\": [\n        {\n          \"position\": {\n            \"height\": 6,\n            \"width\": 3,\n            \"x\": 0,\n            \"y\": 0\n          },\n          \"widget\": {\n            \"name\": \"f21a2f15\",\n            \"queries\": [\n              {\n                \"name\": \"main_query\",\n                \"query\": {\n                  \"cubeGroupingSets\": {\n                    \"sets\": [\n                      {\n                        \"fieldNames\": [\n                          \"name\"\n                        ]\n                      },\n                      {\n                        \"fieldNames\": [\n                          \"subject\"\n                        ]\n                      }\n                    ]\n                  },\n                  \"datasetName\": \"292f9846\",\n                  \"disaggregated\": false,\n                  \"fields\": [\n                    {\n                      \"expression\": \"`name`\",\n                      \"name\": \"name\"\n                    },\n                    {\n                      \"expression\": \"`subject`\",\n                      \"name\": \"subject\"\n                    },\n                    {\n                      \"expression\": \"SUM(`score`)\",\n                      \"name\": \"sum(score)\"\n                    }\n                  ],\n                  \"orders\": [\n                    {\n                      \"direction\": \"ASC\",\n                      \"expression\": \"`name`\"\n                    },\n                    {\n                      \"direction\": \"ASC\",\n                      \"expression\": \"`subject`\"\n                    }\n                  ]\n                }\n              }\n            ],\n            \"spec\": {\n              \"encodings\": {\n                \"cell\": {\n                  \"fields\": [\n                    {\n                      \"cellType\": \"text\",\n                      \"fieldName\": \"sum(score)\"\n                    }\n                  ],\n                  \"type\": \"multi-cell\"\n                },\n                \"columns\": [\n                  {\n                    \"fieldName\": \"subject\"\n                  }\n                ],\n                \"rows\": [\n                  {\n                    \"fieldName\": \"name\"\n                  }\n                ]\n              },\n              \"frame\": {\n                \"showTitle\": true,\n                \"title\": \"exam test\"\n              },\n              \"version\": 3,\n              \"widgetType\": \"pivot\"\n            }\n          }\n        }\n      ],\n      \"name\": \"1b9e2ff8\",\n      \"pageType\": \"PAGE_TYPE_CANVAS\"\n    }\n  ],\n  \"uiSettings\": {\n    \"applyModeEnabled\": false,\n    \"theme\": {\n      \"widgetHeaderAlignment\": \"ALIGNMENT_UNSPECIFIED\"\n    }\n  }\n}\n",
+          "new": "{\n  \"datasets\": [\n    {\n      \"catalog\": \"main\",\n      \"displayName\": \"dataset1\",\n      \"name\": \"292f9846\",\n      \"queryLines\": [\n        \"SELECT *\\r\\n\",\n        \"FROM VALUES\\r\\n\",\n        \"  ('HUBERT', 'Math', 85),\\r\\n\",\n        \"  ('Alice', 'English', 92),\\r\\n\",\n        \"  ('Bob', 'Math', 78),\\r\\n\",\n        \"  ('Bob', 'English', 88),\\r\\n\",\n        \"  ('Charlie', 'Math', 90),\\r\\n\",\n        \"  ('Charlie', 'English', 81)\\r\\n\",\n        \"AS t(name, subject, score);\\r\\n\"\n      ],\n      \"schema\": \"demo\"\n    }\n  ],\n  \"pages\": [\n    {\n      \"displayName\": \"pivot\",\n      \"layout\": [\n        {\n          \"position\": {\n            \"height\": 6,\n            \"width\": 3,\n            \"x\": 0,\n            \"y\": 0\n          },\n          \"widget\": {\n            \"name\": \"f21a2f15\",\n            \"queries\": [\n              {\n                \"name\": \"main_query\",\n                \"query\": {\n                  \"cubeGroupingSets\": {\n                    \"sets\": [\n                      {\n                        \"fieldNames\": [\n                          \"name\"\n                        ]\n                      },\n                      {\n                        \"fieldNames\": [\n                          \"subject\"\n                        ]\n                      }\n                    ]\n                  },\n                  \"datasetName\": \"292f9846\",\n                  \"disaggregated\": false,\n                  \"fields\": [\n                    {\n                      \"expression\": \"`name`\",\n                      \"name\": \"name\"\n                    },\n                    {\n                      \"expression\": \"`subject`\",\n                      \"name\": \"subject\"\n                    },\n                    {\n                      \"expression\": \"SUM(`score`)\",\n                      \"name\": \"sum(score)\"\n                    }\n                  ],\n                  \"orders\": [\n                    {\n                      \"direction\": \"ASC\",\n                      \"expression\": \"`name`\"\n                    },\n                    {\n                      \"direction\": \"ASC\",\n                      \"expression\": \"`subject`\"\n                    }\n                  ]\n                }\n              }\n            ],\n            \"spec\": {\n              \"encodings\": {\n                \"cell\": {\n                  \"fields\": [\n                    {\n                      \"cellType\": \"text\",\n                      \"fieldName\": \"sum(score)\"\n                    }\n                  ],\n                  \"type\": \"multi-cell\"\n                },\n                \"columns\": [\n                  {\n                    \"fieldName\": \"subject\"\n                  }\n                ],\n                \"rows\": [\n                  {\n                    \"fieldName\": \"name\"\n                  }\n                ]\n              },\n              \"frame\": {\n                \"showTitle\": true,\n                \"title\": \"exam test\"\n              },\n              \"version\": 3,\n              \"widgetType\": \"pivot\"\n            }\n          }\n        }\n      ],\n      \"name\": \"1b9e2ff8\",\n      \"pageType\": \"PAGE_TYPE_CANVAS\"\n    }\n  ],\n  \"uiSettings\": {\n    \"applyModeEnabled\": false,\n    \"theme\": {\n      \"widgetHeaderAlignment\": \"ALIGNMENT_UNSPECIFIED\"\n    }\n  }\n}\n",
+          "remote": "{\n  \"datasets\": [\n    {\n      \"name\": \"292f9846\",\n      \"displayName\": \"dataset1\",\n      \"queryLines\": [\n        \"SELECT *\\r\\n\",\n        \"FROM VALUES\\r\\n\",\n        \"  ('HUBERT', 'Math', 85),\\r\\n\",\n        \"  ('Alice', 'English', 92),\\r\\n\",\n        \"  ('Bob', 'Math', 78),\\r\\n\",\n        \"  ('Bob', 'English', 88),\\r\\n\",\n        \"  ('Charlie', 'Math', 90),\\r\\n\",\n        \"  ('Charlie', 'English', 81)\\r\\n\",\n        \"AS t(name, subject, score);\\r\\n\"\n      ],\n      \"catalog\": \"main\",\n      \"schema\": \"demo\"\n    }\n  ],\n  \"pages\": [\n    {\n      \"name\": \"1b9e2ff8\",\n      \"displayName\": \"pivot\",\n      \"layout\": [\n        {\n          \"widget\": {\n            \"name\": \"f21a2f15\",\n            \"queries\": [\n              {\n                \"name\": \"main_query\",\n                \"query\": {\n                  \"datasetName\": \"292f9846\",\n                  \"fields\": [\n                    {\n                      \"name\": \"name\",\n                      \"expression\": \"`name`\"\n                    },\n                    {\n                      \"name\": \"subject\",\n                      \"expression\": \"`subject`\"\n                    },\n                    {\n                      \"name\": \"sum(score)\",\n                      \"expression\": \"SUM(`score`)\"\n                    }\n                  ],\n                  \"cubeGroupingSets\": {\n                    \"sets\": [\n                      {\n                        \"fieldNames\": [\n                          \"name\"\n                        ]\n                      },\n                      {\n                        \"fieldNames\": [\n                          \"subject\"\n                        ]\n                      }\n                    ]\n                  },\n                  \"disaggregated\": false,\n                  \"orders\": [\n                    {\n                      \"direction\": \"ASC\",\n                      \"expression\": \"`name`\"\n                    },\n                    {\n                      \"direction\": \"ASC\",\n                      \"expression\": \"`subject`\"\n                    }\n                  ]\n                }\n              }\n            ],\n            \"spec\": {\n              \"encodings\": {\n                \"cell\": {\n                  \"fields\": [\n                    {\n                      \"cellType\": \"text\",\n                      \"fieldName\": \"sum(score)\"\n                    }\n                  ],\n                  \"type\": \"multi-cell\"\n                },\n                \"columns\": [\n                  {\n                    \"fieldName\": \"subject\"\n                  }\n                ],\n                \"rows\": [\n                  {\n                    \"fieldName\": \"name\"\n                  }\n                ]\n              },\n              \"frame\": {\n                \"showTitle\": true,\n                \"title\": \"exam test\"\n              },\n              \"version\": 3,\n              \"widgetType\": \"pivot\"\n            }\n          },\n          \"position\": {\n            \"x\": 0,\n            \"y\": 0,\n            \"width\": 3,\n            \"height\": 6\n          }\n        }\n      ],\n      \"pageType\": \"PAGE_TYPE_CANVAS\"\n    }\n  ],\n  \"uiSettings\": {\n    \"theme\": {\n      \"widgetHeaderAlignment\": \"ALIGNMENT_UNSPECIFIED\"\n    },\n    \"applyModeEnabled\": false\n  }\n}\n"
+        }
+      }
+    },
+    "resources.jobs.sql_job": {
+      "depends_on": [
+        {
+          "node": "resources.sql_warehouses.my_sql",
+          "label": "${resources.sql_warehouses.my_sql.id}"
+        }
+      ],
+      "action": "update",
+      "new_state": {
+        "value": {
+          "deployment": {
+            "kind": "BUNDLE",
+            "metadata_file_path": "/Workspace/deployment/.bundle/dahsboard_test/state/metadata.json"
+          },
+          "edit_mode": "UI_LOCKED",
+          "format": "MULTI_TASK",
+          "max_concurrent_runs": 1,
+          "name": "sql_test_job_2",
+          "queue": {
+            "enabled": true
+          },
+          "tasks": [
+            {
+              "description": "my task",
+              "notebook_task": {
+                "notebook_path": "/Workspace/deployment/.bundle/dahsboard_test/files/src/sql.dbquery",
+                "source": "WORKSPACE",
+                "warehouse_id": "1c0d997c009ac0e9"
+              },
+              "task_key": "test_sql"
+            }
+          ]
+        }
+      },
+      "remote_state": {
+        "created_time": 1778360804650,
+        "creator_user_name": "hubert.dudek@brickschool.io",
+        "deployment": {
+          "kind": "BUNDLE",
+          "metadata_file_path": "/Workspace/deployment/.bundle/dahsboard_test/state/metadata.json"
+        },
+        "edit_mode": "UI_LOCKED",
+        "email_notifications": {},
+        "format": "MULTI_TASK",
+        "job_id": 500662973113618,
+        "max_concurrent_runs": 1,
+        "name": "sql_test_job",
+        "queue": {
+          "enabled": true
+        },
+        "run_as_user_name": "hubert.dudek@brickschool.io",
+        "tasks": [
+          {
+            "description": "my task",
+            "disabled": false,
+            "email_notifications": {},
+            "notebook_task": {
+              "notebook_path": "/Workspace/deployment/.bundle/dahsboard_test/files/src/sql.dbquery",
+              "source": "WORKSPACE",
+              "warehouse_id": "1c0d997c009ac0e9"
+            },
+            "run_if": "ALL_SUCCESS",
+            "task_key": "test_sql",
+            "timeout_seconds": 0
+          }
+        ],
+        "timeout_seconds": 0,
+        "webhook_notifications": {}
+      },
+      "changes": {
+        "email_notifications": {
+          "action": "skip",
+          "reason": "empty",
+          "remote": {}
+        },
+        "name": {
+          "action": "update",
+          "old": "sql_test_job",
+          "new": "sql_test_job_2",
+          "remote": "sql_test_job"
+        },
+        "tasks[task_key='test_sql'].disabled": {
+          "action": "skip",
+          "reason": "empty",
+          "remote": false
+        },
+        "tasks[task_key='test_sql'].email_notifications": {
+          "action": "skip",
+          "reason": "empty",
+          "remote": {}
+        },
+        "tasks[task_key='test_sql'].run_if": {
+          "action": "skip",
+          "reason": "backend_default",
+          "remote": "ALL_SUCCESS"
+        },
+        "tasks[task_key='test_sql'].timeout_seconds": {
+          "action": "skip",
+          "reason": "empty",
+          "remote": 0
+        },
+        "timeout_seconds": {
+          "action": "skip",
+          "reason": "empty",
+          "remote": 0
+        },
+        "webhook_notifications": {
+          "action": "skip",
+          "reason": "empty",
+          "remote": {}
+        }
+      }
+    },
+    "resources.sql_warehouses.my_sql": {
+      "action": "skip",
+      "remote_state": {
+        "auto_stop_mins": 1,
+        "cluster_size": "2X-Small",
+        "creator_name": "hubert.dudek@brickschool.io",
+        "enable_photon": true,
+        "enable_serverless_compute": true,
+        "id": "1c0d997c009ac0e9",
+        "jdbc_url": "jdbc:spark://adb-1179923690951934.14.azuredatabricks.net:443/default;transportMode=http;ssl=1;AuthMech=3;httpPath=/sql/1.0/warehouses/1c0d997c009ac0e9;",
+        "max_num_clusters": 1,
+        "min_num_clusters": 1,
+        "name": "my_sql_warehouse",
+        "num_active_sessions": 0,
+        "num_clusters": 0,
+        "odbc_params": {
+          "hostname": "adb-1179923690951934.14.azuredatabricks.net",
+          "path": "/sql/1.0/warehouses/1c0d997c009ac0e9",
+          "port": 443,
+          "protocol": "https"
+        },
+        "spot_instance_policy": "COST_OPTIMIZED",
+        "state": "STOPPED",
+        "tags": {},
+        "warehouse_type": "PRO"
+      },
+      "changes": {
+        "creator_name": {
+          "action": "skip",
+          "reason": "output_only",
+          "remote": "hubert.dudek@brickschool.io"
+        },
+        "min_num_clusters": {
+          "action": "skip",
+          "reason": "managed",
+          "remote": 1
+        },
+        "tags": {
+          "action": "skip",
+          "reason": "empty",
+          "remote": {}
+        },
+        "warehouse_type": {
+          "action": "skip",
+          "reason": "managed",
+          "remote": "PRO"
+        }
+      }
+    }
+  }
+}

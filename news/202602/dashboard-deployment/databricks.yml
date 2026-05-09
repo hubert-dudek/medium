@@ -17,7 +17,7 @@ targets:
     mode: production
     default: true
     workspace:
-      host: https://dbc-ca93cffe-fba0.cloud.databricks.com
+      host: https://adb-1179923690951934.14.azuredatabricks.net
       root_path: /deployment/.bundle/dahsboard_test/
     variables:
       catalog_name: main
