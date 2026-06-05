@@ -1,0 +1,3 @@
+Hello from my custom Databricks Docker image.
+Built locally on Surface + WSL2.
+If you can cat this file from Databricks, the custom container works.

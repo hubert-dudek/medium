@@ -1,0 +1,6 @@
+wsl --install
+
+docker buildx build --platform linux/amd64  -t hdudek/dbx-hello-container:0.1 .
+
+docker run --rm hdudek/dbx-hello-container:0.1 \
+  duckdb -c "select 42 as answer, current_date as run_date;"

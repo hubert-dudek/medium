@@ -1,0 +1,28 @@
+FROM databricksruntime/standard:16.4-LTS
+
+USER root
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    jq \
+    ripgrep \
+    unixodbc \
+    curl \
+    ca-certificates \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install DuckDB CLI manually
+ARG DUCKDB_VERSION=1.4.4
+
+RUN curl -L \
+    "https://github.com/duckdb/duckdb/releases/download/v${DUCKDB_VERSION}/duckdb_cli-linux-amd64.zip" \
+    -o /tmp/duckdb.zip \
+    && unzip /tmp/duckdb.zip -d /usr/local/bin \
+    && chmod +x /usr/local/bin/duckdb \
+    && rm /tmp/duckdb.zip
+
+COPY hello.txt /opt/demo/hello.txt
+
+RUN chmod 644 /opt/demo/hello.txt
+
+RUN duckdb --version
