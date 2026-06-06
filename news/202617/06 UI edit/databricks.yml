@@ -1,0 +1,26 @@
+bundle:
+  name: simple_dab
+
+resources:
+  jobs:
+    hello_job:
+      name: hello_job
+      tasks:
+        - notebook_task:
+            notebook_path: ./src/hello_job.py
+          task_key: hello_task
+
+targets:
+  dev:
+    mode: development
+    default: true
+    presets:
+      trigger_pause_status: PAUSED
+    workspace:
+      host: https://dbc-ca93cffe-fba0.cloud.databricks.com
+
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-ca93cffe-fba0.cloud.databricks.com
+      root_path: /Workspace/Users/hdude2020@gmail.com/.bundle/${bundle.name}/${bundle.target}
