@@ -1,0 +1,13 @@
+resources:
+  jobs:
+    videobundle_job:
+      name: videobundle_job
+      tasks:
+        - task_key: main_task
+          spark_python_task:
+            python_file: ../src/videobundle/main.py
+            parameters:
+              - --catalog
+              - ${var.default_catalog}
+              - --message
+              - created-from-template
