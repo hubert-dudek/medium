@@ -1,0 +1,9 @@
+resources:
+  schemas:
+    fts_benchmark_schema:
+      name: ${var.schema}
+      catalog_name: ${var.catalog}
+      comment: Schema managed by Databricks Asset Bundles for the SQL-only one-column FTS benchmark.
+      properties:
+        purpose: fts-search-benchmark
+        bundle: ${bundle.name}

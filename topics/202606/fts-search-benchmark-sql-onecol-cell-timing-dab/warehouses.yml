@@ -1,0 +1,18 @@
+resources:
+  sql_warehouses:
+    fts_serverless_sql_wh_2xs_preview:
+      name: ${bundle.target}-fts-search-benchmark-2xs-serverless-sql-preview
+      cluster_size: ${var.warehouse_size}
+      enable_serverless_compute: true
+      min_num_clusters: ${var.min_num_clusters}
+      max_num_clusters: ${var.max_num_clusters}
+      auto_stop_mins: ${var.auto_stop_mins}
+      warehouse_type: PRO
+      channel:
+        name: ${var.sql_warehouse_channel}
+      tags:
+        custom_tags:
+          - key: purpose
+            value: fts-search-benchmark
+          - key: bundle
+            value: ${bundle.name}

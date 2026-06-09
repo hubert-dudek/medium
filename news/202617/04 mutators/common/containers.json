@@ -1,0 +1,24 @@
+{
+  "dev": {
+    "catalog": "uc_dev",
+    "areas": {
+      "marketing": {
+        "bronze_schema": "mkt_bronze",
+        "silver_schema": "mkt_silver",
+        "gold_schema": "mkt_gold",
+        "ingestion_bucket": "s3://company-dev-marketing-ingestion"
+      }
+    }
+  },
+  "prod": {
+    "catalog": "uc_prod",
+    "areas": {
+      "marketing": {
+        "bronze_schema": "mkt_bronze",
+        "silver_schema": "mkt_silver",
+        "gold_schema": "mkt_gold",
+        "ingestion_bucket": "s3://company-prod-marketing-ingestion"
+      }
+    }
+  }
+}

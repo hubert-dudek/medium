@@ -1,0 +1,23 @@
+bundle:
+  name: simple_dab
+
+resources:
+  jobs:
+    hello_job:
+      name: hello_job
+      tasks:
+        - notebook_task:
+            notebook_path: ./src/hello_job.py
+          task_key: hello
+      trigger:
+        pause_status: UNPAUSED
+        periodic:
+          interval: 1
+          unit: DAYS
+
+targets:
+  dev:
+    mode: development
+    default: true
+    presets:
+      source_linked_deployment: true # default for mode development

@@ -1,0 +1,14 @@
+# Example serverless job demonstrating mutator-injected parameters
+resources:
+  jobs:
+    example_job:
+      name: "example-mutator-params-${bundle.target}"
+      tasks:
+        - task_key: "print_params"
+          notebook_task:
+            notebook_path: ../src/example_job.ipynb
+          environment_key: "Default"
+      environments:
+        - environment_key: "Default"
+          spec:
+            client: "1"

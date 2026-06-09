@@ -1,0 +1,42 @@
+bundle:
+  name: fts_search_benchmark_sql_one_column
+
+include:
+  - schemas.yml
+  - warehouses.yml
+  - jobs.yml
+
+variables:
+  catalog:
+    description: Unity Catalog catalog where benchmark schema will be created.
+    default: main
+  schema:
+    description: Unity Catalog schema for benchmark tables and results.
+    default: fts_search_benchmark_onecol
+  warehouse_size:
+    description: Serverless SQL Warehouse size. Uses 2X-Small as requested.
+    default: 2X-Small
+  min_num_clusters:
+    description: Minimum clusters for the Serverless SQL Warehouse.
+    default: 1
+  max_num_clusters:
+    description: Maximum clusters for the Serverless SQL Warehouse.
+    default: 1
+  auto_stop_mins:
+    description: Auto-stop minutes for benchmark SQL warehouse.
+    default: 1
+  sql_warehouse_channel:
+    description: SQL Warehouse channel. Preview is requested because FTS is in Preview.
+    default: CHANNEL_NAME_PREVIEW
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+
+  prod:
+    mode: production
+    workspace:
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}

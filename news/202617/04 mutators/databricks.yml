@@ -1,0 +1,21 @@
+# databricks.yml
+bundle:
+  name: standard-job-params
+  databricks_cli_version: ">= 1.0.0"
+
+include:
+  - resources/*.yml
+
+variables:
+  business_domain:
+    default: "marketing"
+
+python:
+  venv_path: .venv
+  mutators:
+    - "common.mutators:inject_standard_job_parameters"
+
+targets:
+  dev:
+    default: true
+  prod: {}
