@@ -277,6 +277,190 @@ resources:
               schema: ${var.schema}
               run_id: "{{job.run_id}}"
 
+    fts_benchmark_100m_onecol:
+      name: ${bundle.target}-fts-benchmark-100m-one-column
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: setup_schema
+          notebook_task:
+            notebook_path: ./notebooks/00_setup_schema.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+
+        - task_key: generate_100m
+          depends_on:
+            - task_key: setup_schema
+          notebook_task:
+            notebook_path: ./notebooks/10_generate_100m.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+
+        - task_key: create_indexes_and_optimize_100m
+          depends_on:
+            - task_key: generate_100m
+          notebook_task:
+            notebook_path: ./notebooks/20_create_indexes_and_optimize_100m.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+
+        - task_key: benchmark_substring_100m_sql_wh
+          depends_on:
+            - task_key: create_indexes_and_optimize_100m
+          notebook_task:
+            notebook_path: ./notebooks/30_benchmark_substring_100m.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+              compute_label: serverless_sql_warehouse_2xs_preview
+
+        - task_key: benchmark_word_100m_sql_wh
+          depends_on:
+            - task_key: benchmark_substring_100m_sql_wh
+          notebook_task:
+            notebook_path: ./notebooks/40_benchmark_word_100m.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+              compute_label: serverless_sql_warehouse_2xs_preview
+
+        - task_key: benchmark_substring_100m_serverless_compute
+          depends_on:
+            - task_key: benchmark_word_100m_sql_wh
+          notebook_task:
+            notebook_path: ./notebooks/30_benchmark_substring_100m.sql
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+              compute_label: serverless_compute
+
+        - task_key: benchmark_word_100m_serverless_compute
+          depends_on:
+            - task_key: benchmark_substring_100m_serverless_compute
+          notebook_task:
+            notebook_path: ./notebooks/40_benchmark_word_100m.sql
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+              compute_label: serverless_compute
+
+        - task_key: show_summary_100m
+          depends_on:
+            - task_key: benchmark_word_100m_serverless_compute
+          notebook_task:
+            notebook_path: ./notebooks/95_show_summary.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+
+    fts_benchmark_500m_onecol:
+      name: ${bundle.target}-fts-benchmark-500m-one-column
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: setup_schema
+          notebook_task:
+            notebook_path: ./notebooks/00_setup_schema.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+
+        - task_key: generate_500m
+          depends_on:
+            - task_key: setup_schema
+          notebook_task:
+            notebook_path: ./notebooks/10_generate_500m.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+
+        - task_key: create_indexes_and_optimize_500m
+          depends_on:
+            - task_key: generate_500m
+          notebook_task:
+            notebook_path: ./notebooks/20_create_indexes_and_optimize_500m.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+
+        - task_key: benchmark_substring_500m_sql_wh
+          depends_on:
+            - task_key: create_indexes_and_optimize_500m
+          notebook_task:
+            notebook_path: ./notebooks/30_benchmark_substring_500m.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+              compute_label: serverless_sql_warehouse_2xs_preview
+
+        - task_key: benchmark_word_500m_sql_wh
+          depends_on:
+            - task_key: benchmark_substring_500m_sql_wh
+          notebook_task:
+            notebook_path: ./notebooks/40_benchmark_word_500m.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+              compute_label: serverless_sql_warehouse_2xs_preview
+
+        - task_key: benchmark_substring_500m_serverless_compute
+          depends_on:
+            - task_key: benchmark_word_500m_sql_wh
+          notebook_task:
+            notebook_path: ./notebooks/30_benchmark_substring_500m.sql
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+              compute_label: serverless_compute
+
+        - task_key: benchmark_word_500m_serverless_compute
+          depends_on:
+            - task_key: benchmark_substring_500m_serverless_compute
+          notebook_task:
+            notebook_path: ./notebooks/40_benchmark_word_500m.sql
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+              compute_label: serverless_compute
+
+        - task_key: show_summary_500m
+          depends_on:
+            - task_key: benchmark_word_500m_serverless_compute
+          notebook_task:
+            notebook_path: ./notebooks/95_show_summary.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+
     fts_benchmark_1b_onecol:
       name: ${bundle.target}-fts-benchmark-1b-one-column
       max_concurrent_runs: 1
@@ -361,6 +545,98 @@ resources:
         - task_key: show_summary_1b
           depends_on:
             - task_key: benchmark_word_1b_serverless_compute
+          notebook_task:
+            notebook_path: ./notebooks/95_show_summary.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+
+    fts_benchmark_10b_onecol:
+      name: ${bundle.target}-fts-benchmark-10b-one-column
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: setup_schema
+          notebook_task:
+            notebook_path: ./notebooks/00_setup_schema.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+
+        - task_key: generate_10b
+          depends_on:
+            - task_key: setup_schema
+          notebook_task:
+            notebook_path: ./notebooks/10_generate_10b.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+
+        - task_key: create_indexes_and_optimize_10b
+          depends_on:
+            - task_key: generate_10b
+          notebook_task:
+            notebook_path: ./notebooks/20_create_indexes_and_optimize_10b.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+
+        - task_key: benchmark_substring_10b_sql_wh
+          depends_on:
+            - task_key: create_indexes_and_optimize_10b
+          notebook_task:
+            notebook_path: ./notebooks/30_benchmark_substring_10b.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+              compute_label: serverless_sql_warehouse_2xs_preview
+
+        - task_key: benchmark_word_10b_sql_wh
+          depends_on:
+            - task_key: benchmark_substring_10b_sql_wh
+          notebook_task:
+            notebook_path: ./notebooks/40_benchmark_word_10b.sql
+            warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+              compute_label: serverless_sql_warehouse_2xs_preview
+
+        - task_key: benchmark_substring_10b_serverless_compute
+          depends_on:
+            - task_key: benchmark_word_10b_sql_wh
+          notebook_task:
+            notebook_path: ./notebooks/30_benchmark_substring_10b.sql
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+              compute_label: serverless_compute
+
+        - task_key: benchmark_word_10b_serverless_compute
+          depends_on:
+            - task_key: benchmark_substring_10b_serverless_compute
+          notebook_task:
+            notebook_path: ./notebooks/40_benchmark_word_10b.sql
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              run_id: "{{job.run_id}}"
+              compute_label: serverless_compute
+
+        - task_key: show_summary_10b
+          depends_on:
+            - task_key: benchmark_word_10b_serverless_compute
           notebook_task:
             notebook_path: ./notebooks/95_show_summary.sql
             warehouse_id: ${resources.sql_warehouses.fts_serverless_sql_wh_2xs_preview.id}

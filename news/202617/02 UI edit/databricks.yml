@@ -6,9 +6,10 @@ resources:
     hello_job:
       name: hello_job
       tasks:
-        - notebook_task:
+        - disabled: true
+          notebook_task:
             notebook_path: ./src/hello_job.py
-          task_key: hello
+          task_key: hello_updated
       trigger:
         pause_status: UNPAUSED
         periodic:

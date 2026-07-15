@@ -1,4 +1,5 @@
 -- Databricks notebook source
+-- DBTITLE 1,Cell 1
     -- Generate ONE-COLUMN synthetic text tables for FTS benchmark: 1b / 1,000,000,000 rows.
     -- Parameters: catalog, schema, run_id.
     -- The schema itself is managed as a DAB resource in schemas.yml.
@@ -54,7 +55,7 @@ CASE WHEN pmod(id, 100000) = 42 THEN 'zzqneedlealpha zztokenomega' END,
       FROM range(0, 1000000000, 1, 4096) AS r
       CROSS JOIN vocab
     )
-    SELECT /*+ REPARTITION(4096) */ message
+    SELECT message
     FROM generated;
 
     CREATE OR REPLACE TABLE fts_text_1b_ngram
@@ -62,14 +63,14 @@ CASE WHEN pmod(id, 100000) = 42 THEN 'zzqneedlealpha zztokenomega' END,
       'delta.enableRowTracking' = 'true',
       'delta.autoOptimize.optimizeWrite' = 'true'
     )
-    AS SELECT /*+ REPARTITION(4096) */ message FROM fts_text_1b_scan;
+    AS SELECT message FROM fts_text_1b_scan;
 
     CREATE OR REPLACE TABLE fts_text_1b_split
     TBLPROPERTIES (
       'delta.enableRowTracking' = 'true',
       'delta.autoOptimize.optimizeWrite' = 'true'
     )
-    AS SELECT /*+ REPARTITION(4096) */ message FROM fts_text_1b_scan;
+    AS SELECT message FROM fts_text_1b_scan;
 
     ANALYZE TABLE fts_text_1b_scan COMPUTE STATISTICS;
     ANALYZE TABLE fts_text_1b_ngram COMPUTE STATISTICS;

@@ -13,306 +13,312 @@ USE SCHEMA IDENTIFIER(:schema);
 
 -- COMMAND ----------
 
--- START: FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=1
+-- START: FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=1
 INSERT INTO fts_benchmark_events
 SELECT
   :run_id AS run_id,
   :compute_label AS compute_label,
-  '100k' AS scale_label,
-  100000L AS table_rows,
+  '10b' AS scale_label,
+  10000000000L AS table_rows,
   'substring' AS test_group,
   'fts_ngram_index' AS method,
   'tail_substring_limit_1' AS pattern_label,
   'tailneedlealpha' AS pattern,
   1 AS row_limit,
-  'fts_text_100k_ngram' AS target_table,
+  'fts_text_10b_ngram' AS target_table,
   1 AS repetition,
-  'FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=1' AS benchmark_tag,
+  'FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=1' AS benchmark_tag,
   'start' AS event_type,
   current_timestamp() AS event_ts,
   'ngram index table; same search(message, pattern) and LIMIT 1 as the classic scan test; repetition 1' AS notes;
 
 -- COMMAND ----------
 
--- MEASURED QUERY: FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=1
+-- DBTITLE 1,Cell 3
+-- MEASURED QUERY: FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=1
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
-FROM fts_text_100k_ngram
-WHERE search(message, 'tailneedlealpha')
+FROM fts_text_10b_ngram
+WHERE search(message, 'tailneedlealpha', mode => 'substring')
 LIMIT 1;
 
 -- COMMAND ----------
 
--- END: FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=1
+-- END: FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=1
 INSERT INTO fts_benchmark_events
 SELECT
   :run_id AS run_id,
   :compute_label AS compute_label,
-  '100k' AS scale_label,
-  100000L AS table_rows,
+  '10b' AS scale_label,
+  10000000000L AS table_rows,
   'substring' AS test_group,
   'fts_ngram_index' AS method,
   'tail_substring_limit_1' AS pattern_label,
   'tailneedlealpha' AS pattern,
   1 AS row_limit,
-  'fts_text_100k_ngram' AS target_table,
+  'fts_text_10b_ngram' AS target_table,
   1 AS repetition,
-  'FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=1' AS benchmark_tag,
+  'FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=1' AS benchmark_tag,
   'end' AS event_type,
   current_timestamp() AS event_ts,
   'ngram index table; same search(message, pattern) and LIMIT 1 as the classic scan test; repetition 1' AS notes;
 
 -- COMMAND ----------
 
--- START: FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=1
+-- START: FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=1
 INSERT INTO fts_benchmark_events
 SELECT
   :run_id AS run_id,
   :compute_label AS compute_label,
-  '100k' AS scale_label,
-  100000L AS table_rows,
+  '10b' AS scale_label,
+  10000000000L AS table_rows,
   'substring' AS test_group,
   'classic_no_index_scan' AS method,
   'tail_substring_limit_1' AS pattern_label,
   'tailneedlealpha' AS pattern,
   1 AS row_limit,
-  'fts_text_100k_scan' AS target_table,
+  'fts_text_10b_scan' AS target_table,
   1 AS repetition,
-  'FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=1' AS benchmark_tag,
+  'FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=1' AS benchmark_tag,
   'start' AS event_type,
   current_timestamp() AS event_ts,
   'no-index scan table; same search(message, pattern) and LIMIT 1 as the ngram index test; repetition 1' AS notes;
 
 -- COMMAND ----------
 
--- MEASURED QUERY: FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=1
+-- DBTITLE 1,Cell 6
+-- MEASURED QUERY: FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=1
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
-FROM fts_text_100k_scan
-WHERE search(message, 'tailneedlealpha')
+FROM fts_text_10b_scan
+WHERE search(message, 'tailneedlealpha', mode => 'substring')
 LIMIT 1;
 
 -- COMMAND ----------
 
--- END: FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=1
+-- END: FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=1
 INSERT INTO fts_benchmark_events
 SELECT
   :run_id AS run_id,
   :compute_label AS compute_label,
-  '100k' AS scale_label,
-  100000L AS table_rows,
+  '10b' AS scale_label,
+  10000000000L AS table_rows,
   'substring' AS test_group,
   'classic_no_index_scan' AS method,
   'tail_substring_limit_1' AS pattern_label,
   'tailneedlealpha' AS pattern,
   1 AS row_limit,
-  'fts_text_100k_scan' AS target_table,
+  'fts_text_10b_scan' AS target_table,
   1 AS repetition,
-  'FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=1' AS benchmark_tag,
+  'FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=1' AS benchmark_tag,
   'end' AS event_type,
   current_timestamp() AS event_ts,
   'no-index scan table; same search(message, pattern) and LIMIT 1 as the ngram index test; repetition 1' AS notes;
 
 -- COMMAND ----------
 
--- START: FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=2
+-- START: FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=2
 INSERT INTO fts_benchmark_events
 SELECT
   :run_id AS run_id,
   :compute_label AS compute_label,
-  '100k' AS scale_label,
-  100000L AS table_rows,
+  '10b' AS scale_label,
+  10000000000L AS table_rows,
   'substring' AS test_group,
   'fts_ngram_index' AS method,
   'tail_substring_limit_1' AS pattern_label,
   'tailneedlealpha' AS pattern,
   1 AS row_limit,
-  'fts_text_100k_ngram' AS target_table,
+  'fts_text_10b_ngram' AS target_table,
   2 AS repetition,
-  'FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=2' AS benchmark_tag,
+  'FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=2' AS benchmark_tag,
   'start' AS event_type,
   current_timestamp() AS event_ts,
   'ngram index table; same search(message, pattern) and LIMIT 1 as the classic scan test; repetition 2' AS notes;
 
 -- COMMAND ----------
 
--- MEASURED QUERY: FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=2
+-- DBTITLE 1,Cell 9
+-- MEASURED QUERY: FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=2
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
-FROM fts_text_100k_ngram
-WHERE search(message, 'tailneedlealpha')
+FROM fts_text_10b_ngram
+WHERE search(message, 'tailneedlealpha', mode => 'substring')
 LIMIT 1;
 
 -- COMMAND ----------
 
--- END: FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=2
+-- END: FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=2
 INSERT INTO fts_benchmark_events
 SELECT
   :run_id AS run_id,
   :compute_label AS compute_label,
-  '100k' AS scale_label,
-  100000L AS table_rows,
+  '10b' AS scale_label,
+  10000000000L AS table_rows,
   'substring' AS test_group,
   'fts_ngram_index' AS method,
   'tail_substring_limit_1' AS pattern_label,
   'tailneedlealpha' AS pattern,
   1 AS row_limit,
-  'fts_text_100k_ngram' AS target_table,
+  'fts_text_10b_ngram' AS target_table,
   2 AS repetition,
-  'FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=2' AS benchmark_tag,
+  'FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=2' AS benchmark_tag,
   'end' AS event_type,
   current_timestamp() AS event_ts,
   'ngram index table; same search(message, pattern) and LIMIT 1 as the classic scan test; repetition 2' AS notes;
 
 -- COMMAND ----------
 
--- START: FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=2
+-- START: FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=2
 INSERT INTO fts_benchmark_events
 SELECT
   :run_id AS run_id,
   :compute_label AS compute_label,
-  '100k' AS scale_label,
-  100000L AS table_rows,
+  '10b' AS scale_label,
+  10000000000L AS table_rows,
   'substring' AS test_group,
   'classic_no_index_scan' AS method,
   'tail_substring_limit_1' AS pattern_label,
   'tailneedlealpha' AS pattern,
   1 AS row_limit,
-  'fts_text_100k_scan' AS target_table,
+  'fts_text_10b_scan' AS target_table,
   2 AS repetition,
-  'FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=2' AS benchmark_tag,
+  'FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=2' AS benchmark_tag,
   'start' AS event_type,
   current_timestamp() AS event_ts,
   'no-index scan table; same search(message, pattern) and LIMIT 1 as the ngram index test; repetition 2' AS notes;
 
 -- COMMAND ----------
 
--- MEASURED QUERY: FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=2
+-- DBTITLE 1,Cell 12
+-- MEASURED QUERY: FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=2
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
-FROM fts_text_100k_scan
-WHERE search(message, 'tailneedlealpha')
+FROM fts_text_10b_scan
+WHERE search(message, 'tailneedlealpha', mode => 'substring')
 LIMIT 1;
 
 -- COMMAND ----------
 
--- END: FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=2
+-- END: FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=2
 INSERT INTO fts_benchmark_events
 SELECT
   :run_id AS run_id,
   :compute_label AS compute_label,
-  '100k' AS scale_label,
-  100000L AS table_rows,
+  '10b' AS scale_label,
+  10000000000L AS table_rows,
   'substring' AS test_group,
   'classic_no_index_scan' AS method,
   'tail_substring_limit_1' AS pattern_label,
   'tailneedlealpha' AS pattern,
   1 AS row_limit,
-  'fts_text_100k_scan' AS target_table,
+  'fts_text_10b_scan' AS target_table,
   2 AS repetition,
-  'FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=2' AS benchmark_tag,
+  'FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=2' AS benchmark_tag,
   'end' AS event_type,
   current_timestamp() AS event_ts,
   'no-index scan table; same search(message, pattern) and LIMIT 1 as the ngram index test; repetition 2' AS notes;
 
 -- COMMAND ----------
 
--- START: FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=3
+-- START: FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=3
 INSERT INTO fts_benchmark_events
 SELECT
   :run_id AS run_id,
   :compute_label AS compute_label,
-  '100k' AS scale_label,
-  100000L AS table_rows,
+  '10b' AS scale_label,
+  10000000000L AS table_rows,
   'substring' AS test_group,
   'fts_ngram_index' AS method,
   'tail_substring_limit_1' AS pattern_label,
   'tailneedlealpha' AS pattern,
   1 AS row_limit,
-  'fts_text_100k_ngram' AS target_table,
+  'fts_text_10b_ngram' AS target_table,
   3 AS repetition,
-  'FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=3' AS benchmark_tag,
+  'FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=3' AS benchmark_tag,
   'start' AS event_type,
   current_timestamp() AS event_ts,
   'ngram index table; same search(message, pattern) and LIMIT 1 as the classic scan test; repetition 3' AS notes;
 
 -- COMMAND ----------
 
--- MEASURED QUERY: FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=3
+-- DBTITLE 1,Cell 15
+-- MEASURED QUERY: FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=3
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
-FROM fts_text_100k_ngram
-WHERE search(message, 'tailneedlealpha')
+FROM fts_text_10b_ngram
+WHERE search(message, 'tailneedlealpha', mode => 'substring')
 LIMIT 1;
 
 -- COMMAND ----------
 
--- END: FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=3
+-- END: FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=3
 INSERT INTO fts_benchmark_events
 SELECT
   :run_id AS run_id,
   :compute_label AS compute_label,
-  '100k' AS scale_label,
-  100000L AS table_rows,
+  '10b' AS scale_label,
+  10000000000L AS table_rows,
   'substring' AS test_group,
   'fts_ngram_index' AS method,
   'tail_substring_limit_1' AS pattern_label,
   'tailneedlealpha' AS pattern,
   1 AS row_limit,
-  'fts_text_100k_ngram' AS target_table,
+  'fts_text_10b_ngram' AS target_table,
   3 AS repetition,
-  'FTSBENCH|scale=100k|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=3' AS benchmark_tag,
+  'FTSBENCH|scale=10b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=3' AS benchmark_tag,
   'end' AS event_type,
   current_timestamp() AS event_ts,
   'ngram index table; same search(message, pattern) and LIMIT 1 as the classic scan test; repetition 3' AS notes;
 
 -- COMMAND ----------
 
--- START: FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=3
+-- START: FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=3
 INSERT INTO fts_benchmark_events
 SELECT
   :run_id AS run_id,
   :compute_label AS compute_label,
-  '100k' AS scale_label,
-  100000L AS table_rows,
+  '10b' AS scale_label,
+  10000000000L AS table_rows,
   'substring' AS test_group,
   'classic_no_index_scan' AS method,
   'tail_substring_limit_1' AS pattern_label,
   'tailneedlealpha' AS pattern,
   1 AS row_limit,
-  'fts_text_100k_scan' AS target_table,
+  'fts_text_10b_scan' AS target_table,
   3 AS repetition,
-  'FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=3' AS benchmark_tag,
+  'FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=3' AS benchmark_tag,
   'start' AS event_type,
   current_timestamp() AS event_ts,
   'no-index scan table; same search(message, pattern) and LIMIT 1 as the ngram index test; repetition 3' AS notes;
 
 -- COMMAND ----------
 
--- MEASURED QUERY: FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=3
+-- DBTITLE 1,Cell 18
+-- MEASURED QUERY: FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=3
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
-FROM fts_text_100k_scan
-WHERE search(message, 'tailneedlealpha')
+FROM fts_text_10b_scan
+WHERE search(message, 'tailneedlealpha', mode => 'substring')
 LIMIT 1;
 
 -- COMMAND ----------
 
--- END: FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=3
+-- END: FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=3
 INSERT INTO fts_benchmark_events
 SELECT
   :run_id AS run_id,
   :compute_label AS compute_label,
-  '100k' AS scale_label,
-  100000L AS table_rows,
+  '10b' AS scale_label,
+  10000000000L AS table_rows,
   'substring' AS test_group,
   'classic_no_index_scan' AS method,
   'tail_substring_limit_1' AS pattern_label,
   'tailneedlealpha' AS pattern,
   1 AS row_limit,
-  'fts_text_100k_scan' AS target_table,
+  'fts_text_10b_scan' AS target_table,
   3 AS repetition,
-  'FTSBENCH|scale=100k|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=3' AS benchmark_tag,
+  'FTSBENCH|scale=10b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=3' AS benchmark_tag,
   'end' AS event_type,
   current_timestamp() AS event_ts,
   'no-index scan table; same search(message, pattern) and LIMIT 1 as the ngram index test; repetition 3' AS notes;

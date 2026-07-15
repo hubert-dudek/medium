@@ -34,11 +34,12 @@ SELECT
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Cell 3
 -- MEASURED QUERY: FTSBENCH|scale=1b|group=word|method=fts_split_index|pattern=tail_word_limit_1|limit=1|rep=1
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
 FROM fts_text_1b_split
-WHERE search(message, 'zztailwordprobe')
+WHERE search(message, 'zztailwordprobe', mode => 'word')
 LIMIT 1;
 
 -- COMMAND ----------
@@ -85,11 +86,12 @@ SELECT
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Cell 6
 -- MEASURED QUERY: FTSBENCH|scale=1b|group=word|method=classic_no_index_scan|pattern=tail_word_limit_1|limit=1|rep=1
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
 FROM fts_text_1b_scan
-WHERE search(message, 'zztailwordprobe')
+WHERE search(message, 'zztailwordprobe', mode => 'word')
 LIMIT 1;
 
 -- COMMAND ----------
@@ -136,11 +138,12 @@ SELECT
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Cell 9
 -- MEASURED QUERY: FTSBENCH|scale=1b|group=word|method=fts_split_index|pattern=tail_word_limit_1|limit=1|rep=2
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
 FROM fts_text_1b_split
-WHERE search(message, 'zztailwordprobe')
+WHERE search(message, 'zztailwordprobe', mode => 'word')
 LIMIT 1;
 
 -- COMMAND ----------
@@ -187,11 +190,12 @@ SELECT
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Cell 12
 -- MEASURED QUERY: FTSBENCH|scale=1b|group=word|method=classic_no_index_scan|pattern=tail_word_limit_1|limit=1|rep=2
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
 FROM fts_text_1b_scan
-WHERE search(message, 'zztailwordprobe')
+WHERE search(message, 'zztailwordprobe', mode => 'word')
 LIMIT 1;
 
 -- COMMAND ----------
@@ -238,11 +242,12 @@ SELECT
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Cell 15
 -- MEASURED QUERY: FTSBENCH|scale=1b|group=word|method=fts_split_index|pattern=tail_word_limit_1|limit=1|rep=3
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
 FROM fts_text_1b_split
-WHERE search(message, 'zztailwordprobe')
+WHERE search(message, 'zztailwordprobe', mode => 'word')
 LIMIT 1;
 
 -- COMMAND ----------
@@ -289,11 +294,12 @@ SELECT
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Cell 18
 -- MEASURED QUERY: FTSBENCH|scale=1b|group=word|method=classic_no_index_scan|pattern=tail_word_limit_1|limit=1|rep=3
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
 FROM fts_text_1b_scan
-WHERE search(message, 'zztailwordprobe')
+WHERE search(message, 'zztailwordprobe', mode => 'word')
 LIMIT 1;
 
 -- COMMAND ----------

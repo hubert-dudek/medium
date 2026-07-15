@@ -1,18 +1,19 @@
 -- Databricks notebook source
-    -- Generate ONE-COLUMN synthetic text tables for FTS benchmark: 100k / 100,000 rows.
+-- DBTITLE 1,Cell 1
+    -- Generate ONE-COLUMN synthetic text tables for FTS benchmark: 10b / 10,000,000,000 rows.
     -- Parameters: catalog, schema, run_id.
     -- The schema itself is managed as a DAB resource in schemas.yml.
     -- Tables created; each has exactly one user column: message STRING. The last row contains fixed tail markers for LIMIT 1 tests.
-    --   fts_text_100k_scan   : no full-text index, baseline scan
-    --   fts_text_100k_ngram  : ngram full-text index target for substring tests
-    --   fts_text_100k_split  : split full-text index target for word tests
+    --   fts_text_10b_scan   : no full-text index, baseline scan
+    --   fts_text_10b_ngram  : ngram full-text index target for substring tests
+    --   fts_text_10b_split  : split full-text index target for word tests
 
     USE CATALOG IDENTIFIER(:catalog);
         USE SCHEMA IDENTIFIER(:schema);
 
 
 
-    CREATE OR REPLACE TABLE fts_text_100k_scan
+    CREATE OR REPLACE TABLE fts_text_10b_scan
     TBLPROPERTIES (
       'delta.enableRowTracking' = 'true',
       'delta.autoOptimize.optimizeWrite' = 'true'
@@ -37,7 +38,7 @@
     ), generated AS (
       SELECT
         concat_ws(' ',
-                    CASE WHEN id = 99999 THEN 'zztailneedlealpha zztailwordprobe' END,
+                    CASE WHEN id = 9999999999 THEN 'zztailneedlealpha zztailwordprobe' END,
 CASE WHEN pmod(id, 100000) = 42 THEN 'zzqneedlealpha zztokenomega' END,
           CASE WHEN pmod(id, 1000) = 7 THEN 'zzmediumfalcon zzmarkersignal' END,
           CASE WHEN pmod(id, 20) = 0 THEN 'authentication failed token expired retry login' END,
@@ -51,40 +52,40 @@ CASE WHEN pmod(id, 100000) = 42 THEN 'zzqneedlealpha zztokenomega' END,
             ' '
           )
         ) AS message
-      FROM range(0, 100000, 1, 16) AS r
+      FROM range(0, 10000000000, 1, 8192) AS r
       CROSS JOIN vocab
     )
-    SELECT /*+ REPARTITION(16) */ message
+    SELECT message
     FROM generated;
 
-    CREATE OR REPLACE TABLE fts_text_100k_ngram
+    CREATE OR REPLACE TABLE fts_text_10b_ngram
     TBLPROPERTIES (
       'delta.enableRowTracking' = 'true',
       'delta.autoOptimize.optimizeWrite' = 'true'
     )
-    AS SELECT /*+ REPARTITION(16) */ message FROM fts_text_100k_scan;
+    AS SELECT message FROM fts_text_10b_scan;
 
-    CREATE OR REPLACE TABLE fts_text_100k_split
+    CREATE OR REPLACE TABLE fts_text_10b_split
     TBLPROPERTIES (
       'delta.enableRowTracking' = 'true',
       'delta.autoOptimize.optimizeWrite' = 'true'
     )
-    AS SELECT /*+ REPARTITION(16) */ message FROM fts_text_100k_scan;
+    AS SELECT message FROM fts_text_10b_scan;
 
-    ANALYZE TABLE fts_text_100k_scan COMPUTE STATISTICS;
-    ANALYZE TABLE fts_text_100k_ngram COMPUTE STATISTICS;
-    ANALYZE TABLE fts_text_100k_split COMPUTE STATISTICS;
+    ANALYZE TABLE fts_text_10b_scan COMPUTE STATISTICS;
+    ANALYZE TABLE fts_text_10b_ngram COMPUTE STATISTICS;
+    ANALYZE TABLE fts_text_10b_split COMPUTE STATISTICS;
 
     INSERT INTO fts_benchmark_object_checks
-    SELECT :run_id, current_timestamp(), '100k', 'fts_text_100k_scan', 'table', 'row_count', CAST(COUNT(*) AS STRING), '100000', CASE WHEN COUNT(*) = 100000 THEN 'PASS' ELSE 'FAIL' END
-    FROM fts_text_100k_scan
+    SELECT :run_id, current_timestamp(), '10b', 'fts_text_10b_scan', 'table', 'row_count', CAST(COUNT(*) AS STRING), '10000000000', CASE WHEN COUNT(*) = 10000000000 THEN 'PASS' ELSE 'FAIL' END
+    FROM fts_text_10b_scan
     UNION ALL
-    SELECT :run_id, current_timestamp(), '100k', 'fts_text_100k_ngram', 'table', 'row_count', CAST(COUNT(*) AS STRING), '100000', CASE WHEN COUNT(*) = 100000 THEN 'PASS' ELSE 'FAIL' END
-    FROM fts_text_100k_ngram
+    SELECT :run_id, current_timestamp(), '10b', 'fts_text_10b_ngram', 'table', 'row_count', CAST(COUNT(*) AS STRING), '10000000000', CASE WHEN COUNT(*) = 10000000000 THEN 'PASS' ELSE 'FAIL' END
+    FROM fts_text_10b_ngram
     UNION ALL
-    SELECT :run_id, current_timestamp(), '100k', 'fts_text_100k_split', 'table', 'row_count', CAST(COUNT(*) AS STRING), '100000', CASE WHEN COUNT(*) = 100000 THEN 'PASS' ELSE 'FAIL' END
-    FROM fts_text_100k_split;
+    SELECT :run_id, current_timestamp(), '10b', 'fts_text_10b_split', 'table', 'row_count', CAST(COUNT(*) AS STRING), '10000000000', CASE WHEN COUNT(*) = 10000000000 THEN 'PASS' ELSE 'FAIL' END
+    FROM fts_text_10b_split;
 
-    SELECT 'fts_text_100k_scan' AS table_name, COUNT(*) AS row_count FROM fts_text_100k_scan
-    UNION ALL SELECT 'fts_text_100k_ngram', COUNT(*) FROM fts_text_100k_ngram
-    UNION ALL SELECT 'fts_text_100k_split', COUNT(*) FROM fts_text_100k_split;
+    SELECT 'fts_text_10b_scan' AS table_name, COUNT(*) AS row_count FROM fts_text_10b_scan
+    UNION ALL SELECT 'fts_text_10b_ngram', COUNT(*) FROM fts_text_10b_ngram
+    UNION ALL SELECT 'fts_text_10b_split', COUNT(*) FROM fts_text_10b_split;

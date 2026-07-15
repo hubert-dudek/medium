@@ -34,11 +34,12 @@ SELECT
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Cell 3
 -- MEASURED QUERY: FTSBENCH|scale=1b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=1
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
 FROM fts_text_1b_ngram
-WHERE search(message, 'tailneedlealpha')
+WHERE search(message, 'tailneedlealpha', mode => 'substring')
 LIMIT 1;
 
 -- COMMAND ----------
@@ -85,11 +86,12 @@ SELECT
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Cell 6
 -- MEASURED QUERY: FTSBENCH|scale=1b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=1
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
 FROM fts_text_1b_scan
-WHERE search(message, 'tailneedlealpha')
+WHERE search(message, 'tailneedlealpha', mode => 'substring')
 LIMIT 1;
 
 -- COMMAND ----------
@@ -136,11 +138,12 @@ SELECT
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Cell 9
 -- MEASURED QUERY: FTSBENCH|scale=1b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=2
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
 FROM fts_text_1b_ngram
-WHERE search(message, 'tailneedlealpha')
+WHERE search(message, 'tailneedlealpha', mode => 'substring')
 LIMIT 1;
 
 -- COMMAND ----------
@@ -187,11 +190,12 @@ SELECT
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Cell 12
 -- MEASURED QUERY: FTSBENCH|scale=1b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=2
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
 FROM fts_text_1b_scan
-WHERE search(message, 'tailneedlealpha')
+WHERE search(message, 'tailneedlealpha', mode => 'substring')
 LIMIT 1;
 
 -- COMMAND ----------
@@ -238,11 +242,12 @@ SELECT
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Cell 15
 -- MEASURED QUERY: FTSBENCH|scale=1b|group=substring|method=fts_ngram_index|pattern=tail_substring_limit_1|limit=1|rep=3
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
 FROM fts_text_1b_ngram
-WHERE search(message, 'tailneedlealpha')
+WHERE search(message, 'tailneedlealpha', mode => 'substring')
 LIMIT 1;
 
 -- COMMAND ----------
@@ -289,11 +294,12 @@ SELECT
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Cell 18
 -- MEASURED QUERY: FTSBENCH|scale=1b|group=substring|method=classic_no_index_scan|pattern=tail_substring_limit_1|limit=1|rep=3
 -- The predicate and LIMIT are intentionally identical for index and scan methods.
 SELECT message
 FROM fts_text_1b_scan
-WHERE search(message, 'tailneedlealpha')
+WHERE search(message, 'tailneedlealpha', mode => 'substring')
 LIMIT 1;
 
 -- COMMAND ----------
