@@ -1,0 +1,42 @@
+-- Databricks notebook source
+USE CATALOG IDENTIFIER(:catalog);
+
+-- COMMAND ----------
+
+USE SCHEMA IDENTIFIER(:schema);
+
+-- COMMAND ----------
+
+-- DBTITLE 1,Cell 3
+OPTIMIZE dim_date FULL;
+ANALYZE TABLE dim_date COMPUTE STATISTICS FOR ALL COLUMNS;
+
+-- COMMAND ----------
+
+-- DBTITLE 1,Cell 4
+OPTIMIZE dim_category FULL;
+ANALYZE TABLE dim_category COMPUTE STATISTICS FOR ALL COLUMNS;
+
+-- COMMAND ----------
+
+-- DBTITLE 1,Cell 5
+OPTIMIZE dim_customer FULL;
+ANALYZE TABLE dim_customer COMPUTE STATISTICS FOR ALL COLUMNS;
+
+-- COMMAND ----------
+
+-- DBTITLE 1,Cell 6
+OPTIMIZE dim_merchant FULL;
+ANALYZE TABLE dim_merchant COMPUTE STATISTICS FOR ALL COLUMNS;
+
+-- COMMAND ----------
+
+-- DBTITLE 1,Cell 7
+OPTIMIZE dim_product FULL;
+ANALYZE TABLE dim_product COMPUTE STATISTICS FOR ALL COLUMNS;
+
+-- COMMAND ----------
+
+-- DBTITLE 1,Cell 8
+OPTIMIZE transactions FULL;
+ANALYZE TABLE transactions COMPUTE STATISTICS FOR ALL COLUMNS;

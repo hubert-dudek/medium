@@ -1,0 +1,33 @@
+bundle:
+  name: lakehouse_rt_sql_benchmark
+
+include:
+  - resources/infrastructure.yml
+  - resources/setup_jobs.yml
+
+variables:
+  catalog:
+    description: Existing Unity Catalog catalog in which the two benchmark schemas are created.
+    default: main
+
+  benchmark_warehouse_size:
+    description: Size of the bundle-managed standard serverless warehouse used for manual tests.
+    default: Small
+
+  benchmark_max_clusters:
+    description: Maximum clusters for the standard serverless warehouse. Keep at 1 for a single-cluster comparison.
+    default: 1
+
+  prep_warehouse_size:
+    description: Size of the serverless warehouse used only for data generation and OPTIMIZE.
+    default: 2X-Small
+
+
+
+targets:
+  dev:
+    default: true
+  prod:
+    mode: production
+    workspace:
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}

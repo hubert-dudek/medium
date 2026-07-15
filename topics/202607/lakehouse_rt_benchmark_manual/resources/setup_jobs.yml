@@ -1,0 +1,152 @@
+resources:
+  jobs:
+    setup_10b:
+      name: '[rt-bench][${bundle.target}] prepare 10 billion transactions'
+      description: Creates deterministic Delta dimensions and 10 billion transactions, runs OPTIMIZE, and validates row counts.
+      max_concurrent_runs: 1
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${resources.schemas.data_10b.name}
+        - name: scale_name
+          default: 10b
+        - name: transaction_rows
+          default: '10000000000'
+        - name: customer_rows
+          default: '10000000'
+        - name: merchant_rows
+          default: '1000000'
+        - name: product_rows
+          default: '1000000'
+        - name: fact_num_parts
+          default: '8192'
+        - name: customer_num_parts
+          default: '256'
+        - name: merchant_num_parts
+          default: '64'
+        - name: product_num_parts
+          default: '64'
+      tasks:
+        - task_key: create_dimensions
+          notebook_task:
+            notebook_path: ../src/setup/01_create_dimensions.sql
+            warehouse_id: ${resources.sql_warehouses.prep_serverless.id}
+        - task_key: create_transactions
+          depends_on:
+            - task_key: create_dimensions
+          notebook_task:
+            notebook_path: ../src/setup/02_create_transactions.sql
+            warehouse_id: ${resources.sql_warehouses.prep_serverless.id}
+        - task_key: optimize
+          depends_on:
+            - task_key: create_transactions
+          notebook_task:
+            notebook_path: ../src/setup/03_optimize.sql
+            warehouse_id: ${resources.sql_warehouses.prep_serverless.id}
+        - task_key: validate
+          depends_on:
+            - task_key: optimize
+          notebook_task:
+            notebook_path: ../src/setup/04_validate.sql
+            warehouse_id: ${resources.sql_warehouses.prep_serverless.id}
+    setup_10m:
+      name: '[rt-bench][${bundle.target}] prepare 10 milion transactions'
+      description: Creates deterministic Delta dimensions and 10 milion transactions, runs OPTIMIZE, and validates row counts.
+      max_concurrent_runs: 1
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${resources.schemas.data_10m.name}
+        - name: scale_name
+          default: 1m
+        - name: transaction_rows
+          default: '10000000'
+        - name: customer_rows
+          default: '10000'
+        - name: merchant_rows
+          default: '1000'
+        - name: product_rows
+          default: '1000'
+        - name: fact_num_parts
+          default: '819'
+        - name: customer_num_parts
+          default: '25'
+        - name: merchant_num_parts
+          default: '8'
+        - name: product_num_parts
+          default: '8'
+      tasks:
+        - task_key: create_dimensions
+          notebook_task:
+            notebook_path: ../src/setup/01_create_dimensions.sql
+            warehouse_id: ${resources.sql_warehouses.prep_serverless.id}
+        - task_key: create_transactions
+          depends_on:
+            - task_key: create_dimensions
+          notebook_task:
+            notebook_path: ../src/setup/02_create_transactions.sql
+            warehouse_id: ${resources.sql_warehouses.prep_serverless.id}
+        - task_key: optimize
+          depends_on:
+            - task_key: create_transactions
+          notebook_task:
+            notebook_path: ../src/setup/03_optimize.sql
+            warehouse_id: ${resources.sql_warehouses.prep_serverless.id}
+        - task_key: validate
+          depends_on:
+            - task_key: optimize
+          notebook_task:
+            notebook_path: ../src/setup/04_validate.sql
+            warehouse_id: ${resources.sql_warehouses.prep_serverless.id}
+    setup_1m:
+      name: '[rt-bench][${bundle.target}] prepare 1 milion transactions'
+      description: Creates deterministic Delta dimensions and 1 milion transactions, runs OPTIMIZE, and validates row counts.
+      max_concurrent_runs: 1
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${resources.schemas.data_1m.name}
+        - name: scale_name
+          default: 1m
+        - name: transaction_rows
+          default: '1000000'
+        - name: customer_rows
+          default: '1000'
+        - name: merchant_rows
+          default: '100'
+        - name: product_rows
+          default: '100'
+        - name: fact_num_parts
+          default: '81'
+        - name: customer_num_parts
+          default: '5'
+        - name: merchant_num_parts
+          default: '8'
+        - name: product_num_parts
+          default: '8'
+      tasks:
+        - task_key: create_dimensions
+          notebook_task:
+            notebook_path: ../src/setup/01_create_dimensions.sql
+            warehouse_id: ${resources.sql_warehouses.prep_serverless.id}
+        - task_key: create_transactions
+          depends_on:
+            - task_key: create_dimensions
+          notebook_task:
+            notebook_path: ../src/setup/02_create_transactions.sql
+            warehouse_id: ${resources.sql_warehouses.prep_serverless.id}
+        - task_key: optimize
+          depends_on:
+            - task_key: create_transactions
+          notebook_task:
+            notebook_path: ../src/setup/03_optimize.sql
+            warehouse_id: ${resources.sql_warehouses.prep_serverless.id}
+        - task_key: validate
+          depends_on:
+            - task_key: optimize
+          notebook_task:
+            notebook_path: ../src/setup/04_validate.sql
+            warehouse_id: ${resources.sql_warehouses.prep_serverless.id}

@@ -1,0 +1,52 @@
+resources:
+  sql_warehouses:
+    benchmark_serverless:
+      name: '[rt-bench][${bundle.target}] standard serverless manual benchmark'
+      cluster_size: ${var.benchmark_warehouse_size}
+      enable_serverless_compute: true
+      enable_photon: true
+      min_num_clusters: 1
+      max_num_clusters: 1
+      auto_stop_mins: 1
+      tags:
+        custom_tags:
+          - key: purpose
+            value: rt-sql-benchmark
+          - key: role
+            value: measured-standard
+          - key: bundle_target
+            value: ${bundle.target}
+
+    prep_serverless:
+      name: '[rt-bench][${bundle.target}] data preparation'
+      cluster_size: ${var.prep_warehouse_size}
+      enable_serverless_compute: true
+      enable_photon: true
+      min_num_clusters: 1
+      max_num_clusters: 1
+      auto_stop_mins: 1
+      tags:
+        custom_tags:
+          - key: purpose
+            value: rt-sql-benchmark
+          - key: role
+            value: data-preparation
+          - key: bundle_target
+            value: ${bundle.target}
+
+  schemas:
+
+    data_10b:
+      name: rt_sql_bench_10b
+      catalog_name: ${var.catalog}
+      comment: Lakehouse RT benchmark dataset with 10 billion transaction rows.
+
+    data_10m:
+      name: rt_sql_bench_10m
+      catalog_name: ${var.catalog}
+      comment: Lakehouse RT benchmark dataset with 10 milion transaction rows.
+
+    data_1m:
+      name: rt_sql_bench_1m
+      catalog_name: ${var.catalog}
+      comment: Lakehouse RT benchmark dataset with 1 milion transaction rows.
