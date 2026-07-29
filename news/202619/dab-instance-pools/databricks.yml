@@ -1,0 +1,14 @@
+bundle:
+  name: dab-instance-pools
+  engine: direct
+
+include:
+  - resources/*.yml
+
+targets:
+  prod:
+    default: true
+    mode: production
+    workspace:
+      host: https://adb-1179923690951934.14.azuredatabricks.net
+      root_path: /Workspace/Users/hubert.dudek@brickschool.io/.bundle/${bundle.name}/${bundle.target}

@@ -1,0 +1,42 @@
+{
+  "data_sources": {
+    "tables": [
+      {
+        "column_configs": [
+          {
+            "column_name": "customer_id",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "customer_name",
+            "enable_entity_matching": true,
+            "enable_format_assistance": true
+          }
+        ],
+        "identifier": "main.tx_benchmark_1b.customers"
+      },
+      {
+        "column_configs": [
+          {
+            "column_name": "amount",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "customer_id",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "transaction_date",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "transaction_id",
+            "enable_format_assistance": true
+          }
+        ],
+        "identifier": "main.tx_benchmark_1b.transactions"
+      }
+    ]
+  },
+  "version": 2
+}

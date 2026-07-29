@@ -1,0 +1,161 @@
+resources:
+  jobs:
+    create_1m:
+      name: transaction_benchmark_create_1m
+      description: Create and fully optimize the 1 million row transaction dataset.
+      max_concurrent_runs: 1
+      tags:
+        project: transaction_sql_benchmark
+        scale: 1m
+        phase: create
+      parameters:
+      - name: catalog
+        default: ${var.catalog}
+      - name: schema
+        default: ${var.schema_prefix}_1m
+      tasks:
+      - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/create_dataset_1m.sql
+      - task_key: optimize_full
+        depends_on:
+        - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/optimize_full.sql
+    create_1b:
+      name: transaction_benchmark_create_1b
+      description: Create and fully optimize the 1 billion row transaction dataset.
+      max_concurrent_runs: 1
+      tags:
+        project: transaction_sql_benchmark
+        scale: 1b
+        phase: create
+      parameters:
+      - name: catalog
+        default: ${var.catalog}
+      - name: schema
+        default: ${var.schema_prefix}_1b
+      tasks:
+      - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/create_dataset_1b.sql
+      - task_key: optimize_full
+        depends_on:
+        - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/optimize_full.sql
+    create_10b:
+      name: transaction_benchmark_create_10b
+      description: Create and fully optimize the 10 billion row transaction dataset.
+      max_concurrent_runs: 1
+      tags:
+        project: transaction_sql_benchmark
+        scale: 10b
+        phase: create
+      parameters:
+      - name: catalog
+        default: ${var.catalog}
+      - name: schema
+        default: ${var.schema_prefix}_10b
+      tasks:
+      - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/create_dataset_10b.sql
+      - task_key: optimize_full
+        depends_on:
+        - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/optimize_full.sql
+    create_1m_tid:
+      name: transaction_benchmark_create_1m_tid
+      description: Create and fully optimize the 1 million row transaction dataset clustered by transaction_id.
+      max_concurrent_runs: 1
+      tags:
+        project: transaction_sql_benchmark
+        scale: 1m
+        phase: create
+        clustering: transaction_id
+      parameters:
+      - name: catalog
+        default: ${var.catalog}
+      - name: schema
+        default: ${var.schema_prefix}_1m_tid
+      tasks:
+      - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/create_dataset_1m_tid.sql
+      - task_key: optimize_full
+        depends_on:
+        - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/optimize_full.sql
+    create_1b_tid:
+      name: transaction_benchmark_create_1b_tid
+      description: Create and fully optimize the 1 billion row transaction dataset clustered by transaction_id.
+      max_concurrent_runs: 1
+      tags:
+        project: transaction_sql_benchmark
+        scale: 1b
+        phase: create
+        clustering: transaction_id
+      parameters:
+      - name: catalog
+        default: ${var.catalog}
+      - name: schema
+        default: ${var.schema_prefix}_1b_tid
+      tasks:
+      - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/create_dataset_1b_tid.sql
+      - task_key: optimize_full
+        depends_on:
+        - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/optimize_full.sql
+    create_10b_tid:
+      name: transaction_benchmark_create_10b_tid
+      description: Create and fully optimize the 10 billion row transaction dataset clustered by transaction_id.
+      max_concurrent_runs: 1
+      tags:
+        project: transaction_sql_benchmark
+        scale: 10b
+        phase: create
+        clustering: transaction_id
+      parameters:
+      - name: catalog
+        default: ${var.catalog}
+      - name: schema
+        default: ${var.schema_prefix}_10b_tid
+      tasks:
+      - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/create_dataset_10b_tid.sql
+      - task_key: optimize_full
+        depends_on:
+        - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/optimize_full.sql

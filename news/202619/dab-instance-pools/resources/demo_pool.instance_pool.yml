@@ -1,0 +1,13 @@
+resources:
+  instance_pools:
+    demo_pool:
+      instance_pool_name: dab-demo-pool
+      node_type_id: Standard_DS3_v2
+      min_idle_instances: 0
+      max_capacity: 10
+      idle_instance_autotermination_minutes: 15
+      preloaded_spark_versions:
+        - 18.x-scala2.13
+      azure_attributes:
+        availability: ON_DEMAND_AZURE
+        spot_bid_max_price: -1

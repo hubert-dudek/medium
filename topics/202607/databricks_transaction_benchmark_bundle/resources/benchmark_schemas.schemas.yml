@@ -1,0 +1,31 @@
+resources:
+  schemas:
+    benchmark_1m:
+      name: ${var.schema_prefix}_1m
+      catalog_name: ${var.catalog}
+      comment: 1 million row transaction benchmark schema
+
+    benchmark_1b:
+      name: ${var.schema_prefix}_1b
+      catalog_name: ${var.catalog}
+      comment: 1 billion row transaction benchmark schema
+
+    benchmark_10b:
+      name: ${var.schema_prefix}_10b
+      catalog_name: ${var.catalog}
+      comment: 10 billion row transaction benchmark schema
+
+    benchmark_1m_tid:
+      name: ${var.schema_prefix}_1m_tid
+      catalog_name: ${var.catalog}
+      comment: 1 million row transaction benchmark schema clustered by transaction_id
+
+    benchmark_1b_tid:
+      name: ${var.schema_prefix}_1b_tid
+      catalog_name: ${var.catalog}
+      comment: 1 billion row transaction benchmark schema clustered by transaction_id
+
+    benchmark_10b_tid:
+      name: ${var.schema_prefix}_10b_tid
+      catalog_name: ${var.catalog}
+      comment: 10 billion row transaction benchmark schema clustered by transaction_id

@@ -1,0 +1,10 @@
+resources:
+  genie_spaces:
+    genieagent:
+      title: "GenieAgent"
+      warehouse_id: 48560dc954e23d93
+      file_path: ../src/genieagent.geniespace.json
+      description: |-
+        This Agent enables analysis of synthetic customer information and their transaction activity.
+      parent_path: /Workspace/Users/hubert.dudek@brickschool.io
+

@@ -1,0 +1,13 @@
+resources:
+  jobs:
+    demo_job:
+      name: dab-demo-pool-job
+      tasks:
+        - task_key: main_task
+          notebook_task:
+            notebook_path: ../src/demo_notebook.py
+          new_cluster:
+            spark_version: 18.x-scala2.13
+            instance_pool_id: ${resources.instance_pools.demo_pool.instance_pool_id}
+            driver_instance_pool_id: ${resources.instance_pools.demo_pool.instance_pool_id}
+            num_workers: 2

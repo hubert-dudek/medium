@@ -1,0 +1,30 @@
+# Databricks Declarative Automation Bundle (formerly Asset Bundles)
+# SQL-only synthetic transaction benchmark.
+
+bundle:
+  name: transaction_sql_benchmark
+include:
+- resources/*.yml
+variables:
+  warehouse_id:
+    description: SQL warehouse ID used by every SQL task. Defaults to the bundle-managed warehouse.
+    default: ${resources.sql_warehouses.benchmark_warehouse.id}
+  catalog:
+    description: Unity Catalog catalog in which the benchmark schemas are created.
+    default: main
+  schema_prefix:
+    description: Prefix used for the 1m, 1b, and 10b schemas.
+    default: tx_benchmark
+  benchmark_month_start:
+    description: Inclusive start date for the data-skipping benchmark.
+    default: '2024-06-01'
+  benchmark_month_end:
+    description: Exclusive end date for the data-skipping benchmark.
+    default: '2024-07-01'
+targets:
+  prod:
+    mode: production
+    workspace:
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      schema_prefix: tx_benchmark
