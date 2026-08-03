@@ -1,0 +1,13 @@
+resources:
+  jobs:
+    demo_job:
+      name: demo_job
+      tasks:
+        - task_key: hello_task
+          environment_key: default
+          spark_python_task:
+            python_file: ../src/hello.py
+      environments:
+        - environment_key: default
+          spec:
+            client: "1"

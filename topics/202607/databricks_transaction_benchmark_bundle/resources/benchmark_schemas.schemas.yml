@@ -15,6 +15,11 @@ resources:
       catalog_name: ${var.catalog}
       comment: 10 billion row transaction benchmark schema
 
+    benchmark_50b:
+      name: ${var.schema_prefix}_50b
+      catalog_name: ${var.catalog}
+      comment: 50 billion row transaction benchmark schema
+
     benchmark_1m_tid:
       name: ${var.schema_prefix}_1m_tid
       catalog_name: ${var.catalog}

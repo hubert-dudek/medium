@@ -78,6 +78,32 @@ resources:
           warehouse_id: ${var.warehouse_id}
           file:
             path: ../src/optimize_full.sql
+    create_50b:
+      name: transaction_benchmark_create_50b
+      description: Create and fully optimize the 50 billion row transaction dataset with 500 customers.
+      max_concurrent_runs: 1
+      tags:
+        project: transaction_sql_benchmark
+        scale: 50b
+        phase: create
+      parameters:
+      - name: catalog
+        default: ${var.catalog}
+      - name: schema
+        default: ${var.schema_prefix}_50b
+      tasks:
+      - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/create_dataset_50b.sql
+      - task_key: optimize_full
+        depends_on:
+        - task_key: create_tables
+        sql_task:
+          warehouse_id: ${var.warehouse_id}
+          file:
+            path: ../src/optimize_full.sql
     create_1m_tid:
       name: transaction_benchmark_create_1m_tid
       description: Create and fully optimize the 1 million row transaction dataset clustered by transaction_id.
