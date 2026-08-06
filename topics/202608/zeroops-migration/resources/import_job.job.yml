@@ -1,0 +1,16 @@
+resources:
+  jobs:
+    import_job:
+      name: import_job_azure_sql
+      tasks:
+        - task_key: import_task
+          notebook_task:
+            notebook_path: ../src/import_azure_sql.py
+          environment_key: default
+      environments:
+        - environment_key: default
+          spec:
+            client: "5"
+      schedule:
+        quartz_cron_expression: "0 0 */5 ? * *"
+        timezone_id: "UTC"

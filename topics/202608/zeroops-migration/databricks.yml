@@ -1,0 +1,14 @@
+# Databricks Asset Bundle definition generated from the course custom template.
+bundle:
+  name: data_marketing_azure_sql
+
+include:
+  - resources/*.yml
+
+
+targets:
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-9d54d642-8585.cloud.databricks.com
+      root_path: /Shared/.bundle/${bundle.name}/${bundle.target}
