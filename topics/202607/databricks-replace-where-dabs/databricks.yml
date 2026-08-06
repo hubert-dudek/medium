@@ -1,0 +1,27 @@
+bundle:
+  name: replace_where_use_cases
+
+include:
+  - resources/*.yml
+
+experimental:
+  skip_name_prefix_for_schema: true
+
+variables:
+  catalog:
+    description: Unity Catalog catalog used for the demo.
+    default: main
+  source_schema_base:
+    description: Base name for the source-data schema.
+    default: replace_where_demo_src
+  output_schema_base:
+    description: Base name for the pipeline-output schema.
+    default: replace_where_demo_out
+  pipeline_channel:
+    description: Lakeflow pipeline release channel. PREVIEW is retained for the MV REPLACE preview examples.
+    default: PREVIEW
+
+targets:
+  dev:
+    default: true
+    mode: development

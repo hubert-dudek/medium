@@ -1,0 +1,12 @@
+{
+  "cause": "JOB_TASK",
+  "parameters": {
+    "source_catalog": "main",
+    "source_schema": "replace_where_demo_src_dev",
+    "backfill_start_date": "2026-06-01",
+    "backfill_end_date": "2026-06-07"
+  },
+  "refresh_selection": [
+    "main.replace_where_demo_out_dev.customer_daily_metrics"
+  ]
+}

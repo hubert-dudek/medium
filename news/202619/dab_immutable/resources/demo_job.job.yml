@@ -1,0 +1,8 @@
+resources:
+  jobs:
+    demo_job:
+      name: dab_immutable-job-3
+      tasks:
+        - task_key: main_task_3
+          notebook_task:
+            notebook_path: ../src/demo_notebook.py

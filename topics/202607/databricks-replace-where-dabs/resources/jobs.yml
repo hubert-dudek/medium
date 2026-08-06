@@ -1,0 +1,226 @@
+resources:
+  jobs:
+    setup_sample_data:
+      name: ${bundle.target} - REPLACE WHERE - setup sample data
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: create_sample_data
+          notebook_task:
+            notebook_path: ../src/setup/00_create_sample_data.sql
+            base_parameters:
+              source_catalog: ${var.catalog}
+              source_schema: ${resources.schemas.source_schema.name}
+
+    initialize_all_examples:
+      name: ${bundle.target} - REPLACE WHERE - initialize all six examples
+      max_concurrent_runs: 1
+      parameters:
+        - name: source_catalog
+          default: ${var.catalog}
+        - name: source_schema
+          default: ${resources.schemas.source_schema.name}
+        - name: recompute_days
+          default: '3650'
+        - name: vat_recompute_from
+          default: '1900-01-01'
+        - name: weather_history_days
+          default: '3650'
+        - name: backfill_start_date
+          default: '1900-01-01'
+        - name: backfill_end_date
+          default: '2999-12-31'
+        - name: legal_entity
+          default: PL01
+        - name: open_period_start
+          default: '1900-01-01'
+        - name: provider
+          default: PAYFAST
+        - name: restatement_lookback_days
+          default: '3650'
+      tasks:
+        - task_key: setup
+          notebook_task:
+            notebook_path: ../src/setup/00_create_sample_data.sql
+
+        - task_key: initialize_01_variant
+          depends_on:
+            - task_key: setup
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.uc01_variant_dimension_mv.id}
+
+        - task_key: initialize_02_vat
+          depends_on:
+            - task_key: setup
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.uc02_effective_dated_vat_mv.id}
+
+        - task_key: initialize_03_weather
+          depends_on:
+            - task_key: setup
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.uc03_weather_forecast_st.id}
+
+        - task_key: initialize_04_backfill
+          depends_on:
+            - task_key: setup
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.uc04_parameterized_backfill_st.id}
+
+        - task_key: initialize_05_open_period
+          depends_on:
+            - task_key: setup
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.uc05_open_accounting_period_st.id}
+
+        - task_key: initialize_06_restatement
+          depends_on:
+            - task_key: setup
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.uc06_authoritative_slice_st.id}
+
+    monitored_backfill:
+      name: ${bundle.target} - REPLACE WHERE - monitor and execute backfill requests
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: monitor_requests
+          notebook_task:
+            notebook_path: ../src/orchestration/04_backfill_monitor.py
+            base_parameters:
+              pipeline_id: ${resources.pipelines.uc04_parameterized_backfill_st.id}
+              source_catalog: ${var.catalog}
+              source_schema: ${resources.schemas.source_schema.name}
+              output_catalog: ${var.catalog}
+              output_schema: ${resources.schemas.output_schema.name}
+              target_dataset: customer_daily_metrics
+              max_requests: '10'
+              poll_seconds: '10'
+              timeout_seconds: '3600'
+
+    validate_outputs:
+      name: ${bundle.target} - REPLACE WHERE - validate outputs
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: validate
+          notebook_task:
+            notebook_path: ../src/validation/00_validate_outputs.sql
+            base_parameters:
+              output_catalog: ${var.catalog}
+              output_schema: ${resources.schemas.output_schema.name}
+              source_catalog: ${var.catalog}
+              source_schema: ${resources.schemas.source_schema.name}
+
+    demo_01_variant_dimension:
+      name: ${bundle.target} - Demo 01 - change VARIANT dimension and refresh recent dates
+      max_concurrent_runs: 1
+      parameters:
+        - name: source_catalog
+          default: ${var.catalog}
+        - name: source_schema
+          default: ${resources.schemas.source_schema.name}
+        - name: recompute_days
+          default: '7'
+      tasks:
+        - task_key: mutate_dimension
+          notebook_task:
+            notebook_path: ../src/mutations/01_change_variant_dimension.sql
+        - task_key: refresh_recent_dates
+          depends_on:
+            - task_key: mutate_dimension
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.uc01_variant_dimension_mv.id}
+
+    demo_02_effective_dated_vat:
+      name: ${bundle.target} - Demo 02 - change VAT from 1 January and refresh legal horizon
+      max_concurrent_runs: 1
+      parameters:
+        - name: source_catalog
+          default: ${var.catalog}
+        - name: source_schema
+          default: ${resources.schemas.source_schema.name}
+        - name: vat_recompute_from
+          default: '2026-01-01'
+      tasks:
+        - task_key: mutate_vat_rule
+          notebook_task:
+            notebook_path: ../src/mutations/02_change_vat_rate.sql
+        - task_key: refresh_vat_horizon
+          depends_on:
+            - task_key: mutate_vat_rule
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.uc02_effective_dated_vat_mv.id}
+
+    demo_03_weather_forecast:
+      name: ${bundle.target} - Demo 03 - publish a new forecast and replace today forward
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: publish_forecast
+          notebook_task:
+            notebook_path: ../src/mutations/03_reissue_weather_forecast.sql
+            base_parameters:
+              source_catalog: ${var.catalog}
+              source_schema: ${resources.schemas.source_schema.name}
+        - task_key: refresh_forecast
+          depends_on:
+            - task_key: publish_forecast
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.uc03_weather_forecast_st.id}
+
+    demo_04_monitored_backfill:
+      name: ${bundle.target} - Demo 04 - create and execute a monitored backfill request
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: create_request
+          notebook_task:
+            notebook_path: ../src/mutations/04_create_backfill_request.sql
+            base_parameters:
+              source_catalog: ${var.catalog}
+              source_schema: ${resources.schemas.source_schema.name}
+        - task_key: execute_request
+          depends_on:
+            - task_key: create_request
+          run_job_task:
+            job_id: ${resources.jobs.monitored_backfill.id}
+
+    demo_05_open_accounting_period:
+      name: ${bundle.target} - Demo 05 - change open and closed periods, refresh open period only
+      max_concurrent_runs: 1
+      parameters:
+        - name: source_catalog
+          default: ${var.catalog}
+        - name: source_schema
+          default: ${resources.schemas.source_schema.name}
+        - name: legal_entity
+          default: PL01
+        - name: open_period_start
+          default: '2026-07-01'
+      tasks:
+        - task_key: mutate_accounting_data
+          notebook_task:
+            notebook_path: ../src/mutations/05_change_open_period_data.sql
+        - task_key: refresh_open_period
+          depends_on:
+            - task_key: mutate_accounting_data
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.uc05_open_accounting_period_st.id}
+
+    demo_06_authoritative_slice:
+      name: ${bundle.target} - Demo 06 - accept a corrected daily file and replace its slice
+      max_concurrent_runs: 1
+      parameters:
+        - name: source_catalog
+          default: ${var.catalog}
+        - name: source_schema
+          default: ${resources.schemas.source_schema.name}
+        - name: provider
+          default: PAYFAST
+        - name: restatement_lookback_days
+          default: '14'
+      tasks:
+        - task_key: reissue_file
+          notebook_task:
+            notebook_path: ../src/mutations/06_reissue_settlement_file.sql
+        - task_key: refresh_authoritative_slice
+          depends_on:
+            - task_key: reissue_file
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.uc06_authoritative_slice_st.id}

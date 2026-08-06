@@ -1,0 +1,11 @@
+resources:
+  schemas:
+    source_schema:
+      name: ${var.source_schema_base}_${bundle.target}
+      catalog_name: ${var.catalog}
+      comment: Sample source tables for the six REPLACE WHERE use cases.
+
+    output_schema:
+      name: ${var.output_schema_base}_${bundle.target}
+      catalog_name: ${var.catalog}
+      comment: Materialized views and streaming tables produced by the six demo pipelines.

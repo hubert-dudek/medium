@@ -1,0 +1,8 @@
+resources:
+  jobs:
+    demo_job:
+      name: dab-migration-test-job
+      tasks:
+        - task_key: main_task
+          notebook_task:
+            notebook_path: ../src/demo_notebook.py

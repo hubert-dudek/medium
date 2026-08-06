@@ -1,0 +1,118 @@
+resources:
+  pipelines:
+    uc01_variant_dimension_mv:
+      name: ${bundle.target} - 01 MV - bounded VARIANT dimension recomputation
+      catalog: ${var.catalog}
+      schema: ${resources.schemas.output_schema.name}
+      serverless: true
+      continuous: false
+      channel: ${var.pipeline_channel}
+      libraries:
+        - file:
+            path: ../src/pipelines/01_variant_dimension_mv.sql
+      parameters:
+        source_catalog: ${var.catalog}
+        source_schema: ${resources.schemas.source_schema.name}
+        recompute_days: '7'
+      tags:
+        demo: replace_where
+        use_case: variant_dimension
+        object_type: materialized_view
+
+    uc02_effective_dated_vat_mv:
+      name: ${bundle.target} - 02 MV - effective-dated VAT correction
+      catalog: ${var.catalog}
+      schema: ${resources.schemas.output_schema.name}
+      serverless: true
+      continuous: false
+      channel: ${var.pipeline_channel}
+      libraries:
+        - file:
+            path: ../src/pipelines/02_effective_dated_vat_mv.sql
+      parameters:
+        source_catalog: ${var.catalog}
+        source_schema: ${resources.schemas.source_schema.name}
+        vat_recompute_from: '2026-01-01'
+      tags:
+        demo: replace_where
+        use_case: effective_dated_vat
+        object_type: materialized_view
+
+    uc03_weather_forecast_st:
+      name: ${bundle.target} - 03 ST - current and future weather forecasts
+      catalog: ${var.catalog}
+      schema: ${resources.schemas.output_schema.name}
+      serverless: true
+      continuous: false
+      channel: ${var.pipeline_channel}
+      libraries:
+        - file:
+            path: ../src/pipelines/03_weather_forecast_st.sql
+      parameters:
+        source_catalog: ${var.catalog}
+        source_schema: ${resources.schemas.source_schema.name}
+        weather_history_days: '0'
+      tags:
+        demo: replace_where
+        use_case: weather_forecast
+        object_type: streaming_table
+
+    uc04_parameterized_backfill_st:
+      name: ${bundle.target} - 04 ST - monitored parameterized backfill
+      catalog: ${var.catalog}
+      schema: ${resources.schemas.output_schema.name}
+      serverless: true
+      continuous: false
+      channel: ${var.pipeline_channel}
+      libraries:
+        - file:
+            path: ../src/pipelines/04_parameterized_backfill_st.sql
+      parameters:
+        source_catalog: ${var.catalog}
+        source_schema: ${resources.schemas.source_schema.name}
+        backfill_start_date: '2026-01-01'
+        backfill_end_date: '2026-12-31'
+      tags:
+        demo: replace_where
+        use_case: monitored_backfill
+        object_type: streaming_table
+
+    uc05_open_accounting_period_st:
+      name: ${bundle.target} - 05 ST - open accounting period
+      catalog: ${var.catalog}
+      schema: ${resources.schemas.output_schema.name}
+      serverless: true
+      continuous: false
+      channel: ${var.pipeline_channel}
+      libraries:
+        - file:
+            path: ../src/pipelines/05_open_accounting_period_st.sql
+      parameters:
+        source_catalog: ${var.catalog}
+        source_schema: ${resources.schemas.source_schema.name}
+        legal_entity: PL01
+        open_period_start: '2026-07-01'
+      tags:
+        demo: replace_where
+        use_case: open_accounting_period
+        object_type: streaming_table
+
+    uc06_authoritative_slice_st:
+      name: ${bundle.target} - 06 ST - authoritative daily-file restatement
+      catalog: ${var.catalog}
+      schema: ${resources.schemas.output_schema.name}
+      serverless: true
+      continuous: false
+      channel: ${var.pipeline_channel}
+      libraries:
+        - file:
+            path: ../src/pipelines/06_authoritative_slice_st.sql
+      parameters:
+        source_catalog: ${var.catalog}
+        source_schema: ${resources.schemas.source_schema.name}
+        provider: PAYFAST
+        restatement_lookback_days: '14'
+      tags:
+        demo: replace_where
+        use_case: authoritative_slice
+        object_type: streaming_table

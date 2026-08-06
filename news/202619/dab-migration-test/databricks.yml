@@ -1,0 +1,14 @@
+bundle:
+  name: dab-migration-test
+  engine: terraform
+
+include:
+  - resources/*.yml
+
+targets:
+  prod:
+    default: true
+    mode: production
+    workspace:
+      host: https://dbc-ca93cffe-fba0.cloud.databricks.com/
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
