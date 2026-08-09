@@ -1,0 +1,6 @@
+resources:
+  schemas:
+    transaction_data:
+      name: transaction_processing_${bundle.target}
+      catalog_name: ${var.catalog}
+      comment: Transaction processing tables

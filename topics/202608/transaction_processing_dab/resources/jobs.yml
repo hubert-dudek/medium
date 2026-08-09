@@ -1,0 +1,37 @@
+resources:
+  jobs:
+    source_data_generator:
+      name: ${bundle.target}-transaction-source-generator
+      max_concurrent_runs: 1
+      schedule:
+        quartz_cron_expression: "0 0 * * * ?"
+        timezone_id: UTC
+      parameters:
+        - name: catalog
+          default: ${resources.schemas.transaction_data.catalog_name}
+        - name: schema
+          default: ${resources.schemas.transaction_data.name}
+        - name: rows_per_batch
+          default: "500"
+      tasks:
+        - task_key: generate_source_data
+          notebook_task:
+            notebook_path: ../src/generate_source_data.py
+          timeout_seconds: 1800
+
+    transaction_loader:
+      name: ${bundle.target}-transaction-loader
+      max_concurrent_runs: 1
+      schedule:
+        quartz_cron_expression: "0 10 * * * ?"
+        timezone_id: UTC
+      parameters:
+        - name: catalog
+          default: ${resources.schemas.transaction_data.catalog_name}
+        - name: schema
+          default: ${resources.schemas.transaction_data.name}
+      tasks:
+        - task_key: load_transactions
+          notebook_task:
+            notebook_path: ../src/load_transactions.py
+          timeout_seconds: 1800
