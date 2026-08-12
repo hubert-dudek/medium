@@ -1,0 +1,5 @@
+resources:
+  schemas:
+    device_data:
+      name: device_readings_${bundle.target}
+      catalog_name: ${var.catalog}

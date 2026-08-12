@@ -1,0 +1,5 @@
+resources:
+  schemas:
+    meter_data:
+      name: meter_consumption_${bundle.target}
+      catalog_name: ${var.catalog}

@@ -1,0 +1,73 @@
+resources:
+  jobs:
+    reading_source_generator:
+      name: ${bundle.target}-reading-source-generator
+      performance_target: STANDARD
+      max_concurrent_runs: 1
+      schedule:
+        quartz_cron_expression: "0 */3 * * * ?"
+        timezone_id: UTC
+        pause_status: UNPAUSED
+      parameters:
+        - name: catalog
+          default: ${resources.schemas.device_data.catalog_name}
+        - name: schema
+          default: ${resources.schemas.device_data.name}
+      tasks:
+        - task_key: generate_readings
+          notebook_task:
+            notebook_path: ../src/generate_readings.py
+          environment_key: default
+          timeout_seconds: 1800
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+
+    reading_loader:
+      name: ${bundle.target}-reading-loader
+      performance_target: STANDARD
+      max_concurrent_runs: 1
+      schedule:
+        quartz_cron_expression: "0 */3 * * * ?"
+        timezone_id: UTC
+        pause_status: UNPAUSED
+      parameters:
+        - name: catalog
+          default: ${resources.schemas.device_data.catalog_name}
+        - name: schema
+          default: ${resources.schemas.device_data.name}
+      tasks:
+        - task_key: load_readings
+          notebook_task:
+            notebook_path: ../src/load_readings.py
+          environment_key: default
+          timeout_seconds: 1800
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+
+    reading_loader_agg:
+      name: ${bundle.target}-reading-aggregate
+      performance_target: STANDARD
+      max_concurrent_runs: 1
+      schedule:
+        quartz_cron_expression: "0 0 * * * ?"
+        timezone_id: UTC
+        pause_status: UNPAUSED
+      parameters:
+        - name: catalog
+          default: ${resources.schemas.device_data.catalog_name}
+        - name: schema
+          default: ${resources.schemas.device_data.name}
+      tasks:
+        - task_key: load_readings
+          notebook_task:
+            notebook_path: ../src/load_readings_agg.py
+          environment_key: default
+          timeout_seconds: 1800
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"

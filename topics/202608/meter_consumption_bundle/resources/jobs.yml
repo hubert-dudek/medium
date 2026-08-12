@@ -1,0 +1,37 @@
+resources:
+  jobs:
+    meter_reading_generator:
+      name: ${bundle.target}-meter-reading-generator
+      max_concurrent_runs: 1
+      schedule:
+        quartz_cron_expression: "0 0 * * * ?"
+        timezone_id: UTC
+      parameters:
+        - name: catalog
+          default: ${resources.schemas.meter_data.catalog_name}
+        - name: schema
+          default: ${resources.schemas.meter_data.name}
+        - name: rows_per_batch
+          default: "48"
+      tasks:
+        - task_key: generate_meter_readings
+          notebook_task:
+            notebook_path: ../src/generate_meter_readings.py
+          timeout_seconds: 1800
+
+    meter_usage_aggregation:
+      name: ${bundle.target}-meter-usage-aggregation
+      max_concurrent_runs: 1
+      schedule:
+        quartz_cron_expression: "0 10 * * * ?"
+        timezone_id: UTC
+      parameters:
+        - name: catalog
+          default: ${resources.schemas.meter_data.catalog_name}
+        - name: schema
+          default: ${resources.schemas.meter_data.name}
+      tasks:
+        - task_key: aggregate_meter_usage
+          notebook_task:
+            notebook_path: ../src/aggregate_meter_usage.py
+          timeout_seconds: 1800
