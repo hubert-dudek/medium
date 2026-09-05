@@ -1,0 +1,32 @@
+bundle:
+  name: tag-automation-simplified
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog_name:
+    description: Existing Unity Catalog catalog used by the experiment.
+    default: main
+  schema_name:
+    description: Dedicated schema for the experiment.
+    default: tags_experiment
+  reset_schema:
+    description: Drop and recreate the experiment schema during setup.
+    default: "true"
+  apply_abac_policy:
+    description: Create the optional ABAC column-mask policy from the ABAC notebook.
+    default: "false"
+  abac_principal:
+    description: User or group to which the optional ABAC mask applies.
+    default: ""
+  drop_governed_tags_on_cleanup:
+    description: Also drop the account-level ta_demo_* governed-tag definitions.
+    default: "false"
+
+targets:
+  prod:
+    mode: production
+    default: true
+    workspace:
+      root_path: /Workspace/Users/hubert.dudek@databrickster.com/.bundle/${bundle.name}/${bundle.target}

@@ -1,0 +1,80 @@
+resources:
+  jobs:
+    tag_automation_setup:
+      name: "[tag-automation] 01 - setup tags_experiment"
+      description: Creates the simplified dataset, governed tags, and seeded PII column tags.
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      tasks:
+        - task_key: setup_dataset
+          notebook_task:
+            notebook_path: ../src/00_setup.py
+            base_parameters:
+              catalog_name: ${var.catalog_name}
+              schema_name: ${var.schema_name}
+              reset_schema: ${var.reset_schema}
+          timeout_seconds: 3600
+          max_retries: 0
+
+        - task_key: inspect_baseline
+          depends_on:
+            - task_key: setup_dataset
+          notebook_task:
+            notebook_path: ../src/01_inspect_and_verify.py
+            base_parameters:
+              catalog_name: ${var.catalog_name}
+              schema_name: ${var.schema_name}
+          timeout_seconds: 1800
+          max_retries: 0
+
+    tag_automation_inspect:
+      name: "[tag-automation] 02 - inspect and verify"
+      description: Shows current table and column tags and checks the three expected automation outcomes.
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      tasks:
+        - task_key: inspect_and_verify
+          notebook_task:
+            notebook_path: ../src/01_inspect_and_verify.py
+            base_parameters:
+              catalog_name: ${var.catalog_name}
+              schema_name: ${var.schema_name}
+          timeout_seconds: 1800
+          max_retries: 0
+
+    tag_automation_abac:
+      name: "[tag-automation] 03 - optional ABAC demo"
+      description: Prints or creates a tag-driven column-mask policy and reads ABAC_POLICY_DEFINITIONS.
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      tasks:
+        - task_key: abac_demo
+          notebook_task:
+            notebook_path: ../src/02_abac_demo.py
+            base_parameters:
+              catalog_name: ${var.catalog_name}
+              schema_name: ${var.schema_name}
+              apply_policy: ${var.apply_abac_policy}
+              mask_principal: ${var.abac_principal}
+          timeout_seconds: 1800
+          max_retries: 0
+
+    tag_automation_cleanup:
+      name: "[tag-automation] 99 - cleanup"
+      description: Drops the tags_experiment schema and optionally the two demo governed-tag definitions.
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      tasks:
+        - task_key: cleanup
+          notebook_task:
+            notebook_path: ../src/99_cleanup.py
+            base_parameters:
+              catalog_name: ${var.catalog_name}
+              schema_name: ${var.schema_name}
+              drop_governed_tags: ${var.drop_governed_tags_on_cleanup}
+          timeout_seconds: 1800
+          max_retries: 0

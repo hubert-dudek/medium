@@ -45,6 +45,7 @@ spark.sql(
       GROUP BY device_id
     ) AS source
     ON target.device_id = source.device_id
+    WHEN MATCHED THEN UPDATE SET target.count = source.count
     WHEN NOT MATCHED THEN INSERT (
       device_id,
       count
@@ -52,6 +53,5 @@ spark.sql(
       source.device_id,
       1
     )
-    WHEN MATCHED THEN UPDATE SET target.count = source.count
     """
 )
