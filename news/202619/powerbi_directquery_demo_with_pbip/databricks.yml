@@ -1,0 +1,40 @@
+bundle:
+  name: powerbi_directquery_demo
+
+variables:
+  sql_warehouse_id:
+    description: "Existing Databricks SQL warehouse ID used by the SQL task. Pass with --var sql_warehouse_id=<warehouse_id>."
+    default: "86e0822b5a017775"
+  catalog:
+    description: "Unity Catalog catalog where demo objects will be created."
+    default: "main"
+  schema:
+    description: "Schema where demo Power BI objects will be created."
+    default: "powerbi_directquery_demo"
+  fact_rows:
+    description: "Number of synthetic sales rows to generate. Keep small for first test; increase later."
+    default: "250000"
+
+include:
+  - resources/*.yml
+
+sync:
+  include:
+    - sql/**
+    - powerbi/**
+    - resources/**
+    - README.md
+  exclude:
+    - .databricks/**
+    - '*.zip'
+    - '*.pbix'
+    - '*.pbit'
+
+workspace:
+  root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+
+targets:
+  prod:
+    mode: production
+    workspace:
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}

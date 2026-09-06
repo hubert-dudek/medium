@@ -13,5 +13,5 @@ targets:
     default: true
     mode: production
     workspace:
-      host: https://dbc-ca93cffe-fba0.cloud.databricks.com/
+      host: https://adb-1179923690951934.14.azuredatabricks.net
       root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}

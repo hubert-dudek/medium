@@ -1,5 +1,4 @@
 bundle:
-  engine: direct
   name: dab-terraform
 
 include:
