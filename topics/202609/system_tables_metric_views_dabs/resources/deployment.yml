@@ -1,0 +1,106 @@
+# Requires CLI >=1.13.0 with the direct engine; DDL runs as part of bundle deploy.
+resources:
+  jobs:
+    deploy_metric_views:
+      name: system_tables_metrics_deployment
+      description: DDL on SQL warehouse, safe fiscal/offset probes, metric-view materializations and smoke queries.
+        Triggered once on each bundle deployment.
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      timeout_seconds: 14400
+      tasks:
+      - task_key: preflight
+        notebook_task:
+          notebook_path: ../sql/00_preflight.sql
+          warehouse_id: ${var.warehouse_id}
+          base_parameters:
+            schema: ${resources.schemas.system_tables_metrics.name}
+        timeout_seconds: 3600
+        max_retries: 0
+      - task_key: warehouse_latest
+        notebook_task:
+          notebook_path: ../sql/01_warehouse_latest.sql
+          warehouse_id: ${var.warehouse_id}
+          base_parameters:
+            schema: ${resources.schemas.system_tables_metrics.name}
+        timeout_seconds: 3600
+        max_retries: 0
+        depends_on:
+        - task_key: preflight
+      - task_key: billing
+        notebook_task:
+          notebook_path: ../sql/02_billing.sql
+          warehouse_id: ${var.warehouse_id}
+          base_parameters:
+            schema: ${resources.schemas.system_tables_metrics.name}
+        timeout_seconds: 3600
+        max_retries: 0
+        depends_on:
+        - task_key: warehouse_latest
+      - task_key: billing_monthly
+        notebook_task:
+          notebook_path: ../sql/03_billing_monthly.sql
+          warehouse_id: ${var.warehouse_id}
+          base_parameters:
+            schema: ${resources.schemas.system_tables_metrics.name}
+        timeout_seconds: 3600
+        max_retries: 0
+        depends_on:
+        - task_key: billing
+      - task_key: warehouse_queries
+        notebook_task:
+          notebook_path: ../sql/04_warehouse_queries.sql
+          warehouse_id: ${var.warehouse_id}
+          base_parameters:
+            schema: ${resources.schemas.system_tables_metrics.name}
+        timeout_seconds: 3600
+        max_retries: 0
+        depends_on:
+        - task_key: billing_monthly
+      - task_key: warehouse_efficiency
+        notebook_task:
+          notebook_path: ../sql/05_warehouse_efficiency.sql
+          warehouse_id: ${var.warehouse_id}
+          base_parameters:
+            schema: ${resources.schemas.system_tables_metrics.name}
+        timeout_seconds: 3600
+        max_retries: 0
+        depends_on:
+        - task_key: warehouse_queries
+      - task_key: billing_materialized
+        notebook_task:
+          notebook_path: ../sql/06_billing_materialized.sql
+          warehouse_id: ${var.warehouse_id}
+          base_parameters:
+            schema: ${resources.schemas.system_tables_metrics_materialized.name}
+        timeout_seconds: 3600
+        max_retries: 0
+        depends_on:
+        - task_key: warehouse_efficiency
+      - task_key: billing_monthly_materialized
+        notebook_task:
+          notebook_path: ../sql/07_billing_monthly_materialized.sql
+          warehouse_id: ${var.warehouse_id}
+          base_parameters:
+            schema: ${resources.schemas.system_tables_metrics_materialized.name}
+        timeout_seconds: 3600
+        max_retries: 0
+        depends_on:
+        - task_key: billing_materialized
+      - task_key: smoke_tests
+        notebook_task:
+          notebook_path: ../sql/08_smoke_tests.sql
+          warehouse_id: ${var.warehouse_id}
+          base_parameters:
+            schema: ${resources.schemas.system_tables_metrics.name}
+        timeout_seconds: 3600
+        max_retries: 0
+        depends_on:
+        - task_key: billing_monthly_materialized
+  job_runs:
+    deploy_metric_views_on_deploy:
+      job_id: ${resources.jobs.deploy_metric_views.id}
+      lifecycle:
+        triggers:
+        - on_bundle_deploy: true

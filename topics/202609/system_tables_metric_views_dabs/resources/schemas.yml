@@ -1,0 +1,15 @@
+# Native UC resources: names are exact; no development-mode schema prefixes.
+resources:
+  schemas:
+    system_tables_metrics:
+      catalog_name: main
+      name: system_tables_metrics
+      comment: Live system-table metric views. Fiscal year starts March 1. USD public-list-price estimates.
+      lifecycle:
+        prevent_destroy: true
+    system_tables_metrics_materialized:
+      catalog_name: main
+      name: system_tables_metrics_materialized
+      comment: Billing metric views with managed Lakeflow materialization; relaxed freshness.
+      lifecycle:
+        prevent_destroy: true

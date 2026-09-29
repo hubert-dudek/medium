@@ -1,0 +1,12 @@
+bundle:
+  name: on_deploy_test
+  databricks_cli_version: ">= 1.13.0"
+  engine: direct
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    default: true
+    mode: development

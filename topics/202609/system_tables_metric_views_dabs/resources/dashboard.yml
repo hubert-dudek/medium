@@ -1,0 +1,8 @@
+# The local JSON is deployed as an AI/BI dashboard, not synchronized as a second workspace file.
+resources:
+  dashboards:
+    billing_fiscal_ytd:
+      display_name: Databricks estimated spend - March fiscal year
+      file_path: ../dashboards/billing_fiscal_ytd.lvdash.json
+      warehouse_id: ${var.warehouse_id}
+      embed_credentials: false

@@ -1,0 +1,28 @@
+resources:
+  jobs:
+    merge_configuration_job:
+      name: job_runs_article_03_json_configuration
+      performance_target: PERFORMANCE_OPTIMIZED
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+      tasks:
+        - task_key: merge_configuration
+          max_retries: 0
+          notebook_task:
+            notebook_path: ../notebooks/merge_configuration.py
+            base_parameters:
+              config_path: ${workspace.file_path}/config/application.json
+
+  job_runs:
+    merge_configuration:
+      job_id: ${resources.jobs.merge_configuration_job.id}
+      job_parameters:
+        catalog: ${var.catalog}
+        schema: ${var.schema}
+      lifecycle:
+        triggers:
+          - on_file_change: ../config/application.json
+          - on_file_change: ../notebooks/merge_configuration.py

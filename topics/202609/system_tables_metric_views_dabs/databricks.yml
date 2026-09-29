@@ -1,0 +1,29 @@
+# Create the two UC schemas, deployment workflow, deployment run and one AI/BI dashboard.
+bundle:
+  name: system_tables_metric_views
+  engine: direct
+  databricks_cli_version: ">= 1.13.0"
+
+include:
+  - resources/*.yml
+
+variables:
+  warehouse_id:
+    description: Existing serverless or Pro SQL warehouse used for SQL notebooks and the dashboard.
+    lookup:
+      warehouse: "SQL warehouse"
+
+workspace:
+  root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+
+sync:
+  exclude:
+    - dashboards/*.lvdash.json
+    - tests/**
+    - requirements-dev.txt
+    - .pytest_cache/**
+    - '**/__pycache__/**'
+
+targets:
+  main:
+    default: true

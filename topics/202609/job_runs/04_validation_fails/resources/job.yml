@@ -1,0 +1,29 @@
+resources:
+  jobs:
+    validation_job:
+      name: job_runs_article_validate_candidate
+      performance_target: PERFORMANCE_OPTIMIZED
+      tasks:
+        - task_key: validate_candidate
+          max_retries: 0
+          notebook_task:
+            notebook_path: ../notebooks/candidate.py
+
+    production_job:
+      name: job_runs_article_production
+      performance_target: PERFORMANCE_OPTIMIZED
+      tags:
+        # The reference, rather than the tag name, creates the dependency.
+        validation_result: ${resources.job_runs.validate_candidate.state.result_state}
+      tasks:
+        - task_key: transform_data
+          max_retries: 0
+          notebook_task:
+            notebook_path: ../notebooks/candidate.py
+
+  job_runs:
+    validate_candidate:
+      job_id: ${resources.jobs.validation_job.id}
+      lifecycle:
+        triggers:
+          - on_bundle_deploy: true

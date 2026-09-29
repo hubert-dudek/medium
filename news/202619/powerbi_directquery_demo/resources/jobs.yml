@@ -1,0 +1,16 @@
+resources:
+  jobs:
+    build_powerbi_directquery_demo:
+      name: ${bundle.name}_build
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: build_demo_dataset
+          sql_task:
+            file:
+              path: ${workspace.file_path}/sql/build_powerbi_demo.sql
+              source: WORKSPACE
+            warehouse_id: ${var.sql_warehouse_id}
+            parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              fact_rows: ${var.fact_rows}

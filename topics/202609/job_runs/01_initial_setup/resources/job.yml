@@ -1,0 +1,23 @@
+resources:
+  jobs:
+    initialize_job:
+      name: job_runs_article_01_initial_setup
+      performance_target: PERFORMANCE_OPTIMIZED
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+      tasks:
+        - task_key: initialize
+          max_retries: 0
+          notebook_task:
+            notebook_path: ../notebooks/initialize.py
+
+  job_runs:
+    initialize:
+      job_id: ${resources.jobs.initialize_job.id}
+      job_parameters:
+        catalog: ${var.catalog}
+        schema: ${var.schema}
+      # No triggers: reuse a successful, unchanged run on later deployments.

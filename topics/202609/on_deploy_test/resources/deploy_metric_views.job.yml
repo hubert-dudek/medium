@@ -1,0 +1,16 @@
+resources:
+  jobs:
+    deploy_job:
+      name: on_deploy_test
+      performance_target: PERFORMANCE_OPTIMIZED
+      tasks:
+        - task_key: test_on_deploy
+          notebook_task:
+            notebook_path: ../notebooks/test_on_deploy.py
+
+  job_runs:
+    deploy_metric_views_on_deploy:
+      job_id: ${resources.jobs.deploy_job.id}
+      lifecycle:
+        triggers:
+          - on_bundle_deploy: true

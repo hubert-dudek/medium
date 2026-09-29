@@ -1,0 +1,114 @@
+{
+  "datasets": [
+    {
+      "name": "b1111a01",
+      "displayName": "Fiscal YTD estimated USD spend",
+      "queryLines": [
+        "\n",
+        "SELECT usage_month,\n",
+        "       MEASURE(spend_usd) AS spend_usd,\n",
+        "       MEASURE(previous_month_spend_usd) AS previousmonth\n",
+        "FROM main.system_tables_metrics_materialized.billing_monthly\n",
+        "GROUP BY usage_month\n",
+        "ORDER BY usage_month\n"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "f150a001",
+      "displayName": "March fiscal year",
+      "layout": [
+        {
+          "widget": {
+            "name": "b1111a02",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "b1111a01",
+                  "fields": [
+                    {
+                      "name": "usage_month",
+                      "expression": "`usage_month`"
+                    },
+                    {
+                      "name": "sum(spend_usd)",
+                      "expression": "SUM(`spend_usd`)"
+                    },
+                    {
+                      "name": "sum(previousmonth)",
+                      "expression": "SUM(`previousmonth`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": true,
+                "title": {
+                  "value": "Estimated Databricks spend | March FYTD | USD list prices",
+                  "fields": []
+                },
+                "description": {
+                  "value": "Through yesterday UTC. Current month may be partial. Unpriced periods are NULL, not zero. Relaxed materialization may lag; this is not invoice spend.",
+                  "fields": []
+                }
+              },
+              "version": 1,
+              "widgetType": "combo",
+              "encodings": {
+                "x": {
+                  "fieldName": "usage_month",
+                  "displayName": "Month",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "primary": {
+                    "fields": [
+                      {
+                        "fieldName": "sum(spend_usd)",
+                        "displayName": "Estimated spend (USD)"
+                      }
+                    ]
+                  },
+                  "secondary": {
+                    "fields": [
+                      {
+                        "fieldName": "sum(previousmonth)"
+                      }
+                    ]
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}

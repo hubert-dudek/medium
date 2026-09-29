@@ -1,0 +1,6 @@
+.databricks/
+*.zip
+*.pbix
+*.pbit
+*.log
+.DS_Store

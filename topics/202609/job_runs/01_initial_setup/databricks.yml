@@ -1,0 +1,18 @@
+bundle:
+  name: job_runs_article_01_initial_setup
+  databricks_cli_version: '>= 1.18.0'
+  engine: direct
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    default: main
+  schema:
+    default: job_runs_article
+
+targets:
+  dev:
+    default: true
+    mode: development

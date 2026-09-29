@@ -1,0 +1,19 @@
+bundle:
+  name: job_runs_article_validation_demo
+  databricks_cli_version: ">= 1.18.0"
+  engine: direct
+
+# Private Preview: requires Databricks enablement in this workspace.
+# Both variants deliberately manage the SAME deployment.
+experimental:
+  immutable_folder: true
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    default: true
+    mode: development
+    presets:
+      source_linked_deployment: false
