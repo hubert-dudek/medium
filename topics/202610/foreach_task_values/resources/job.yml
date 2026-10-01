@@ -16,9 +16,3 @@ resources:
               task_key: process_country
               notebook_task:
                 notebook_path: ../src/02_process_country.py
-
-        - task_key: summarize_countries
-          depends_on:
-            - task_key: process_countries
-          notebook_task:
-            notebook_path: ../src/03_summarize_countries.py
