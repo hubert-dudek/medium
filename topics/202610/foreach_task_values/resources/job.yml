@@ -11,6 +11,7 @@ resources:
           depends_on:
             - task_key: generate_countries
           for_each_task:
+            concurrency: 3
             inputs: "{{tasks.generate_countries.values.countries}}"
             task:
               task_key: process_country
