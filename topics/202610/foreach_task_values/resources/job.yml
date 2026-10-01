@@ -16,3 +16,5 @@ resources:
               task_key: process_country
               notebook_task:
                 notebook_path: ../src/02_process_country.py
+                base_parameters:
+                  country: "{{input}}"
