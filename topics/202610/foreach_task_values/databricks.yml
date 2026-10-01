@@ -1,0 +1,10 @@
+bundle:
+  name: foreach_task_values_countries
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    default: true
+    mode: development

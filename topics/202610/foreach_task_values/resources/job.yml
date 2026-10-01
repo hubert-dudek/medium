@@ -1,0 +1,44 @@
+resources:
+  jobs:
+    countries_demo:
+      name: foreach-task-values-countries
+      description: Pass countries into For each, then loop over its collected task values in Python.
+      max_concurrent_runs: 1
+      parameters:
+        - name: countries_json
+          default: '["Poland", "Czechia", "Italy", "Germany", "Spain"]'
+        - name: skip_result_for
+          default: ""
+
+      # No cluster configuration: these Python notebook tasks use serverless.
+      tasks:
+        - task_key: generate_countries
+          notebook_task:
+            notebook_path: ../src/01_generate_countries.py
+            base_parameters:
+              countries_json: "{{job.parameters.countries_json}}"
+
+        - task_key: process_countries
+          depends_on:
+            - task_key: generate_countries
+          for_each_task:
+            inputs: "{{tasks.generate_countries.values.countries}}"
+            concurrency: 3
+            task:
+              task_key: process_country
+              notebook_task:
+                notebook_path: ../src/02_process_country.py
+                base_parameters:
+                  country: "{{input}}"
+                  skip_result_for: "{{job.parameters.skip_result_for}}"
+
+        - task_key: summarize_countries
+          depends_on:
+            # Depend on the OUTER task so all iterations have finished.
+            - task_key: process_countries
+          notebook_task:
+            notebook_path: ../src/03_summarize_countries.py
+            base_parameters:
+              input_countries_json: "{{tasks.generate_countries.values.countries}}"
+              # Read outputs from the NESTED task, not process_countries.
+              results_json: "{{tasks.process_country.values.result}}"
