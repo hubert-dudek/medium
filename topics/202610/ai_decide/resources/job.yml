@@ -1,0 +1,12 @@
+resources:
+  jobs:
+    ai_decide_demo:
+      name: ai-decide-ticket-triage
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: triage_tickets
+          notebook_task:
+            notebook_path: ../src/01_ai_decide.py
+          timeout_seconds: 600
+          max_retries: 0
+
