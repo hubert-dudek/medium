@@ -1,12 +1,11 @@
 resources:
   jobs:
     ai_decide_demo:
-      name: ai-decide-ticket-triage
+      name: ai-decide-everyday-examples
       max_concurrent_runs: 1
       tasks:
-        - task_key: triage_tickets
+        - task_key: everyday_examples
           notebook_task:
-            notebook_path: ../src/01_ai_decide.py
+            notebook_path: ../src/01_ai_decide.sql
           timeout_seconds: 600
           max_retries: 0
-
