@@ -4,8 +4,20 @@ resources:
       name: ai-decide-everyday-examples
       max_concurrent_runs: 1
       tasks:
-        - task_key: everyday_examples
+        - task_key: travel_expense
           notebook_task:
-            notebook_path: ../src/01_ai_decide.sql
+            notebook_path: ../src/01_travel_expense.sql
+          timeout_seconds: 600
+          max_retries: 0
+
+        - task_key: dogs_allowed
+          notebook_task:
+            notebook_path: ../src/02_dogs_allowed.sql
+          timeout_seconds: 600
+          max_retries: 0
+
+        - task_key: guest_satisfaction
+          notebook_task:
+            notebook_path: ../src/03_guest_satisfaction.sql
           timeout_seconds: 600
           max_retries: 0
