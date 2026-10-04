@@ -7,6 +7,15 @@ resources:
       name: serverless_environment_variables_demo
       max_concurrent_runs: 1
       timeout_seconds: 900
+      environment_variables:
+        - environment_variables_key: app_config
+          spec:
+            variables:
+              APP_ENV: staging
+              ARTICLE_ENV_MARKER: serverless-env-demo
+              LOG_LEVEL: DEBUG
+            files:
+              - ${workspace.file_path}/config/application.env
       environments:
         - environment_key: default
           spec:
@@ -14,18 +23,22 @@ resources:
       tasks:
         - task_key: simple
           environment_key: default
+          environment_variables_key: app_config
           notebook_task:
             notebook_path: ./src/01_simple.py
         - task_key: import_settings
           environment_key: default
+          environment_variables_key: app_config
           notebook_task:
             notebook_path: ./src/02_import_settings.py
         - task_key: typed_config
           environment_key: default
+          environment_variables_key: app_config
           notebook_task:
             notebook_path: ./src/03_typed_config.py
         - task_key: udf_boundary
           environment_key: default
+          environment_variables_key: app_config
           notebook_task:
             notebook_path: ./src/04_udf_boundary.py
         - task_key: without_entry
