@@ -1,6 +1,3 @@
-# Job-settings fragment for reading the UI/API configuration.
-# CLI v1.19.0 drops these native DAB fields: do not include this file in the bundle.
-# Replace the example file path with your own workspace file path.
 environment_variables:
   - environment_variables_key: app_config
     spec:

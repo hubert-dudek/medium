@@ -5,7 +5,6 @@ resources:
   jobs:
     env_demo:
       name: serverless_environment_variables_demo
-      description: Simple Python examples for serverless environment variables. Configure app_config in the job UI after deployment.
       max_concurrent_runs: 1
       timeout_seconds: 900
       environments:
@@ -37,9 +36,6 @@ resources:
 sync:
   exclude:
     - examples/**
-    - evidence/**
-    - images/**
-    - "*.md"
 
 targets:
   dev:

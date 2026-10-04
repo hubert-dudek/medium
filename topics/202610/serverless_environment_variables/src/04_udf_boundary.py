@@ -1,9 +1,4 @@
 # Databricks notebook source
-# MAGIC %md
-# MAGIC # 4. Check the Spark boundary
-# MAGIC Select `app_config` for this task. Its process gets the marker; the Spark UDF does not.
-
-# COMMAND ----------
 import os
 from pyspark.sql import functions as F
 from pyspark.sql import types as T

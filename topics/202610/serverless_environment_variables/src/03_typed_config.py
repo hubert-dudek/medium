@@ -1,14 +1,6 @@
 # Databricks notebook source
-# MAGIC %md
-# MAGIC # 3. Convert strings into application settings
-# MAGIC Values from `os.environ` are strings. Convert and validate them before use.
-# MAGIC Optionally add `BATCH_SIZE=500` and `ENABLE_EXPORT=false` to `app_config`.
-# MAGIC This example uses those defaults when the two values are absent.
-
-# COMMAND ----------
 import os
 from dataclasses import asdict, dataclass
-
 
 def read_boolean(name, default="false"):
     value = os.getenv(name, default).strip().lower()
@@ -16,13 +8,11 @@ def read_boolean(name, default="false"):
         raise ValueError(f"{name} must be true or false")
     return value == "true"
 
-
 @dataclass(frozen=True)
 class Settings:
     app_env: str
     batch_size: int
     enable_export: bool
-
 
 settings = Settings(
     app_env=os.environ["APP_ENV"],
