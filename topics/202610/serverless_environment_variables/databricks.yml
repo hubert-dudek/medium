@@ -1,0 +1,54 @@
+bundle:
+  name: serverless_environment_variables
+  databricks_cli_version: ">= 1.8.0"
+
+variables:
+  app_env:
+    default: development
+  log_level:
+    default: INFO
+
+resources:
+  jobs:
+    env_demo:
+      name: serverless_environment_variables_demo
+      description: Small article demo; application environment, file precedence, and Spark UDF scope.
+      max_concurrent_runs: 1
+      timeout_seconds: 900
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "5"
+      tasks:
+        - task_key: read_environment
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/01_read_environment.py
+        - task_key: without_entry
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/02_without_entry.py
+        - task_key: udf_boundary
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/03_udf_boundary.py
+
+scripts:
+  apply_environment:
+    env:
+      ENV_DEMO_TARGET: ${bundle.target}
+      ENV_DEMO_FILES: ${workspace.file_path}
+      ENV_DEMO_APP_ENV: ${var.app_env}
+      ENV_DEMO_LOG_LEVEL: ${var.log_level}
+    content: python scripts/apply_environment.py
+
+sync:
+  exclude:
+    - experimental/**
+    - evidence/**
+    - "*.md"
+
+targets:
+  dev:
+    default: true
+    mode: development
