@@ -11,9 +11,20 @@ resources:
         - environment_variables_key: app_config
           spec:
             variables:
+              APP_ENV: development
+              LOG_LEVEL: INFO
+        - environment_variables_key: file_config
+          spec:
+            files:
+              - ${workspace.file_path}/config/application.env
+        - environment_variables_key: combined_config
+          spec:
+            variables:
               APP_ENV: staging
-              ARTICLE_ENV_MARKER: serverless-env-demo
               LOG_LEVEL: DEBUG
+              ARTICLE_ENV_MARKER: serverless-env-demo
+              BATCH_SIZE: "250"
+              ENABLE_EXPORT: "true"
             files:
               - ${workspace.file_path}/config/application.env
       environments:
@@ -21,9 +32,19 @@ resources:
           spec:
             environment_version: "5"
       tasks:
-        - task_key: simple
+        - task_key: inline_variables
           environment_key: default
           environment_variables_key: app_config
+          notebook_task:
+            notebook_path: ./src/01_simple.py
+        - task_key: file_variables
+          environment_key: default
+          environment_variables_key: file_config
+          notebook_task:
+            notebook_path: ./src/01_simple.py
+        - task_key: file_with_overrides
+          environment_key: default
+          environment_variables_key: combined_config
           notebook_task:
             notebook_path: ./src/01_simple.py
         - task_key: import_settings
@@ -33,22 +54,18 @@ resources:
             notebook_path: ./src/02_import_settings.py
         - task_key: typed_config
           environment_key: default
-          environment_variables_key: app_config
+          environment_variables_key: combined_config
           notebook_task:
             notebook_path: ./src/03_typed_config.py
         - task_key: udf_boundary
           environment_key: default
-          environment_variables_key: app_config
+          environment_variables_key: combined_config
           notebook_task:
             notebook_path: ./src/04_udf_boundary.py
         - task_key: without_entry
           environment_key: default
           notebook_task:
             notebook_path: ./src/05_without_entry.py
-
-sync:
-  exclude:
-    - examples/**
 
 targets:
   dev:
