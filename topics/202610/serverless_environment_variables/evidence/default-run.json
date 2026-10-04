@@ -1,0 +1,24 @@
+{
+  "verified_on": "2026-10-04",
+  "cli_version": "1.19.0",
+  "environment_version": "5",
+  "result_state": "SUCCESS",
+  "run_id": 987665494149478,
+  "task_outputs": {
+    "read_environment": {
+      "app_env": "development",
+      "log_level": "INFO",
+      "file_only": "loaded-from-file"
+    },
+    "without_entry": {
+      "APP_ENV": null,
+      "LOG_LEVEL": null,
+      "FILE_ONLY": null,
+      "ARTICLE_ENV_MARKER": null
+    },
+    "udf_boundary": {
+      "task_process": "serverless-env-demo",
+      "spark_udf": null
+    }
+  }
+}

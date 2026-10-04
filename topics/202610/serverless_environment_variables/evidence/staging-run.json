@@ -1,0 +1,16 @@
+{
+  "verified_on": "2026-10-04",
+  "run_id": 1081695220293683,
+  "result_state": "SUCCESS",
+  "task_states": {
+    "udf_boundary": "SUCCESS",
+    "without_entry": "SUCCESS",
+    "read_environment": "SUCCESS"
+  },
+  "read_environment_output": {
+    "app_env": "staging",
+    "log_level": "DEBUG",
+    "file_only": "loaded-from-file"
+  },
+  "source_code_changed": false
+}
