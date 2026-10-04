@@ -1,93 +1,153 @@
-# Databricks Serverless Jobs: Configure Your Python Code Before It Starts
+# Environment Variables in Databricks Serverless Jobs
 
-*A small Python demo, an important Spark boundary, and a practical way to deploy it with DABs.*
+## What are environment variables?
 
-Moving a Python package to serverless compute should not require rewriting how it reads configuration. If it uses `os.environ` on your laptop, keeping that interface in a scheduled job makes the package easier to reuse and test.
+Environment variables are named text values available to a running program. They let us change settings such as `APP_ENV` or `LOG_LEVEL` without editing the application code. In Python, we read them with `os.environ` or `os.getenv`.
 
-Databricks now offers environment variables for serverless Lakeflow Jobs. The useful part is when configuration arrives: the application can read it before importing a library.
+## Differences between classic and serverless
 
-Consider a small module that reads its settings during import:
+| Classic compute | Serverless jobs |
+|---|---|
+| Set variables in compute configuration, including `spark_env_vars`. | Define a named entry in the job and select it for each task. |
+| Init scripts can prepare the environment. | Init scripts are unavailable. |
+
+- Before this feature, one application-level option was to set `os.environ` in Python before importing code that needed it.
+- The new option makes that setup part of the job configuration.
+- The useful result: the same Python module can read its configuration locally and in a serverless job.
+
+[Classic compute configuration](https://docs.databricks.com/aws/en/compute/configure#environment-variables)
+
+## Current limitations
+
+- **Beta:** a workspace administrator must enable the preview.
+- Requires **serverless environment version 5 or later**.
+- Maximum **10 entries per job**, **20 inline variables** and **5 files per entry**.
+- Variables reach the task process, **not Spark UDFs**.
+- One task selects one entry; entries do not inherit from each other.
+- The job's **Run as** identity needs permission to read each file.
+
+**DABs test, October 4, 2026:** CLI **v1.19.0** warned about the native fields and removed them from its resolved configuration. Validation still exited successfully. For this demo, deploy the notebooks and job with DABs, then enable UI editing and configure the entry. The [demo guide](README.md) includes the one-line unlock command. Check the entry and task assignments again after redeploying.
+
+[Current serverless documentation](https://docs.databricks.com/aws/en/jobs/environment-variables) · [Our test results](evidence/results.md)
+
+## YAML syntax
+
+This is a **job settings fragment** showing the UI/API structure in YAML. It is a reference for the fields, not working native bundle configuration with the CLI version tested above.
+
+```yaml
+environment_variables:
+  - environment_variables_key: app_config
+    spec:
+      variables:
+        APP_ENV: staging
+        LOG_LEVEL: DEBUG
+      files:
+        - /Workspace/Shared/application.env
+
+tasks:
+  - task_key: read_config
+    notebook_task:
+      notebook_path: /Workspace/Shared/01_simple
+    environment_key: default
+    environment_variables_key: app_config
+
+environments:
+  - environment_key: default
+    spec:
+      environment_version: "5"
+```
+
+- `environment_key` selects the task's serverless runtime environment.
+- `environment_variables_key` selects the named collection of variables.
+- Keep the entry's key and the task's selected key identical.
+- Replace the example workspace paths with your deployed paths.
+
+![Named entry, inline values and file path in job YAML](images/05-yaml.png)
+
+## What is `app_settings`?
+
+- `app_settings.py` is an ordinary Python file we create in `src`.
+- It keeps configuration reads in one place. It is not a special Databricks library or a `.env` loader.
+- Other files import it instead of repeating the same configuration code.
 
 ```python
-# app_settings.py
+# src/app_settings.py
 import os
 
 APP_ENV = os.environ["APP_ENV"]
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 ```
 
-The calling code can stay simple:
-
 ```python
+# Another file in src
 import app_settings
 
 print(app_settings.APP_ENV)
+print(app_settings.LOG_LEVEL)
 ```
 
-Changing `os.environ` after that import does not update the module's stored values. Putting configuration in the process before the import avoids this ordering problem.
+- These assignments run when Python first imports the module.
+- They store the values read at that time. Changing `os.environ` later does not automatically refresh them.
+- This is why having the environment ready before the import matters.
 
-## What we used before
+## The UI: Name, Variables and Files
 
-On classic compute, we could set environment variables in the compute configuration or through `spark_env_vars` in the cluster API. [Databricks documents both options](https://docs.databricks.com/aws/en/compute/configure#environment-variables).
+Select a job task and find **Environment variables**.
 
-An application-level alternative was to load a configuration file, read command-line arguments, or retrieve a value from another service, then populate `os.environ` before importing the package. That works, but adds setup code to every entry point. If someone moves an import above that setup, behavior can change.
+![Select the environment variable entry for a task](images/01-entry.png)
 
-This feature gives us another deployment option. A package can retain its ordinary Python configuration interface while the job supplies the values.
+- **Name** identifies the whole entry, such as `app_config`. Several tasks can select it. It does not create a Python variable called `app_config`.
+- **Variables** contains individual names and values, such as `APP_ENV=staging`.
+- **Files** contains paths to `.env` files. You can use Variables, Files or both.
 
-## The current configuration
+![Name, inline Variables and Files in the configuration dialog](images/02-configure.png)
 
-The [September 28 documentation](https://docs.databricks.com/aws/en/jobs/environment-variables) describes UI and Jobs API setup. The feature remains Beta, requires an administrator to enable its preview, and needs serverless environment version 5 or later.
+The file in this demo contains:
 
-A job holds named entries; each task selects one with `environment_variables_key`. Entries are independent. An unassigned task receives none of these custom variables. Limits include 10 entries per job, 20 inline variables per entry, and five `.env` files per entry.
-
-The entry uses this structure (`spec.variables` is the important nesting):
-
-```json
-{
-  "environment_variables_key": "app_config",
-  "spec": {
-    "variables": {
-      "APP_ENV": "development",
-      "LOG_LEVEL": "INFO"
-    },
-    "files": ["/Workspace/Shared/application.env"]
-  }
-}
+```dotenv
+APP_ENV=from-file
+LOG_LEVEL=WARNING
+FILE_ONLY=loaded-from-file
 ```
 
-These variables belong to application code in the task process. Spark UDF execution is outside that scope.
+![The demo .env file and its three values](images/03-env-file.png)
 
-## Four small experiments
+- Files are read at task startup. Later files win over earlier files; inline values win over files.
+- Our inline `APP_ENV=staging` and `LOG_LEVEL=DEBUG` therefore win. `FILE_ONLY` still comes from the file.
+- Use plain `KEY=VALUE` lines. Quotes and `${OTHER}` remain literal text in this format.
+- In the demo folder, `config/application.env` supplies values; `src/app_settings.py` reads the resulting process environment.
 
-The accompanying project uses synthetic values and tiny workloads. It does not need a business dataset. Each experiment asks one question:
+![The configuration file in the demo project](images/04-file-location.png)
 
-| Experiment | What to inspect |
-|---|---|
-| Import a configuration module | Does it read the assigned value on its first import? |
-| Run a task without an entry | Is the demo variable absent? |
-| Read the same key inside a Spark UDF | Does the result differ from the task process? |
-| Combine a file with inline values | Which value reaches the imported module? |
+## Code examples
 
-**Measured on October 4, 2026:** all three notebook tasks succeeded. The imported module read `development`, `INFO`, and the file-only value `loaded-from-file`. The unassigned task received none of the four demo variables. The task process read the marker `serverless-env-demo`; the UDF returned `null`. A second run changed only the configuration to `staging` and `DEBUG`; all tasks passed again and the same module read those new values. The [evidence folder](evidence/results.md) contains the captured results.
+**Read a required value and an optional value:**
 
-The first experiment matters most for application portability. The next two prevent a misleading interpretation: a job-level definition is not a global variable shared by all tasks and all Spark workers.
+```python
+import os
 
-For a UDF, reading configuration in the calling process and deliberately passing a non-secret value into the computation is a separate design choice. It should not depend on accidental inheritance of the process environment.
+app_env = os.environ["APP_ENV"]  # Missing value raises KeyError.
+log_level = os.getenv("LOG_LEVEL", "INFO")  # Default if absent.
+print(app_env, log_level)
+```
 
-## Files are useful, but read their format
+**Convert text into application settings:**
 
-Databricks reads `.env` files at task startup. Its format is literal: quotes and `${OTHER}` remain text. Later files override earlier ones; inline values win. The job's Run as identity needs file access. Use the documented format rather than assuming shell or Python dotenv behavior.
+```python
+import os
 
-For this demo, a shared file contains defaults and the job entry contains the deployment override. That makes the recording easy to follow: show both inputs, then inspect the value actually read by the code.
+batch_size = int(os.getenv("BATCH_SIZE", "500"))
+enable_export = os.getenv("ENABLE_EXPORT", "false").lower() == "true"
+```
 
-## Deploying the experiment with DABs
+- Values start as strings. For example, `bool("false")` is `True`, so do not use it to parse a setting.
+- The demo has five small notebooks: direct reads, importing `app_settings`, typed settings, the UDF boundary, and a task without an entry.
+- The last two make the scope visible: the verified run returned no demo marker inside the UDF, and no custom demo values in the unassigned task.
+- There are no deployment helper scripts. Start with `01_simple.py`, then open the examples you want to record.
 
-With **Databricks CLI v1.19.0**, native bundle validation returned two warnings: `environment_variables` and `environment_variables_key` were unknown fields. Validation exited with code 0, but both fields were missing from the resolved JSON. That is why this example uses an API update. This is a result for the tested CLI version, not a claim that native support can never work.
+## TL;DR
 
-The project keeps the job and notebooks in a bundle. After `bundle deploy`, a bundle script updates that same job through the raw Jobs API. It uses the deployed job ID rather than creating another job on every run.
-
-Bundle substitutions pass the selected target's values to the script. The script builds the JSON entry and calls `/api/2.2/jobs/update`. The CLI's generic [`api` command](https://docs.databricks.com/aws/en/dev-tools/cli/reference/api-commands) is designed to cover API features not yet exposed by its higher-level commands.
-
-Treat deployment and this update as one sequence, and verify the resulting job settings. Reapply the update after redeployment while using this workaround. The bundle manages the job's lifecycle; the script manages these additional settings.
-
-I would use this pattern for deployment configuration such as application mode, logging level, or a non-secret service endpoint. Inputs that change for each run can remain [job parameters](https://docs.databricks.com/aws/en/jobs/job-parameters). The practical gain is straightforward: fewer configuration adapters around ordinary Python code.
+- Put deployment settings outside your Python code.
+- Select a named entry for each task that needs it.
+- Read settings directly or collect them in `app_settings.py`.
+- Use the UI with the tested CLI version, and remember the Spark UDF boundary.

@@ -1,18 +1,11 @@
 bundle:
   name: serverless_environment_variables
-  databricks_cli_version: ">= 1.8.0"
-
-variables:
-  app_env:
-    default: development
-  log_level:
-    default: INFO
 
 resources:
   jobs:
     env_demo:
       name: serverless_environment_variables_demo
-      description: Small article demo; application environment, file precedence, and Spark UDF scope.
+      description: Simple Python examples for serverless environment variables. Configure app_config in the job UI after deployment.
       max_concurrent_runs: 1
       timeout_seconds: 900
       environments:
@@ -20,32 +13,32 @@ resources:
           spec:
             environment_version: "5"
       tasks:
-        - task_key: read_environment
+        - task_key: simple
           environment_key: default
           notebook_task:
-            notebook_path: ./src/01_read_environment.py
-        - task_key: without_entry
+            notebook_path: ./src/01_simple.py
+        - task_key: import_settings
           environment_key: default
           notebook_task:
-            notebook_path: ./src/02_without_entry.py
+            notebook_path: ./src/02_import_settings.py
+        - task_key: typed_config
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/03_typed_config.py
         - task_key: udf_boundary
           environment_key: default
           notebook_task:
-            notebook_path: ./src/03_udf_boundary.py
-
-scripts:
-  apply_environment:
-    env:
-      ENV_DEMO_TARGET: ${bundle.target}
-      ENV_DEMO_FILES: ${workspace.file_path}
-      ENV_DEMO_APP_ENV: ${var.app_env}
-      ENV_DEMO_LOG_LEVEL: ${var.log_level}
-    content: python scripts/apply_environment.py
+            notebook_path: ./src/04_udf_boundary.py
+        - task_key: without_entry
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/05_without_entry.py
 
 sync:
   exclude:
-    - experimental/**
+    - examples/**
     - evidence/**
+    - images/**
     - "*.md"
 
 targets:

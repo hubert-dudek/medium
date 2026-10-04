@@ -1,10 +1,9 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Task process versus Spark UDF
-# MAGIC The UDF reads its own process environment. It does not capture a driver value.
+# MAGIC # 4. Check the Spark boundary
+# MAGIC Select `app_config` for this task. Its process gets the marker; the Spark UDF does not.
 
 # COMMAND ----------
-import json
 import os
 from pyspark.sql import functions as F
 from pyspark.sql import types as T
@@ -18,8 +17,11 @@ result = {
     "task_process": os.getenv("ARTICLE_ENV_MARKER"),
     "spark_udf": spark.range(1).select(read_marker_in_udf().alias("value")).first()["value"],
 }
-print(json.dumps(result, indent=2))
+print(result)
 assert result["task_process"] == "serverless-env-demo"
-assert result["spark_udf"] is None, "UDF scope differs from the documented behavior"
+assert result["spark_udf"] is None
+
+# COMMAND ----------
+import json
 
 dbutils.notebook.exit(json.dumps(result))

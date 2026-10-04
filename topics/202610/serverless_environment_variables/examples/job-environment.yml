@@ -1,0 +1,24 @@
+# Job-settings fragment for reading the UI/API configuration.
+# CLI v1.19.0 drops these native DAB fields: do not include this file in the bundle.
+# Replace the example file path with your own workspace file path.
+environment_variables:
+  - environment_variables_key: app_config
+    spec:
+      variables:
+        APP_ENV: staging
+        LOG_LEVEL: DEBUG
+        ARTICLE_ENV_MARKER: serverless-env-demo
+      files:
+        - /Workspace/Shared/serverless-env/config/application.env
+
+tasks:
+  - task_key: simple
+    environment_key: default
+    environment_variables_key: app_config
+    notebook_task:
+      notebook_path: /Workspace/Shared/serverless-env/src/01_simple
+
+environments:
+  - environment_key: default
+    spec:
+      environment_version: "5"

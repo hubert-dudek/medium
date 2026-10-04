@@ -1,66 +1,71 @@
-# Serverless environment variables
+# Serverless environment variables — simple demo
 
-Small experiment for the [article](article.md) and [recording walkthrough](recording-walkthrough.md).
+Read the [article](article.md), then use the [recording walkthrough](recording-walkthrough.md).
 
-## Requirements
+## Deploy the notebooks
 
-- A workspace with **Environment variables in Lakeflow Jobs** enabled in Previews.
-- Access to serverless environment version 5 and permission to create/run a job.
-- Databricks CLI on `PATH`, authenticated to your workspace. Tested with v1.19.0.
-- Python 3 available as `python`. The deployment script uses only the standard library.
-
-Use your own CLI profile in place of `article-demo`. Credentials belong in your local CLI authentication, never in this project.
-
-## Deploy and run
-
-From this directory:
+Use an authenticated Databricks CLI profile. Replace `article-demo` below if yours has another name.
 
 ```bash
 databricks bundle validate -t dev -p article-demo
 databricks bundle deploy -t dev -p article-demo
-databricks bundle run -t dev -p article-demo apply_environment
-databricks bundle run -t dev -p article-demo env_demo
 databricks bundle summary -t dev -p article-demo
 ```
 
-The bundle creates one job with three serverless notebook tasks. It has no schedule and writes no tables. The UDF test processes one row.
+The bundle creates one job and uploads the Python notebooks and `config/application.env`. It contains **no helper scripts**. The notebooks use serverless environment version 5.
 
-`apply_environment` updates the job already owned by the bundle and checks the API response. It uses the raw Jobs API because CLI v1.19.0 warns about the native bundle fields. Run it **after every deployment**: these additional fields are outside the tested bundle schema. Do not treat the two steps as an atomic production deployment.
+## Allow UI editing after a fresh CLI deployment
 
-To change the values while leaving the Python code unchanged:
+The tested CLI locks bundle-managed jobs, even when YAML requests `EDITABLE`. The prepared demo is already unlocked. To reproduce the setup, replace `123456789` with the job ID shown by `bundle summary`, then run this single command:
 
 ```bash
-databricks bundle run -t dev -p article-demo --var="app_env=staging,log_level=DEBUG" apply_environment
-databricks bundle run -t dev -p article-demo env_demo
+databricks api post /api/2.2/jobs/update -p article-demo --json '{"job_id":123456789,"new_settings":{"edit_mode":"EDITABLE"}}'
 ```
 
-Here the variables are inputs to a script that explicitly updates the job. Passing `--var` to `env_demo` alone does not update its process environment. To restore the defaults, run `apply_environment` again without `--var`.
+This enables UI editing only for your demo job. Check this again after redeployment.
 
-## What each task checks
+## Set the variables in the UI
 
-| Task | Experiment |
+1. Open the deployed job and select the `simple` task.
+2. Under **Environment variables**, create an entry named `app_config`.
+3. Add these inline values:
+
+| Variable | Value |
 |---|---|
-| `read_environment` | Import `app_settings.py`; verify inline `APP_ENV` overrides the file and `FILE_ONLY` arrives from the file. |
-| `without_entry` | Verify the demo marker and file-only setting are absent without an entry selection. |
-| `udf_boundary` | Read the marker in the task process and independently inside a Spark UDF. |
+| `APP_ENV` | `staging` |
+| `LOG_LEVEL` | `DEBUG` |
+| `ARTICLE_ENV_MARKER` | `serverless-env-demo` |
 
-Only the named synthetic values are printed. No environment dump is needed.
+4. Under **Files**, add the deployed path to `config/application.env`. Find the file in the bundle's workspace folder and copy its path; it ends in `/files/config/application.env`.
+5. Save, then select the same `app_config` entry for `import_settings`, `typed_config`, and `udf_boundary`.
+6. Leave **Environment variables** unassigned for `without_entry`.
+7. Click **Run now**.
 
-## Native bundle probe
+The current workspace job is already configured. These steps explain how to reproduce it in another workspace.
 
-```bash
-cd experimental/native_dab
-databricks bundle validate -t dev -p article-demo
-```
+**Why this UI step?** In tested CLI v1.19.0, native environment-variable YAML fields produce warnings and disappear from resolved bundle JSON. `examples/job-environment.yml` shows the job configuration shape but is not included in the deployable bundle. After redeploying, check the entry and each task's selection again.
 
-This is a validation-only fixture, excluded from the working deployment. It keeps the expected native YAML shape available for retesting future CLI versions. A zero exit code with unknown-field warnings does not prove support. See [measured evidence](evidence/results.md).
+## Examples
+
+| File | What it shows |
+|---|---|
+| `src/01_simple.py` | Required `os.environ` and optional `os.getenv` values. |
+| `src/app_settings.py` | An ordinary Python file that stores shared settings at import time. |
+| `src/02_import_settings.py` | Import that module and use its values in a function. |
+| `src/03_typed_config.py` | Convert strings to an integer and Boolean, then validate them. |
+| `src/04_udf_boundary.py` | Compare the task process with a Spark UDF. |
+| `src/05_without_entry.py` | Check a task with no selected configuration entry. |
+
+The advanced example defaults to `BATCH_SIZE=500` and `ENABLE_EXPORT=false`. You can add these two keys to `app_config` to try different values.
+
+The demo has no schedule, writes no tables, and uses one row for the UDF. It prints only the named example values. Results are recorded in [evidence/results.md](evidence/results.md).
 
 ## Cleanup
 
-When you no longer need the recording job, run this from the main demo directory:
+When you finish recording, remove this demo with:
 
 ```bash
 databricks bundle destroy -t dev -p article-demo
 ```
 
-Review the CLI confirmation before deletion. This removes the demo's bundle-managed resources; it is not part of the recording setup.
+Review the confirmation before deletion.
