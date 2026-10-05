@@ -12,20 +12,20 @@ resources:
           spec:
             environment_version: "6"
       tasks:
-        - task_key: basics
+        - task_key: select_examples
           environment_key: default
           notebook_task:
-            notebook_path: ./src/01_basics.py
+            notebook_path: ./src/01_select.sql
           max_retries: 0
-        - task_key: metadata
+        - task_key: cte_join
           environment_key: default
           notebook_task:
-            notebook_path: ./src/02_metadata.py
+            notebook_path: ./src/02_cte_join.sql
           max_retries: 0
-        - task_key: experiments
+        - task_key: merge
           environment_key: default
           notebook_task:
-            notebook_path: ./src/03_experiments.py
+            notebook_path: ./src/03_merge.sql
           max_retries: 0
 
 targets:
