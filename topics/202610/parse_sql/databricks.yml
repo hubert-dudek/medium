@@ -1,0 +1,34 @@
+bundle:
+  name: parse_sql_experiments
+
+resources:
+  jobs:
+    parse_sql_experiments:
+      name: parse_sql_experiments
+      max_concurrent_runs: 1
+      timeout_seconds: 900
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: basics
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/01_basics.py
+          max_retries: 0
+        - task_key: metadata
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/02_metadata.py
+          max_retries: 0
+        - task_key: experiments
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/03_experiments.py
+          max_retries: 0
+
+targets:
+  dev:
+    default: true
+    mode: development
