@@ -7,7 +7,7 @@ SELECT parse_sql('
   SELECT upper(name) AS customer, amount * 1.2 AS total
   FROM orders
   WHERE amount > :minimum
-') AS parsed_sql;
+')
 
 -- COMMAND ----------
 
