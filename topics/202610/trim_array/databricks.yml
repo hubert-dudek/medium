@@ -1,0 +1,24 @@
+bundle:
+  name: trim_array
+
+resources:
+  jobs:
+    trim_array:
+      name: trim-array-demo
+      max_concurrent_runs: 1
+      timeout_seconds: 600
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: trim_array
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/01_trim_array.sql
+          max_retries: 0
+
+targets:
+  dev:
+    default: true
+    mode: development

@@ -1,0 +1,24 @@
+bundle:
+  name: truncate
+
+resources:
+  jobs:
+    truncate:
+      name: truncate-demo
+      max_concurrent_runs: 1
+      timeout_seconds: 600
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: truncate
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/01_truncate.sql
+          max_retries: 0
+
+targets:
+  dev:
+    default: true
+    mode: development
