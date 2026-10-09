@@ -1,0 +1,40 @@
+bundle:
+  name: multiple_job_triggers
+
+resources:
+  jobs:
+    multiple_triggers:
+      name: multiple-triggers-demo
+      max_concurrent_runs: 1
+      timeout_seconds: 600
+      performance_target: STANDARD
+      queue:
+        enabled: true
+      triggers:
+        - pause_status: PAUSED
+          schedule:
+            quartz_cron_expression: "0 0 9 * * ?"
+            timezone_id: UTC
+        - pause_status: PAUSED
+          schedule:
+            quartz_cron_expression: "0 0 17 * * ?"
+            timezone_id: UTC
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: show_trigger
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/01_show_trigger.py
+            base_parameters:
+              trigger_type: "{{job.trigger.type}}"
+              triggered_at: "{{job.trigger.time.iso_datetime}}"
+              run_id: "{{job.run_id}}"
+          max_retries: 0
+
+targets:
+  dev:
+    default: true
+    mode: development
