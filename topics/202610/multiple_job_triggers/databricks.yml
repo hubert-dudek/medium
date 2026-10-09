@@ -19,6 +19,12 @@ resources:
           schedule:
             quartz_cron_expression: "0 0 17 * * ?"
             timezone_id: UTC
+        - pause_status: PAUSED
+          table_update:
+            table_names:
+              - main.multiple_triggers_demo.orders
+              - main.multiple_triggers_demo.customers
+            condition: ALL_UPDATED
       environments:
         - environment_key: default
           spec:
