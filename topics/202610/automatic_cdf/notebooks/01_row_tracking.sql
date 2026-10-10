@@ -37,4 +37,18 @@ ORDER BY id;
 
 -- COMMAND ----------
 
+SELECT id, product, quantity, _metadata.row_id AS row_id,
+       _metadata.row_commit_version AS row_commit_version
+FROM main.automatic_cdf_20261010.row_tracking_sql_demo VERSION AS OF 1
+ORDER BY id;
+
+-- COMMAND ----------
+
+SELECT id, product, quantity, _metadata.row_id AS row_id,
+       _metadata.row_commit_version AS row_commit_version
+FROM main.automatic_cdf_20261010.row_tracking_sql_demo VERSION AS OF 2
+ORDER BY id;
+
+-- COMMAND ----------
+
 DESCRIBE HISTORY main.automatic_cdf_20261010.row_tracking_sql_demo;
