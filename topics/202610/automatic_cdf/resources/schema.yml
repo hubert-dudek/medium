@@ -1,0 +1,8 @@
+resources:
+  schemas:
+    cdf:
+      catalog_name: main
+      name: automatic_cdf_20261010
+      storage_root: abfss://unitycatalog@stmvplinkdbxwus01.dfs.core.windows.net/automatic_cdf_20261010
+      lifecycle:
+        prevent_destroy: true

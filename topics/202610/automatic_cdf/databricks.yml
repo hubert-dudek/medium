@@ -1,0 +1,12 @@
+bundle:
+  name: automatic-cdf-demo
+
+include:
+  - resources/*.yml
+
+targets:
+  azure:
+    default: true
+    workspace:
+      host: https://adb-7405607825310844.4.azuredatabricks.net
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}

@@ -1,0 +1,46 @@
+resources:
+  jobs:
+    row_tracking:
+      name: automatic-cdf-row-tracking-demo
+      environments:
+        - environment_key: env6
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: row_tracking
+          max_retries: 0
+          environment_key: env6
+          notebook_task:
+            notebook_path: ../notebooks/01_row_tracking.sql
+    cdf_demo:
+      name: classic-and-automatic-cdf-demo
+      environments:
+        - environment_key: env6
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: cdf_demo
+          max_retries: 0
+          environment_key: env6
+          notebook_task:
+            notebook_path: ../notebooks/02_classic_and_automatic_cdf.sql
+    storage_benchmark:
+      name: automatic-cdf-storage-benchmark
+      timeout_seconds: 7200
+      environments:
+        - environment_key: env6
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: write_benchmark
+          max_retries: 0
+          environment_key: env6
+          notebook_task:
+            notebook_path: ../notebooks/03_storage_benchmark.sql
+        - task_key: read_benchmark
+          depends_on:
+            - task_key: write_benchmark
+          max_retries: 0
+          environment_key: env6
+          notebook_task:
+            notebook_path: ../notebooks/04_read_benchmark.sql
