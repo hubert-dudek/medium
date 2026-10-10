@@ -1,0 +1,30 @@
+resources:
+  pipelines:
+    classic_cdf:
+      name: automatic-cdf-demo-classic
+      catalog: main
+      schema: automatic_cdf_20261010
+      serverless: true
+      continuous: false
+      development: true
+      channel: PREVIEW
+      edition: ADVANCED
+      environment:
+        environment_version: "5"
+      libraries:
+        - notebook:
+            path: ../notebooks/05_autocdc_classic.py
+    automatic_cdf:
+      name: automatic-cdf-demo-automatic
+      catalog: main
+      schema: automatic_cdf_20261010
+      serverless: true
+      continuous: false
+      development: true
+      channel: PREVIEW
+      edition: ADVANCED
+      environment:
+        environment_version: "5"
+      libraries:
+        - notebook:
+            path: ../notebooks/06_autocdc_automatic.py
