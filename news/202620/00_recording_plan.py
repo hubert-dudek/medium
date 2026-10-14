@@ -22,26 +22,26 @@
 # MAGIC
 # MAGIC | Chapter | Feature | Show |
 # MAGIC |---|---|---|
-# MAGIC | 01 | [Lakeflow Connect connectors](./01_aws_lakeflow_connectors/01_demo.py) | UI walkthrough |
-# MAGIC | 02 | [Genie Code task](./02_aws_genie_code_task/01_demo.py) | UI walkthrough |
-# MAGIC | 03 | [Dynamic For each inputs](./03_aws_foreach_task_values/src/01_generate_countries.py) | Runnable demo |
-# MAGIC | 04 | [Resize streaming state](./04_aws_state_repartitioning/00_recording_steps.py) | Runnable demo |
-# MAGIC | 05 | [Run jobs during bundle deployment](./05_aws_dabs_job_runs/00_recording_steps.py) | CLI deployment examples |
-# MAGIC | 06 | [Direct deployment engine](./06_aws_dabs_direct_engine/00_recording_steps.py) | Runnable demo |
-# MAGIC | 07 | [Run jobs and pipelines as a group](./07_aws_dabs_run_as_group/00_recording_steps.py) | Runnable demo |
-# MAGIC | 08 | [ai_decide](./08_aws_ai_decide/src/01_ai_decide.sql) | Runnable demo |
-# MAGIC | 09 | [counter_diff](./09_aws_counter_diff/src/01_counter_diff.sql) | Runnable demo |
-# MAGIC | 10 | [parse_sql](./10_aws_parse_sql/src/01_select.sql) | Runnable demo |
-# MAGIC | 11 | [truncate](./11_aws_truncate/src/01_truncate.sql) | Runnable demo |
-# MAGIC | 12 | [trim_array](./12_aws_trim_array/src/01_trim_array.sql) | Runnable demo |
-# MAGIC | 13 | [Serverless environment 6](./13_aws_serverless_environment_v6/01_demo.py) | UI walkthrough |
-# MAGIC | 14 | [Serverless environment variables](./14_aws_serverless_environment_variables/src/01_simple.py) | Runnable demo |
-# MAGIC | 15 | [Skills in Unity Catalog](./15_aws_uc_skills/01_demo.py) | UI walkthrough |
-# MAGIC | 16 | [External model cost tracking](./16_aws_external_model_costs/01_demo.py) | UI walkthrough |
-# MAGIC | 17 | [Notebook tabs and spaces](./17_aws_notebook_tabs_spaces/01_demo.py) | UI walkthrough |
-# MAGIC | 18 | [Serverless governance](./18_aws_serverless_governance/01_demo.py) | UI walkthrough |
-# MAGIC | 19 | [System table retention](./19_aws_system_table_retention/01_demo.py) | UI walkthrough |
-# MAGIC | 20 | [App Spaces](./20_aws_app_spaces/01_demo.py) | UI walkthrough |
+# MAGIC | 01 | [Lakeflow Connect connectors](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296563) | UI walkthrough |
+# MAGIC | 02 | [Genie Code task](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296565) | UI walkthrough |
+# MAGIC | 03 | [Dynamic For each inputs](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296569) | Runnable demo |
+# MAGIC | 04 | [Resize streaming state](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296572) | Runnable demo |
+# MAGIC | 05 | [Run jobs during bundle deployment](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296581) | CLI deployment examples |
+# MAGIC | 06 | [Direct deployment engine](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296615) | Runnable demo |
+# MAGIC | 07 | [Run jobs and pipelines as a group](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296620) | Runnable demo |
+# MAGIC | 08 | [ai_decide](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296628) | Runnable demo |
+# MAGIC | 09 | [counter_diff](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296632) | Runnable demo |
+# MAGIC | 10 | [parse_sql](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296636) | Runnable demo |
+# MAGIC | 11 | [truncate](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296642) | Runnable demo |
+# MAGIC | 12 | [trim_array](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296646) | Runnable demo |
+# MAGIC | 13 | [Serverless environment 6](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296648) | UI walkthrough |
+# MAGIC | 14 | [Serverless environment variables](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296654) | Runnable demo |
+# MAGIC | 15 | [Skills in Unity Catalog](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296661) | UI walkthrough |
+# MAGIC | 16 | [External model cost tracking](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296663) | UI walkthrough |
+# MAGIC | 17 | [Notebook tabs and spaces](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296665) | UI walkthrough |
+# MAGIC | 18 | [Serverless governance](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296667) | UI walkthrough |
+# MAGIC | 19 | [System table retention](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296669) | UI walkthrough |
+# MAGIC | 20 | [App Spaces](https://dbc-ca93cffe-fba0.cloud.databricks.com/editor/notebooks/942788509296671) | UI walkthrough |
 
 # COMMAND ----------
 
@@ -50,12 +50,12 @@
 # MAGIC
 # MAGIC | Chapter | Feature | Show |
 # MAGIC |---|---|---|
-# MAGIC | 21 | [Multiple job triggers](./21_azure_multiple_job_triggers/src/00_recording_steps.py) | Runnable demo |
-# MAGIC | 22 | [Nanosecond timestamps](./22_azure_nanosecond_timestamps/src/01_check_precision.sql) | Runnable demo |
-# MAGIC | 23 | [Environments on classic compute](./23_azure_classic_compute_environments/src/00_recording_guide.py) | Runnable demo |
-# MAGIC | 24 | [Unity Catalog secrets backed by Key Vault](./24_azure_uc_secrets_key_vault/01_demo.py) | UI walkthrough |
-# MAGIC | 25 | [Private Network Gateway](./25_azure_private_network_gateway/01_demo.py) | UI walkthrough |
-# MAGIC | 26 | [Automatic Change Data Feed](./26_azure_automatic_cdf/src/01_compare_cdf.sql) | Runnable demo |
+# MAGIC | 21 | [Multiple job triggers](https://adb-7405607825310844.4.azuredatabricks.net/editor/notebooks/2091443487632006) | Runnable demo |
+# MAGIC | 22 | [Nanosecond timestamps](https://adb-7405607825310844.4.azuredatabricks.net/editor/notebooks/2091443487632012) | Runnable demo |
+# MAGIC | 23 | [Environments on classic compute](https://adb-7405607825310844.4.azuredatabricks.net/editor/notebooks/2091443487632018) | Runnable demo |
+# MAGIC | 24 | [Unity Catalog secrets backed by Key Vault](https://adb-7405607825310844.4.azuredatabricks.net/editor/notebooks/2091443487632021) | UI walkthrough |
+# MAGIC | 25 | [Private Network Gateway](https://adb-7405607825310844.4.azuredatabricks.net/editor/notebooks/2091443487632023) | UI walkthrough |
+# MAGIC | 26 | [Automatic Change Data Feed](https://adb-7405607825310844.4.azuredatabricks.net/editor/notebooks/2091443487632027) | Runnable demo |
 
 # COMMAND ----------
 
