@@ -1,0 +1,32 @@
+resources:
+  jobs:
+    record_deployment_job:
+      name: news_202620_dabs_02_every_deployment
+      performance_target: STANDARD
+      timeout_seconds: 600
+      max_concurrent_runs: 1
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+      tasks:
+        - task_key: record_deployment
+          environment_key: default
+          max_retries: 0
+          notebook_task:
+            notebook_path: ../notebooks/record_deployment.py
+
+  job_runs:
+    record_deployment:
+      job_id: ${resources.jobs.record_deployment_job.id}
+      job_parameters:
+        catalog: ${var.catalog}
+        schema: ${var.schema}
+      lifecycle:
+        triggers:
+          - on_bundle_deploy: true

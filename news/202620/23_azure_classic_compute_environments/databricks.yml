@@ -1,0 +1,36 @@
+bundle:
+  name: news-202620-classic-compute-environments
+  databricks_cli_version: ">= 1.20.0"
+  engine: direct
+
+workspace:
+  host: https://adb-7405607825310844.4.azuredatabricks.net
+
+variables:
+  cluster_id:
+    default: 0919-203238-dmcv9ho3
+
+resources:
+  jobs:
+    demo:
+      name: news-202620-classic-compute-environments
+      max_concurrent_runs: 1
+      timeout_seconds: 900
+      performance_target: STANDARD
+      environments:
+        - environment_key: demo
+          spec:
+            base_environment: ${workspace.file_path}/environment.yml
+      tasks:
+        - task_key: 01_dependency_check
+          environment_key: demo
+          max_retries: 0
+          disable_auto_optimization: true
+          existing_cluster_id: ${var.cluster_id}
+          notebook_task:
+            notebook_path: ./src/01_dependency_check.py
+
+targets:
+  dev:
+    default: true
+    mode: development

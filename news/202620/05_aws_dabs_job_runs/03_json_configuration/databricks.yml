@@ -1,0 +1,20 @@
+bundle:
+  name: news_202620_dabs_03_json_configuration
+  databricks_cli_version: '>= 1.18.0'
+  engine: direct
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    default: main
+  schema:
+    default: news_202620_dabs
+
+targets:
+  dev:
+    default: true
+    mode: development
+    workspace:
+      host: https://dbc-ca93cffe-fba0.cloud.databricks.com

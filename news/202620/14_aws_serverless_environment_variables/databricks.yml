@@ -1,0 +1,93 @@
+bundle:
+  name: news-202620-serverless-environment-variables
+  databricks_cli_version: ">= 1.20.0"
+  engine: direct
+
+workspace:
+  host: https://dbc-ca93cffe-fba0.cloud.databricks.com
+
+resources:
+  jobs:
+    env_demo:
+      name: news-202620-serverless-environment-variables
+      max_concurrent_runs: 1
+      timeout_seconds: 900
+      performance_target: STANDARD
+      environment_variables:
+        - environment_variables_key: app_config
+          spec:
+            variables:
+              APP_ENV: development
+              LOG_LEVEL: INFO
+        - environment_variables_key: file_config
+          spec:
+            files:
+              - ${workspace.file_path}/config/application.env
+        - environment_variables_key: combined_config
+          spec:
+            variables:
+              APP_ENV: staging
+              LOG_LEVEL: DEBUG
+              ARTICLE_ENV_MARKER: serverless-env-demo
+              BATCH_SIZE: "250"
+              ENABLE_EXPORT: "true"
+            files:
+              - ${workspace.file_path}/config/application.env
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: inline_variables
+          max_retries: 0
+          disable_auto_optimization: true
+          environment_key: default
+          environment_variables_key: app_config
+          notebook_task:
+            notebook_path: ./src/01_simple.py
+        - task_key: file_variables
+          max_retries: 0
+          disable_auto_optimization: true
+          environment_key: default
+          environment_variables_key: file_config
+          notebook_task:
+            notebook_path: ./src/01_simple.py
+        - task_key: file_with_overrides
+          max_retries: 0
+          disable_auto_optimization: true
+          environment_key: default
+          environment_variables_key: combined_config
+          notebook_task:
+            notebook_path: ./src/01_simple.py
+        - task_key: import_settings
+          max_retries: 0
+          disable_auto_optimization: true
+          environment_key: default
+          environment_variables_key: app_config
+          notebook_task:
+            notebook_path: ./src/02_import_settings.py
+        - task_key: typed_config
+          max_retries: 0
+          disable_auto_optimization: true
+          environment_key: default
+          environment_variables_key: combined_config
+          notebook_task:
+            notebook_path: ./src/03_typed_config.py
+        - task_key: udf_boundary
+          max_retries: 0
+          disable_auto_optimization: true
+          environment_key: default
+          environment_variables_key: combined_config
+          notebook_task:
+            notebook_path: ./src/04_udf_boundary.py
+        - task_key: without_entry
+          max_retries: 0
+          disable_auto_optimization: true
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/05_without_entry.py
+
+targets:
+  dev:
+    default: true
+    mode: development

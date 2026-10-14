@@ -1,0 +1,18 @@
+[
+  {
+    "new key": "value",
+    "config_key": "retention_days",
+    "config_value": "30",
+    "description": "Days of application data to retain"
+  },
+  {
+    "config_key": "quality_threshold",
+    "config_value": "0.98",
+    "description": "Minimum acceptable fraction of valid records"
+  },
+  {
+    "config_key": "notification_channel",
+    "config_value": "teams",
+    "description": "Channel used for application notifications"
+  }
+]

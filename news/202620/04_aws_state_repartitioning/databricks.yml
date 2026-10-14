@@ -1,0 +1,50 @@
+bundle:
+  name: news-202620-state-repartitioning
+  databricks_cli_version: ">= 1.20.0"
+  engine: direct
+
+variables:
+  catalog:
+    default: main
+  schema:
+    default: news_202620_state
+  state_partitions:
+    default: "2"
+
+resources:
+  pipelines:
+    state_repartitioning:
+      name: news-202620-state-repartitioning
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      continuous: false
+      channel: CURRENT
+      configuration:
+        demo.source_table: ${var.catalog}.${var.schema}.pipeline_events
+        demo.state_partitions: ${var.state_partitions}
+      libraries:
+        - notebook:
+            path: ./src/01_stateful_pipeline.py
+
+  jobs:
+    standalone:
+      name: news-202620-state-repartitioning-standalone
+      timeout_seconds: 600
+      max_concurrent_runs: 1
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: resize_state
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/02_streaming_repartition.py
+
+targets:
+  dev:
+    default: true
+    mode: development
+    workspace:
+      host: https://dbc-ca93cffe-fba0.cloud.databricks.com

@@ -1,0 +1,31 @@
+bundle:
+  name: news-202620-automatic-cdf
+  databricks_cli_version: ">= 1.20.0"
+  engine: direct
+
+workspace:
+  host: https://adb-7405607825310844.4.azuredatabricks.net
+
+resources:
+  jobs:
+    demo:
+      name: news-202620-automatic-cdf
+      max_concurrent_runs: 1
+      timeout_seconds: 900
+      performance_target: STANDARD
+      environments:
+        - environment_key: demo
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: 01_compare_cdf
+          environment_key: demo
+          max_retries: 0
+          disable_auto_optimization: true
+          notebook_task:
+            notebook_path: ./src/01_compare_cdf.sql
+
+targets:
+  dev:
+    default: true
+    mode: development

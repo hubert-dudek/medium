@@ -1,0 +1,27 @@
+bundle:
+  name: news-202620-direct-engine
+  databricks_cli_version: ">= 1.20.0"
+  engine: direct
+
+resources:
+  jobs:
+    hello:
+      name: news-202620-direct-engine
+      max_concurrent_runs: 1
+      timeout_seconds: 600
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: hello
+          environment_key: default
+          notebook_task:
+            notebook_path: ./src/01_hello.sql
+
+targets:
+  dev:
+    default: true
+    mode: development
+    workspace:
+      host: https://dbc-ca93cffe-fba0.cloud.databricks.com

@@ -1,0 +1,52 @@
+bundle:
+  name: news-202620-multiple-job-triggers
+  databricks_cli_version: ">= 1.20.0"
+  engine: direct
+
+workspace:
+  host: https://adb-7405607825310844.4.azuredatabricks.net
+
+resources:
+  jobs:
+    demo:
+      name: news-202620-multiple-job-triggers
+      max_concurrent_runs: 1
+      timeout_seconds: 900
+      performance_target: STANDARD
+      queue:
+        enabled: true
+      triggers:
+        - pause_status: PAUSED
+          schedule:
+            quartz_cron_expression: "0 0 9 * * ?"
+            timezone_id: UTC
+        - pause_status: PAUSED
+          schedule:
+            quartz_cron_expression: "0 0 17 * * ?"
+            timezone_id: UTC
+        - pause_status: PAUSED
+          table_update:
+            table_names:
+              - main.news_202620_multiple_triggers.orders
+              - main.news_202620_multiple_triggers.customers
+            condition: ALL_UPDATED
+      environments:
+        - environment_key: demo
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: 01_show_trigger
+          environment_key: demo
+          max_retries: 0
+          disable_auto_optimization: true
+          notebook_task:
+            notebook_path: ./src/01_show_trigger.py
+            base_parameters:
+              trigger_type: "{{job.trigger.type}}"
+              triggered_at: "{{job.trigger.time.iso_datetime}}"
+              run_id: "{{job.run_id}}"
+
+targets:
+  dev:
+    default: true
+    mode: development

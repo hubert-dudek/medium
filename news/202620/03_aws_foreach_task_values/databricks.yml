@@ -1,0 +1,46 @@
+bundle:
+  name: news-202620-foreach-task-values
+  databricks_cli_version: ">= 1.20.0"
+  engine: direct
+
+workspace:
+  host: https://dbc-ca93cffe-fba0.cloud.databricks.com
+
+resources:
+  jobs:
+    demo:
+      name: news-202620-foreach-task-values
+      timeout_seconds: 900
+      max_concurrent_runs: 1
+      performance_target: STANDARD
+      environments:
+        - environment_key: env6
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: generate_countries
+          environment_key: env6
+          max_retries: 0
+          disable_auto_optimization: true
+          notebook_task:
+            notebook_path: ./src/01_generate_countries.py
+        - task_key: process_countries
+          depends_on:
+            - task_key: generate_countries
+          for_each_task:
+            concurrency: 3
+            inputs: "{{tasks.generate_countries.values.countries}}"
+            task:
+              task_key: process_country
+              environment_key: env6
+              max_retries: 0
+              disable_auto_optimization: true
+              notebook_task:
+                notebook_path: ./src/02_process_country.py
+                base_parameters:
+                  country: "{{input}}"
+
+targets:
+  dev:
+    default: true
+    mode: development
