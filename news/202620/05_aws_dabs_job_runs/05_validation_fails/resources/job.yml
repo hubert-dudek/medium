@@ -13,6 +13,7 @@ resources:
         - task_key: validate_candidate
           environment_key: default
           max_retries: 0
+          disable_auto_optimization: true
           notebook_task:
             notebook_path: ../notebooks/candidate.py
 
