@@ -1,0 +1,33 @@
+bundle:
+  name: state_repartitioning
+  databricks_cli_version: ">= 1.20.0"
+  engine: direct
+
+variables:
+  catalog:
+    default: main
+  schema:
+    default: state_repartitioning_demo
+  state_partitions:
+    default: "2"
+
+resources:
+  pipelines:
+    state_repartitioning:
+      name: state-repartitioning-demo
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      continuous: false
+      channel: CURRENT
+      configuration:
+        demo.source_table: ${var.catalog}.${var.schema}.pipeline_events
+        demo.state_partitions: ${var.state_partitions}
+      libraries:
+        - notebook:
+            path: ./src/01_stateful_pipeline.py
+
+targets:
+  dev:
+    default: true
+    mode: development
