@@ -9,3 +9,10 @@ OPTIONS (
   password 'demo_password',
   externalOptionsAllowList 'query,dbtable'
 );
+
+-- COMMAND ----------
+
+SELECT * FROM remote_query(
+  'news_20261021_postgres',
+  query => 'SELECT city, amount FROM public.sales LIMIT 10'
+);
