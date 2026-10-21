@@ -1,0 +1,16 @@
+@import "@databricks/appkit-ui/styles.css";
+
+:root {
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.17 0.01 20);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.17 0.01 20);
+  --primary: oklch(0.577 0.245 27.325);
+  --primary-foreground: oklch(0.99 0 0);
+  --ring: oklch(0.577 0.245 27.325);
+  --accent: oklch(0.967 0.02 20);
+  --accent-foreground: oklch(0.45 0.22 27.325);
+
+
+}
