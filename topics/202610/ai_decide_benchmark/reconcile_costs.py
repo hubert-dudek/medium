@@ -252,8 +252,8 @@ def collect(client, paths, table, predicate, kind):
         return {"status": "unknown", "reason": str(error), "rows": [], "predicate": predicate}
 
 
-def money_summary(rows, prices, age_hours):
-    missing_state = "pending" if age_hours < 12 else "unknown"
+def money_summary(rows, prices, age_hours, delivery_hours=12):
+    missing_state = "pending" if age_hours < delivery_hours else "unknown"
     if not rows:
         return {"status": missing_state, "observed_list_cost_usd": None,
                 "reason": "No matching billing records; absence is not evidence of zero cost"}
@@ -293,7 +293,7 @@ def money_summary(rows, prices, age_hours):
         "unpriced_record_ids": unpriced,
         "includes_signed_corrections": True,
         "is_final_invoice_cost": False,
-        "completeness": "pending_delivery" if age_hours < 12 else "not_guaranteed",
+        "completeness": "pending_delivery" if age_hours < delivery_hours else "not_guaranteed",
     }
 
 
@@ -327,7 +327,7 @@ def reconcile(manifest, client, now):
         predicate = exact_predicate(paths, manifest, name)
         if name == "billing":
             if predicate and "billing_origin_product" in paths:
-                predicate += " AND billing_origin_product <> 'SQL'"
+                predicate += " AND billing_origin_product NOT IN ('SQL', 'JOBS')"
             else:
                 predicate = None
         window = time_predicate(paths, start, end, gateway=name == "gateway")
@@ -369,7 +369,33 @@ def reconcile(manifest, client, now):
     overhead = " AND ".join(overhead_parts) if all(overhead_parts) else None
     report["sql_compute_candidates"] = collect(client, paths, TABLES["billing"], overhead, "billing")
     report["sql_compute_candidates"]["attribution"] = "shared_warehouse_window_not_exact_per_query"
-    billing_groups = ("billing_exact", "ai_decide_candidates", "batch_inference_candidates", "sql_compute_candidates")
+    billing_groups = ["billing_exact", "ai_decide_candidates", "batch_inference_candidates", "sql_compute_candidates"]
+    job = manifest.get("serverless_job") or {}
+    if job.get("job_id") is not None and job.get("run_id") is not None:
+        required = {"workspace_id", "usage_metadata.job_id", "usage_metadata.job_run_id", "billing_origin_product"}
+        job_predicate = None
+        serverless_field = "product_features.is_serverless"
+        if manifest.get("workspace_id") and required.issubset(paths):
+            parts = [
+                "workspace_id = " + literal(manifest["workspace_id"]),
+                "usage_metadata.job_id = " + literal(job["job_id"]),
+                "usage_metadata.job_run_id = " + literal(job["run_id"]),
+                "billing_origin_product = 'JOBS'",
+            ]
+            if serverless_field in paths:
+                parts.append(serverless_field + " = true")
+            job_predicate = " AND ".join(parts)
+        report["serverless_job_exact"] = collect(client, paths, TABLES["billing"], job_predicate, "billing")
+        report["serverless_job_exact"].update({
+            "attribution": "exact_workspace_job_id_and_job_run_id",
+            "job_id": job["job_id"],
+            "job_run_id": job["run_id"],
+            "task_run_id": job.get("task_run_id"),
+            "serverless_filter_available": serverless_field in paths,
+            "execution_time_window_applied": False,
+        })
+        report["serverless_billing_delivery_reference_hours"] = 24
+        billing_groups.append("serverless_job_exact")
     all_rows = [row for name in billing_groups for row in report[name]["rows"]]
     skus = sorted({row["sku_name"] for row in all_rows if row.get("sku_name")})
     price_paths = schemas["prices"]
@@ -384,7 +410,8 @@ def reconcile(manifest, client, now):
     if not skus:
         report["prices"]["reason"] = "No observed billing SKUs to price"
     for name in billing_groups:
-        summary = money_summary(report[name]["rows"], report["prices"]["rows"], age_hours)
+        summary = money_summary(report[name]["rows"], report["prices"]["rows"], age_hours,
+                                delivery_hours=24 if name == "serverless_job_exact" else 12)
         if report[name]["status"] == "unknown":
             summary["status"] = "unknown"
             summary["reason"] = report[name].get("reason")
@@ -392,7 +419,8 @@ def reconcile(manifest, client, now):
     report["combined_total_usd"] = None
     report["combined_total_reason"] = "Candidate costs can overlap exact records and include unrelated shared compute; do not add them"
     report["reconciliation_statement_ids"] = client.statements
-    report["next_check_recommended_at"] = iso(max(now + dt.timedelta(hours=1), end + dt.timedelta(hours=12)))
+    delivery_hours = 24 if "serverless_job_exact" in report else 12
+    report["next_check_recommended_at"] = iso(max(now + dt.timedelta(hours=1), end + dt.timedelta(hours=delivery_hours)))
     return report
 
 
@@ -471,7 +499,8 @@ def main():
     print(json.dumps({"run_id": manifest["run_id"], "output": str(output),
                       "exact_billing_cost": report["billing_exact"]["cost"],
                       "ai_decide_candidate_cost": report["ai_decide_candidates"]["cost"],
-                      "sql_compute_candidate_cost": report["sql_compute_candidates"]["cost"]}, indent=2))
+                      "sql_compute_candidate_cost": report["sql_compute_candidates"]["cost"],
+                      "serverless_job_exact_cost": report.get("serverless_job_exact", {}).get("cost")}, indent=2))
 
 
 if __name__ == "__main__":
