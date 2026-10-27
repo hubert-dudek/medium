@@ -1,10 +1,13 @@
 # Databricks notebook source
-df = spark.range(1000).selectExpr("id % 3 AS group_id")
+sales = spark.table(
+    "samples.bakehouse.sales_transactions"
+).limit(1000)
+df = sales.groupBy("product").count()
 df.cache()
 
 # COMMAND ----------
 
-display(df.groupBy("group_id").count().orderBy("group_id"))
+display(df.orderBy("count", ascending=False))
 
 # COMMAND ----------
 
