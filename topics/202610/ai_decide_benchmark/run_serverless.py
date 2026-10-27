@@ -136,31 +136,60 @@ def history(manifest_path):
         "filter_by.user_ids": "477935517597058", "max_results": 100, "include_metrics": "true",
     }
     matches = []
+    matched_ids = set()
     more = False
     for _ in range(3):
         response = api("get", "/api/2.0/sql/history/queries?" + urlencode(parameters))
         for query in response.get("res", []):
-            info = query.get("query_source", {}).get("job_info", {})
-            text = query.get("query_text", "")
-            by_job = str(info.get("job_id")) == str(job["job_id"]) and str(info.get("job_run_id")) == str(job["run_id"])
-            by_marker = "run_id=" + manifest["run_id"] + ";" in text
-            if (by_job or by_marker) and "ai_decide(" in text.lower():
+            info = (query.get("query_source") or {}).get("job_info") or {}
+            text = query.get("query_text") or ""
+            same_job = job.get("job_id") is not None and str(info.get("job_id")) == str(job["job_id"])
+            same_run = job.get("run_id") is not None and str(info.get("job_run_id")) == str(job["run_id"])
+            same_task = job.get("task_run_id") is not None and str(info.get("job_task_run_id")) == str(job["task_run_id"])
+            by_job = same_job and (same_run or same_task)
+            by_marker = not info.get("job_id") and "run_id=" + manifest["run_id"] + ";" in text and "ai_decide(" in text.lower()
+            query_id = query.get("query_id")
+            is_select = str(query.get("statement_type") or "").upper() == "SELECT"
+            if is_select and (by_job or by_marker) and (not query_id or query_id not in matched_ids):
                 matches.append(query)
+                if query_id:
+                    matched_ids.add(query_id)
         more = response.get("has_next_page", False)
         if not more:
             break
-        parameters["page_token"] = response["next_page_token"]
+        token = response.get("next_page_token")
+        if not token:
+            break
+        parameters["page_token"] = token
     record = {"checked_at": now(), "new_sql_queries_executed": False, "matches": matches, "pages_truncated": more}
     save(manifest_path.with_name("query_history.json"), record)
-    manifest["query_history"] = {"checked_at": record["checked_at"], "matching_record_count": len(matches), "pages_truncated": more}
-    if len(matches) == 1:
+    result = dict(manifest.get("query_history") or {})
+    check_status = "truncated" if more else "not_found" if not matches else "ambiguous" if len(matches) > 1 else "matched"
+    result.update({"checked_at": record["checked_at"], "matching_record_count": len(matches),
+                   "pages_truncated": more, "check_status": check_status,
+                   "execution_metric_verified_this_check": False})
+    if len(matches) == 1 and not more:
         query = matches[0]
         metrics = query.get("metrics", {})
-        manifest["query_history"].update({"statement_id": query.get("query_id"), "status": query.get("status"),
-                                           "is_final": query.get("is_final"), "metrics": metrics})
+        current = {"statement_id": query.get("query_id"), "status": query.get("status"),
+                   "is_final": query.get("is_final"), "metrics": metrics}
+        result["latest_match"] = current
         duration = metrics.get("execution_time_ms")
-        if query.get("status") == "FINISHED" and isinstance(duration, (int, float)):
-            manifest["query_history"]["execution_seconds"] = duration / 1000
+        valid_duration = isinstance(duration, (int, float)) and not isinstance(duration, bool) and 0 <= duration < float("inf")
+        previous_statement = result.get("statement_id") if "execution_seconds" in result else None
+        if previous_statement and previous_statement != query.get("query_id"):
+            result["check_status"] = "ambiguous"
+        elif query.get("status") == "FINISHED" and query.get("is_final") is True and valid_duration:
+            result.update(current)
+            result.update({"execution_seconds": duration / 1000,
+                           "execution_metric_verified_at": record["checked_at"],
+                           "execution_metric_verified_this_check": True})
+        else:
+            result["check_status"] = "metrics_pending"
+            if "execution_seconds" not in result:
+                result.update(current)
+    result["execution_metric_retained"] = "execution_seconds" in result and not result["execution_metric_verified_this_check"]
+    manifest["query_history"] = result
     write(manifest_path, manifest)
     return manifest
 
