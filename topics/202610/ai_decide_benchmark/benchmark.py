@@ -26,9 +26,11 @@ CLI = r"C:\git\cli\databricks.exe"
 CONFIG = r"C:\git\cli\.databrickscfg"
 CREDIT_STATE = r"C:\git\cli\.credit-monitor\state.json"
 DEFAULT_MODELS = (
-    "openjev-qwen35-4b,typesafeai-jev-1-14-0,meta-llama-3-1-8b-instruct,"
+    "openjev-qwen35-4b,meta-llama-3-1-8b-instruct,"
     "meta-llama-3-3-70b-instruct,llama-4-maverick,gpt-6-luna,gpt-6-sol,"
-    "gpt-6-astra,claude-haiku-5-5,gemini-3-8-flash"
+    "gpt-6-astra,claude-haiku-5-5,gemini-3-8-flash,qwen3-next-80b-a3b-instruct,"
+    "deepseek-v4-1-flash-1017,claude-sonnet-4-5,gemma-3-12b,gpt-oss-120b,"
+    "kimi-k3,glm-5-3-flash,grok-4-7"
 )
 
 
@@ -311,7 +313,7 @@ def build_request(model, text):
     body = {"model": service, "messages": messages, "max_tokens": 16}
     if model["model"] in {"system.ai.deepseek-v4-1-flash", "system.ai.deepseek-v4-1-flash-1017"}:
         body["reasoning_effort"] = "none"
-    if model["model"] == "system.ai.gemini-3-8-flash":
+    if model["model"] in {"system.ai.gemini-3-8-flash", "system.ai.gpt-oss-120b", "system.ai.kimi-k3", "system.ai.glm-5-3-flash", "system.ai.grok-4-7"}:
         body.update({"max_tokens": 256, "reasoning_effort": "low"})
     if not model["model"].startswith("system.ai.gemini-") and model["model"] != "system.ai.claude-haiku-5-5":
         body["temperature"] = 0
@@ -364,6 +366,15 @@ def prepare_rejected_retries(manifest, path):
     if rejected:
         manifest["requests"] = retained
         manifest.setdefault("rejected_requests", []).extend(rejected)
+        authorized = {(record["model"], record["client_request_id"]) for record in rejected if record.get("client_request_id")}
+        blocks = manifest.get("provider_rejection_blocks", {})
+        for model, block in list(blocks.items()):
+            if (model, block.get("client_request_id")) in authorized:
+                manifest.setdefault("provider_rejection_block_history", []).append({
+                    **block, "model": model, "cleared_at": now(),
+                    "clear_reason": "Explicit retry of an exact known temperature rejection",
+                })
+                del blocks[model]
         save(path, manifest)
     print(json.dumps({"rejected_requests_prepared_for_retry": len(rejected)}), flush=True)
     return len(rejected)
@@ -421,7 +432,7 @@ def run(client, manifest, path):
     manifest.setdefault("inference_started_at", now())
     for model, case, repeat in tasks:
         key = (model["model"], case["id"], repeat)
-        if key in attempted:
+        if key in attempted or model["model"] in manifest.get("provider_rejection_blocks", {}):
             continue
         request_id = str(uuid.uuid4())
         tags = {**manifest["tags"], "model": model["model"], "case_id": case["id"], "phase": manifest.get("request_phase", "measured"), "repeat": str(repeat), "client_request_id": request_id}
@@ -451,11 +462,17 @@ def run(client, manifest, path):
             record.update({"status": "error", "error": str(error), "correct": False})
             if isinstance(error, ApiError):
                 record.update({"http_status": error.status, "response": error.body, "response_headers": error.headers})
+                if error.status == 400:
+                    record["blocked_after_rejection"] = True
+                    manifest.setdefault("provider_rejection_blocks", {})[model["model"]] = {
+                        "blocked_at": now(), "client_request_id": request_id,
+                        "http_status": error.status, "error": str(error),
+                    }
         record["finished_at"] = now()
         if model["model"] == "ai_decide_rest":
             manifest["ai_decide"]["finished_at"] = record["finished_at"]
         save(path, manifest)
-        print(json.dumps({key: record.get(key) for key in ("model", "case_id", "status", "prediction", "correct", "client_latency_ms")}), flush=True)
+        print(json.dumps({key: record.get(key) for key in ("model", "case_id", "status", "prediction", "correct", "client_latency_ms", "http_status", "blocked_after_rejection")}), flush=True)
     manifest["inference_finished_at"] = now()
     manifest["finished_at"] = manifest["inference_finished_at"]
     manifest["summary"] = summarize(manifest)
@@ -511,6 +528,8 @@ def summarize(manifest):
             })
         summary.append({
             "model": model, "attempts": len(rows), "unique_posts": len({item["case_id"] for item in rows}),
+            "planned_attempts": len(manifest["cases"]) * manifest["repeats"],
+            "not_attempted_after_provider_rejection": len(manifest["cases"]) * manifest["repeats"] - len(rows) if model in manifest.get("provider_rejection_blocks", {}) else 0,
             "rejected_before_inference": sum(item["model"] == model for item in manifest.get("rejected_requests", [])),
             "calibration_attempts": len(calibration), "calibration_tokens": token_totals(calibration),
             "correct": sum(bool(item.get("correct")) for item in rows),
@@ -615,7 +634,7 @@ def main():
     parser.add_argument("--seed", type=int, default=20261027)
     parser.add_argument("--phase", choices=("setup", "run", "cleanup", "all"), default="all")
     parser.add_argument("--exclude-ai-decide", action="store_true")
-    parser.add_argument("--request-phase", choices=("measured", "timing_extension", "timing_extension_replacement"), default="measured")
+    parser.add_argument("--request-phase", choices=("measured", "timing_extension", "timing_extension_replacement", "timing_extension_2", "timing_extension_grok"), default="measured")
     parser.add_argument("--retry-rejected", action="store_true")
     parser.add_argument("--retry-truncated", action="store_true")
     args = parser.parse_args()
