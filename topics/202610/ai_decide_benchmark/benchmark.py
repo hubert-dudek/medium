@@ -309,6 +309,8 @@ def build_request(model, text):
     if "mlflow/v1/chat/completions" not in supported:
         raise ValueError("No supported benchmark inference API for this service")
     body = {"model": service, "messages": messages, "max_tokens": 16}
+    if model["model"] in {"system.ai.deepseek-v4-1-flash", "system.ai.deepseek-v4-1-flash-1017"}:
+        body["reasoning_effort"] = "none"
     if model["model"] == "system.ai.gemini-3-8-flash":
         body.update({"max_tokens": 256, "reasoning_effort": "low"})
     if not model["model"].startswith("system.ai.gemini-") and model["model"] != "system.ai.claude-haiku-5-5":
@@ -403,7 +405,7 @@ def run(client, manifest, path):
         raise RuntimeError("Setup must complete before inference")
     if manifest.get("cleanup_complete"):
         raise RuntimeError("These temporary services have already been removed")
-    models = [{"model": "ai_decide_rest", "name": "ai_decide_rest"}]
+    models = [{"model": "ai_decide_rest", "name": "ai_decide_rest"}] if manifest.get("include_ai_decide", True) else []
     for item in manifest["model_services"]:
         if not item.get("created"):
             continue
@@ -422,7 +424,7 @@ def run(client, manifest, path):
         if key in attempted:
             continue
         request_id = str(uuid.uuid4())
-        tags = {**manifest["tags"], "model": model["model"], "case_id": case["id"], "phase": "measured", "repeat": str(repeat), "client_request_id": request_id}
+        tags = {**manifest["tags"], "model": model["model"], "case_id": case["id"], "phase": manifest.get("request_phase", "measured"), "repeat": str(repeat), "client_request_id": request_id}
         record = {
             "client_request_id": request_id, "model": model["model"], "service": model["name"],
             "case_id": case["id"], "repeat": repeat, "expected": "approved" if case["expected_approved"] else "refused",
@@ -612,6 +614,8 @@ def main():
     parser.add_argument("--repeats", type=int, default=1, choices=range(1, 4))
     parser.add_argument("--seed", type=int, default=20261027)
     parser.add_argument("--phase", choices=("setup", "run", "cleanup", "all"), default="all")
+    parser.add_argument("--exclude-ai-decide", action="store_true")
+    parser.add_argument("--request-phase", choices=("measured", "timing_extension", "timing_extension_replacement"), default="measured")
     parser.add_argument("--retry-rejected", action="store_true")
     parser.add_argument("--retry-truncated", action="store_true")
     args = parser.parse_args()
@@ -635,6 +639,7 @@ def main():
         manifest = {
             "run_id": run_id, "started_at": now(), "host": HOST, "workspace_id": WORKSPACE_ID,
             "profile": "AWS-DEV", "warehouse_id": "8a19c545d43c9bc3", "repeats": args.repeats, "seed": args.seed,
+            "include_ai_decide": not args.exclude_ai_decide, "request_phase": args.request_phase,
             "tags": {"run_id": run_id, "project": "ai_decide_moderation", "environment": "AWS-DEV"},
             "catalog": {"name": catalog, "created": False}, "schema": {"name": catalog + ".moderation", "created": False},
             "requested_models": list(dict.fromkeys("system.ai." + item.removeprefix("system.ai.") for item in args.models.split(",") if item)),
@@ -642,6 +647,9 @@ def main():
             "statement_ids": [], "requests": [], "policy": POLICY, "cases": CASES, "corpus": validate(),
             "cost_status": "pending_reconciliation", "sampling_note": "Five synthetic English posts; illustrative comparison, not a population accuracy estimate.",
         }
+        if args.request_phase != "measured":
+            manifest["phase"] = args.request_phase
+            manifest["tags"]["phase"] = args.request_phase
         save(path, manifest)
     if args.phase in {"setup", "run", "all"}:
         verify_manifest_corpus(manifest)
