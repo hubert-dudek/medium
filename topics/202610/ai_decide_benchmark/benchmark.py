@@ -30,7 +30,7 @@ DEFAULT_MODELS = (
     "meta-llama-3-3-70b-instruct,llama-4-maverick,gpt-6-luna,gpt-6-sol,"
     "gpt-6-astra,claude-haiku-5-5,gemini-3-8-flash,qwen3-next-80b-a3b-instruct,"
     "deepseek-v4-1-flash-1017,claude-sonnet-4-5,gemma-3-12b,gpt-oss-120b,"
-    "kimi-k3,glm-5-3-flash,grok-4-7"
+    "kimi-k3,glm-5-3-flash,grok-4-7,gpt-6-1-sol,claude-sonnet-4-6,gpt-oss-20b"
 )
 
 
@@ -313,7 +313,7 @@ def build_request(model, text):
     body = {"model": service, "messages": messages, "max_tokens": 16}
     if model["model"] in {"system.ai.deepseek-v4-1-flash", "system.ai.deepseek-v4-1-flash-1017"}:
         body["reasoning_effort"] = "none"
-    if model["model"] in {"system.ai.gemini-3-8-flash", "system.ai.gpt-oss-120b", "system.ai.kimi-k3", "system.ai.glm-5-3-flash", "system.ai.grok-4-7"}:
+    if model["model"] in {"system.ai.gemini-3-8-flash", "system.ai.gpt-oss-120b", "system.ai.gpt-oss-20b", "system.ai.kimi-k3", "system.ai.glm-5-3-flash", "system.ai.grok-4-7"}:
         body.update({"max_tokens": 256, "reasoning_effort": "low"})
     if not model["model"].startswith("system.ai.gemini-") and model["model"] != "system.ai.claude-haiku-5-5":
         body["temperature"] = 0
@@ -634,7 +634,7 @@ def main():
     parser.add_argument("--seed", type=int, default=20261027)
     parser.add_argument("--phase", choices=("setup", "run", "cleanup", "all"), default="all")
     parser.add_argument("--exclude-ai-decide", action="store_true")
-    parser.add_argument("--request-phase", choices=("measured", "timing_extension", "timing_extension_replacement", "timing_extension_2", "timing_extension_grok"), default="measured")
+    parser.add_argument("--request-phase", choices=("measured", "timing_extension", "timing_extension_replacement", "timing_extension_2", "timing_extension_grok", "timing_extension_3"), default="measured")
     parser.add_argument("--retry-rejected", action="store_true")
     parser.add_argument("--retry-truncated", action="store_true")
     args = parser.parse_args()
