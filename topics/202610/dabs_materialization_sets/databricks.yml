@@ -1,0 +1,45 @@
+bundle:
+  name: news_dabs_20261104_fs
+  engine: direct
+  databricks_cli_version: ">= 1.24.0"
+
+resources:
+  features:
+    transaction_count_7d:
+      full_name: news_dabs_20261104.news_dabs_20261104_fs.transaction_count_7d
+      source:
+        delta_table_source:
+          full_name: news_dabs_20261104.news_dabs_20261104_fs.transactions
+      function:
+        aggregation_function:
+          count_function:
+            input: amount
+          time_window:
+            sliding:
+              window_duration: 604800s
+              slide_duration: 86400s
+      entities:
+        - name: customer_id
+      timeseries_column:
+        name: event_ts
+
+  materialization_sets:
+    customer_features:
+      materialized_features:
+        - feature_name: ${resources.features.transaction_count_7d.full_name}
+          offline_store_config:
+            catalog_name: news_dabs_20261104
+            schema_name: news_dabs_20261104_fs
+            table_name_prefix: customer_features
+          cron_schedule_trigger:
+            mode: MANUAL
+            cron_expression: "0 0 0 * * ?"
+            timezone_id: UTC
+
+targets:
+  dev:
+    default: true
+    mode: development
+    workspace:
+      host: https://dbc-ca93cffe-fba0.cloud.databricks.com
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}

@@ -1,0 +1,19 @@
+bundle:
+  name: news_dabs_20261104_dq
+  databricks_cli_version: '>= 1.24.0'
+  engine: direct
+
+variables:
+  table_id: {}
+  output_schema_id: {}
+
+resources:
+  data_quality_monitors:
+    sales:
+      object_type: table
+      object_id: ${var.table_id}
+      data_profiling_config:
+        output_schema_id: ${var.output_schema_id}
+        assets_dir: ${workspace.root_path}/quality
+        snapshot: {}
+        skip_builtin_dashboard: true

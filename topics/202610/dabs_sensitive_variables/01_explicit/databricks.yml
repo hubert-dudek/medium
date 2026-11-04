@@ -1,0 +1,11 @@
+bundle:
+  name: dabs-sensitive-explicit
+
+variables:
+  environment:
+    default: demo
+  api_key:
+    sensitive: true
+  authorization:
+    sensitive: true
+    default: Bearer ${var.api_key}
