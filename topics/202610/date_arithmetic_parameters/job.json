@@ -1,0 +1,21 @@
+{
+  "name": "news_date_arithmetic_20261113",
+  "environments": [
+    {"environment_key": "news", "spec": {"environment_version": "6"}}
+  ],
+  "tasks": [
+    {
+      "task_key": "compare_dates",
+      "environment_key": "news",
+      "notebook_task": {
+        "notebook_path": "/Shared/news-20261113/date_arithmetic",
+        "base_parameters": {
+          "base_date": "{{job.start_time.iso_date}}",
+          "prior_week": "{{(job.start_time - 1.week).iso_date}}"
+        }
+      },
+      "timeout_seconds": 300,
+      "max_retries": 0
+    }
+  ]
+}

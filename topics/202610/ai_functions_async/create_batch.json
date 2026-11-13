@@ -1,0 +1,9 @@
+{
+  "endpoint": "ai_classify",
+  "input_ref": "/Volumes/sbx_test_data/news_ai_functions_20261113/batch_files/requests.jsonl",
+  "params": {
+    "labels": ["billing", "technical"],
+    "options": {"version": "2.1"}
+  },
+  "output_ref": "/Volumes/sbx_test_data/news_ai_functions_20261113/batch_files/output/"
+}

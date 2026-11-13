@@ -1,15 +1,21 @@
 bundle:
-  name: news_dabs_20261104_fs
+  name: news_feature_materialization_20261113
   engine: direct
   databricks_cli_version: ">= 1.24.0"
 
+variables:
+  catalog:
+    default: sbx_test_data
+  schema:
+    default: news_feature_materialization_20261113
+
 resources:
   features:
-    transaction_count_7d:
-      full_name: news_dabs_20261104.news_dabs_20261104_fs.transaction_count_7d
+    txn_count:
+      full_name: ${var.catalog}.${var.schema}.transaction_count_7d
       source:
         delta_table_source:
-          full_name: news_dabs_20261104.news_dabs_20261104_fs.transactions
+          full_name: ${var.catalog}.${var.schema}.transactions
       function:
         aggregation_function:
           count_function:
@@ -26,10 +32,10 @@ resources:
   materialization_sets:
     customer_features:
       materialized_features:
-        - feature_name: ${resources.features.transaction_count_7d.full_name}
+        - feature_name: ${resources.features.txn_count.full_name}
           offline_store_config:
-            catalog_name: news_dabs_20261104
-            schema_name: news_dabs_20261104_fs
+            catalog_name: ${var.catalog}
+            schema_name: ${var.schema}
             table_name_prefix: customer_features
           cron_schedule_trigger:
             mode: MANUAL

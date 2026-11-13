@@ -1,7 +1,8 @@
-CREATE SCHEMA IF NOT EXISTS news_dabs_20261104.news_dabs_20261104_fs;
+CREATE SCHEMA IF NOT EXISTS sbx_test_data.news_feature_materialization_20261113;
 
-CREATE TABLE news_dabs_20261104.news_dabs_20261104_fs.transactions
+CREATE TABLE sbx_test_data.news_feature_materialization_20261113.transactions
 USING DELTA
+TBLPROPERTIES ('delta.enableChangeDataFeed' = 'true')
 AS SELECT
   customer_id,
   amount,
