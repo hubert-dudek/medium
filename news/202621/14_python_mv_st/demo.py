@@ -4,7 +4,7 @@ import re
 from pyspark import pipelines as dp
 from pyspark.sql import functions as F
 
-dbutils.widgets.text("catalog", "sbx_test_data")
+dbutils.widgets.text("catalog", spark.catalog.currentCatalog())
 catalog = dbutils.widgets.get("catalog")
 if not re.fullmatch(r"[a-zA-Z_][a-zA-Z_0-9]*", catalog):
     raise ValueError("Enter a catalog name containing letters, digits or underscores.")

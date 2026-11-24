@@ -15,18 +15,18 @@ from databricks_agentkit import AgentKitClient
 workspace = WorkspaceClient()
 client = AgentKitClient(workspace)
 user_hash = sha256(workspace.current_user.me().id.encode()).hexdigest()[:10]
-store_id = f"news-202621-recipes-{user_hash}"
+store_id = f"recipe-preferences-{user_hash}"
 store = next((item for item in client.memory_stores.list() if item.id == store_id), None)
-description = "Temporary news 202621 video demo"
+description = "Recipe preference example"
 if store is None:
     store = client.memory_stores.create(store_id, description=description)
 elif store.description != description:
     raise ValueError(f"{store_id} belongs to another demonstration.")
-print(store.id, store.storage_backend)
+print(store.id)
 
 # COMMAND ----------
 
-actor = "recording-user"
+actor = "sample-user"
 path = "/preferences/food.md"
 store.put(actor_id=actor, path=path, content="User prefers Mexican recipes", description="Food preferences")
 saved = store.list(actor_id=actor, path=path)
@@ -41,7 +41,14 @@ display(spark.createDataFrame([(row.memory.content,) for row in matches], "recal
 
 # COMMAND ----------
 
-dbutils.widgets.dropdown("remove_after_filming", "no", ["no", "yes"])
-if dbutils.widgets.get("remove_after_filming") == "yes":
+print(store.storage_backend)
+print("""SELECT actor_id, path, content
+FROM memory.memory_entries
+WHERE actor_id = 'sample-user' AND path = '/preferences/food.md';""")
+
+# COMMAND ----------
+
+dbutils.widgets.dropdown("delete_sample_store", "no", ["no", "yes"])
+if dbutils.widgets.get("delete_sample_store") == "yes":
     store.delete()
     print(f"Removed {store_id}")

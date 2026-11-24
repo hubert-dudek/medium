@@ -5,7 +5,7 @@ import json
 
 from databricks.sdk import WorkspaceClient
 
-dbutils.widgets.text("catalog", "sbx_test_data")
+dbutils.widgets.text("catalog", spark.catalog.currentCatalog())
 dbutils.widgets.text("schema", "news_202621")
 dbutils.widgets.text("volume", "inputs")
 catalog, schema, volume = (dbutils.widgets.get(key) for key in ("catalog", "schema", "volume"))
@@ -18,7 +18,11 @@ folder = Path("/Volumes") / catalog / schema / volume / "support_ticket_batch"
 output = folder / "output"
 output.mkdir(parents=True, exist_ok=True)
 requests = folder / "requests.jsonl"
-requests.write_bytes(Path("requests.jsonl").read_bytes())
+tickets = [
+    {"custom_id": "ticket-1", "body": {"text": "My invoice has an unexpected charge."}},
+    {"custom_id": "ticket-2", "body": {"text": "The application crashes when I sign in."}},
+]
+requests.write_text("".join(json.dumps(ticket) + "\n" for ticket in tickets), encoding="utf-8")
 print(requests.read_text())
 
 # COMMAND ----------

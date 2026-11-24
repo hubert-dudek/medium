@@ -12,8 +12,8 @@ resources:
       tasks:
         - task_key: emit_logs
           environment_key: serverless
-          spark_python_task:
-            python_file: ./emit_logs.py
+          notebook_task:
+            notebook_path: ./emit_logs.py
 
 targets:
   dev:

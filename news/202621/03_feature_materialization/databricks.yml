@@ -5,7 +5,7 @@ bundle:
 
 variables:
   catalog:
-    default: sbx_test_data
+    description: Catalog containing the transactions table.
   schema:
     default: news_202621_materialization
 

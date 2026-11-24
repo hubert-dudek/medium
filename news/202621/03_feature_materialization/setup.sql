@@ -1,9 +1,9 @@
 -- Databricks notebook source
-CREATE SCHEMA IF NOT EXISTS sbx_test_data.news_202621_materialization;
+CREATE SCHEMA IF NOT EXISTS news_202621_materialization;
 
 -- COMMAND ----------
 
-CREATE OR REPLACE TABLE sbx_test_data.news_202621_materialization.transactions
+CREATE OR REPLACE TABLE news_202621_materialization.transactions
 USING DELTA
 TBLPROPERTIES ('delta.enableChangeDataFeed' = 'true')
 AS SELECT

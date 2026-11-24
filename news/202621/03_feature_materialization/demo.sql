@@ -1,5 +1,5 @@
 -- Databricks notebook source
-USE sbx_test_data.news_202621_materialization;
+USE SCHEMA news_202621_materialization;
 
 -- COMMAND ----------
 

@@ -20,5 +20,3 @@ resources:
 targets:
   azure:
     default: true
-    workspace:
-      host: https://adb-7405607825310844.4.azuredatabricks.net

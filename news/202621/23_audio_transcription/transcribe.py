@@ -2,13 +2,13 @@
 from pathlib import Path
 
 audio = Path("news_sample.wav").read_bytes()
-spark.createDataFrame([(audio,)], "content BINARY").createOrReplaceTempView("recording_audio")
+spark.createDataFrame([(audio,)], "content BINARY").createOrReplaceTempView("sample_audio")
 
 # COMMAND ----------
 
 # MAGIC %sql
 # MAGIC WITH transcript AS (
-# MAGIC   SELECT ai_transcribe(content) AS result FROM recording_audio
+# MAGIC   SELECT ai_transcribe(content) AS result FROM sample_audio
 # MAGIC )
 # MAGIC SELECT
 # MAGIC   segment.value:start::DOUBLE AS start_seconds,

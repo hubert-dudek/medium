@@ -1,3 +1,0 @@
-Build a Databricks News Tracker using six inline sample stories. Give every story a title, a one-sentence summary and a topic. For Apps, use Deployment history and App Builder. For AI/ML, use Genie CLI and Agent memory. For Data Engineering, use Materialized views and JDBC connections.
-
-Display the stories as cards and add four filter buttons above them: All, Apps, AI/ML and Data Engineering. Start with all six visible. Clicking a topic should show its two matching cards and update the count. Use only inline sample data.

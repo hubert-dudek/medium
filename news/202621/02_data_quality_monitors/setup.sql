@@ -1,9 +1,9 @@
 -- Databricks notebook source
-CREATE SCHEMA IF NOT EXISTS sbx_test_data.news_202621_quality;
+CREATE SCHEMA IF NOT EXISTS news_202621_quality;
 
 -- COMMAND ----------
 
-CREATE TABLE IF NOT EXISTS sbx_test_data.news_202621_quality.sales
+CREATE TABLE IF NOT EXISTS news_202621_quality.sales
 USING DELTA AS
 SELECT * FROM VALUES
   (1, 10.0),

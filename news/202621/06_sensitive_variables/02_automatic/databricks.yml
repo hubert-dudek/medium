@@ -9,7 +9,7 @@ variables:
 resources:
   secrets:
     demo_secret:
-      catalog_name: sbx_test_data
+      catalog_name: main
       schema_name: default
       name: demo_secret
       value: ${var.api_key}
