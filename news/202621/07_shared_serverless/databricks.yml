@@ -1,0 +1,6 @@
+bundle:
+  name: news-shared-serverless
+
+targets:
+  dev:
+    default: true

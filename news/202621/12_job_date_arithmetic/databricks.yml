@@ -1,0 +1,25 @@
+bundle:
+  name: news_202621_job_dates
+
+resources:
+  jobs:
+    compare_dates:
+      name: news-202621-job-dates
+      environments:
+        - environment_key: serverless
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: compare_dates
+          environment_key: serverless
+          notebook_task:
+            notebook_path: ./dates.py
+            base_parameters:
+              base_date: "{{job.start_time.iso_date}}"
+              prior_week: "{{(job.start_time - 1.week).iso_date}}"
+          timeout_seconds: 300
+
+targets:
+  dev:
+    default: true
+    mode: development

@@ -1,0 +1,27 @@
+bundle:
+  name: news_202621_access_dependencies
+  engine: direct
+  databricks_cli_version: ">= 1.26.0"
+
+resources:
+  jobs:
+    source:
+      name: news_202621_access_source
+      tasks:
+        - task_key: ready
+          condition_task:
+            left: '1'
+            op: EQUAL_TO
+            right: '1'
+      permissions:
+        - user_name: ${workspace.current_user.userName}
+          level: IS_OWNER
+    consumer:
+      name: news_202621_access_consumer
+      tasks:
+        - task_key: run_source
+          run_job_task:
+            job_id: ${resources.jobs.source.id}
+      lifecycle:
+        depends_on:
+          - resource: jobs.source.permissions

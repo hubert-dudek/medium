@@ -1,0 +1,22 @@
+bundle:
+  name: news-deployment-history-20261021
+  engine: direct
+
+experimental:
+  deployment_history: true
+
+resources:
+  jobs:
+    history_demo:
+      name: News deployment history
+      timeout_seconds: 60
+      tasks:
+        - task_key: ready
+          condition_task:
+            left: '1'
+            op: EQUAL_TO
+            right: '1'
+
+targets:
+  news:
+    default: true

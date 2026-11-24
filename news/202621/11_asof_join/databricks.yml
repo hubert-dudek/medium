@@ -1,0 +1,24 @@
+bundle:
+  name: news_202621_asof
+  engine: direct
+
+resources:
+  clusters:
+    asof:
+      cluster_name: news-202621-asof
+      spark_version: 19.x-scala2.13
+      node_type_id: Standard_D4ads_v6
+      runtime_engine: STANDARD
+      kind: CLASSIC_PREVIEW
+      is_single_node: true
+      data_security_mode: SINGLE_USER
+      single_user_name: ${workspace.current_user.userName}
+      autotermination_minutes: 10
+      azure_attributes:
+        availability: ON_DEMAND_AZURE
+
+targets:
+  azure:
+    default: true
+    workspace:
+      host: https://adb-7405607825310844.4.azuredatabricks.net

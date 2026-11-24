@@ -1,0 +1,7 @@
+[project]
+name = "news-shared-serverless"
+version = "0.1.0"
+dependencies = ["humanize==4.12.3"]
+
+[tool.databricks.environment]
+environment_version = "6"

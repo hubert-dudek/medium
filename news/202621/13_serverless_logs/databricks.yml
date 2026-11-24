@@ -1,0 +1,21 @@
+bundle:
+  name: news_202621_serverless_logs
+
+resources:
+  jobs:
+    emit_logs:
+      name: news-202621-serverless-logs
+      environments:
+        - environment_key: serverless
+          spec:
+            environment_version: "6"
+      tasks:
+        - task_key: emit_logs
+          environment_key: serverless
+          spark_python_task:
+            python_file: ./emit_logs.py
+
+targets:
+  dev:
+    default: true
+    mode: development

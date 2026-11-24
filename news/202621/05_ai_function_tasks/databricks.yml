@@ -1,0 +1,33 @@
+bundle:
+  name: news_202621_ai_functions
+  engine: direct
+
+variables:
+  input_table:
+    default: sbx_test_data.news_202621_ai_functions.tickets
+  output_catalog:
+    default: sbx_test_data
+  output_schema:
+    default: news_202621_ai_functions
+
+resources:
+  jobs:
+    classify_tickets:
+      name: news_202621_classify_tickets
+      tasks:
+        - task_key: classify
+          ai_function_task:
+            delta_table:
+              table_name: ${var.input_table}
+              input_column: body
+              merge_key_columns: [id]
+            output:
+              catalog: ${var.output_catalog}
+              schema: ${var.output_schema}
+              table: ticket_labels
+            ai_classify:
+              version: '2.1'
+              inline_labels:
+                labels:
+                  - name: billing
+                  - name: technical

@@ -1,0 +1,21 @@
+{
+  "event_type": "budgets.on_threshold_exceeded",
+  "event_id": "sample-recording-event",
+  "schema_version": "1",
+  "account_id": "sample-account",
+  "budget": {
+    "budget_configuration_id": "sample-budget",
+    "display_name": "Recording example",
+    "resource_type": "BUDGET_RESOURCE_TYPE_UNITY_AI_GATEWAY"
+  },
+  "alert": {
+    "scope_type": "ALERT_CONFIGURATION_SCOPE_TYPE_SHARED",
+    "trigger_type": "CUMULATIVE_SPENDING_EXCEEDED",
+    "quantity_type": "LIST_PRICE_DOLLARS_USD",
+    "time_period": "MONTH"
+  },
+  "evaluation": {
+    "quantity_threshold": "10.00",
+    "current_spend": "10.20"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "accounts/<account_id>/budget-spend-statuses/<budget_id>",
+  "alert_spend_statuses": [
+    {
+      "scope_type": "ALERT_CONFIGURATION_SCOPE_TYPE_PER_USER",
+      "time_period": "MONTH",
+      "spend": "<USD at list price>",
+      "threshold": "<effective USD limit>",
+      "percent_consumed": "<decimal percentage>"
+    }
+  ]
+}

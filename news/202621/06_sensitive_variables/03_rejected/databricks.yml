@@ -1,0 +1,20 @@
+bundle:
+  name: dabs-sensitive-rejected
+
+variables:
+  api_key:
+    sensitive: true
+
+resources:
+  jobs:
+    demo_job:
+      name: sensitive-variable-demo
+      parameters:
+        - name: api_key
+          default: ${var.api_key}
+      tasks:
+        - task_key: condition
+          condition_task:
+            left: '1'
+            op: EQUAL_TO
+            right: '1'
