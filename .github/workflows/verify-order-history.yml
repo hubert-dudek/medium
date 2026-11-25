@@ -1,0 +1,62 @@
+name: Verify order history with PostgreSQL and PostgREST
+on:
+  push:
+    branches: [verify-lakebase-order-history-20261125]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    services:
+      db:
+        image: postgres:18
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 127.0.0.1:5432:5432
+        options: --health-cmd pg_isready --health-interval 2s --health-timeout 4s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Create the disposable source and reader
+        env:
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+        run: |
+          psql -v ON_ERROR_STOP=1 <<'SQL'
+          CREATE TABLE public.orders(order_id bigint PRIMARY KEY, tenant_id integer NOT NULL, amount_cents bigint NOT NULL);
+          INSERT INTO public.orders VALUES (41,10,697),(42,10,714);
+          CREATE ROLE history_reader NOLOGIN;
+          CREATE ROLE rest_login NOINHERIT LOGIN;
+          GRANT history_reader TO rest_login;
+          SQL
+          psql -v ON_ERROR_STOP=1 -f topics/202611/lakebase_data_api/order_history.sql
+          psql -v ON_ERROR_STOP=1 -f topics/202611/lakebase_data_api/order_history.sql
+          psql -v ON_ERROR_STOP=1 -c 'GRANT USAGE ON SCHEMA public TO history_reader; GRANT SELECT ON public.orders_cdc TO history_reader;'
+      - name: Start the read-only PostgREST endpoint
+        run: |
+          docker run -d --name order-api --network host -e PGRST_DB_URI=postgres://rest_login@127.0.0.1:5432/postgres -e PGRST_DB_ANON_ROLE=history_reader -e PGRST_SERVER_HOST=127.0.0.1 postgrest/postgrest:v12.2.3
+          for i in $(seq 1 30); do curl -fsS 'http://127.0.0.1:3000/orders_cdc?limit=0' >/dev/null && exit 0; sleep 1; done
+          docker logs order-api
+          exit 1
+      - name: Verify the HTTP response and rollback, then time five warm reads
+        env:
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+        run: |
+          python -m pip install -q "psycopg[binary]>=3.2,<4" "requests>=2,<3"
+          python qa_cdc.py | tee "$RUNNER_TEMP/order-history-evidence.txt"
+      - name: Capture the verified JSON response
+        run: |
+          google-chrome --headless --no-sandbox --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --window-size=1280,260 --screenshot="$RUNNER_TEMP/order-history-rest.png" 'http://127.0.0.1:3000/orders_cdc?select=order_id,operation,old_amount_cents,new_amount_cents&order_id=eq.42&order=event_id.desc&limit=1'
+          test -s "$RUNNER_TEMP/order-history-rest.png"
+      - name: Save the original proof
+        uses: actions/upload-artifact@v4
+        with:
+          name: postgres-postgrest-order-history
+          path: |
+            ${{ runner.temp }}/order-history-rest.png
+            ${{ runner.temp }}/order-history-evidence.txt
+          retention-days: 7
